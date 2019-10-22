@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONArray;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -76,6 +78,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @RestController
+@Api(tags="用户模块")
 @RequestMapping("/sys/user")
 public class SysUserController {
 	@Autowired
@@ -136,6 +139,7 @@ public class SysUserController {
 		return result;
 	}
 
+    @ApiOperation(value = "编辑用户", notes = "编辑用户")
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
 	//@RequiresPermissions("user:edit")
 	public Result<SysUser> edit(@RequestBody JSONObject jsonObject) {
@@ -248,6 +252,7 @@ public class SysUserController {
      * @param sysUser
      * @return
      */
+    @ApiOperation(value = "校验用户账号是否唯一", notes = "校验用户账号是否唯一")
     @RequestMapping(value = "/checkOnlyUser", method = RequestMethod.GET)
     public Result<Boolean> checkOnlyUser(SysUser sysUser) {
         Result<Boolean> result = new Result<>();
@@ -274,6 +279,7 @@ public class SysUserController {
     /**
      * 修改密码
      */
+    @ApiOperation(value = "修改密码", notes = "修改密码")
     @RequestMapping(value = "/changPassword", method = RequestMethod.PUT)
     public Result<?> changPassword(@RequestBody SysUser sysUser) {
         SysUser u = this.sysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, sysUser.getUsername()));
@@ -453,6 +459,7 @@ public class SysUserController {
 	/**
 	 * 首页用户重置密码
 	 */
+    @ApiOperation(value = "用户重置密码", notes = "用户重置密码 {\"username\": \"admin\",\"oldpassword\": \"123456\",\"password\": \"123456\",\"confirmpassword\": \"123456\"}")
 	@RequestMapping(value = "/updatePassword", method = RequestMethod.PUT)
 	public Result<?> changPassword(@RequestBody JSONObject json) {
 		String username = json.getString("username");
@@ -733,6 +740,7 @@ public class SysUserController {
 	 * @param user
 	 * @return
 	 */
+    @ApiOperation(value = "用户注册", notes = "用户注册 {\"phone\":\"15901038477\",\"username\":\"test\",\"email\":\"test@test.com\",\"password\": \"Uelrkjsdf!@@#323\", \"smsmode\": \"23042\"}")
 	@PostMapping("/register")
 	public Result<JSONObject> userRegister(@RequestBody JSONObject jsonObject, SysUser user) {
 		Result<JSONObject> result = new Result<JSONObject>();
@@ -828,6 +836,7 @@ public class SysUserController {
 	/**
 	 * 用户手机号验证
 	 */
+    @ApiOperation(value = "用户手机号验证", notes = "用户手机号验证 {\"phone\":\"15901038477\", \"smsmode\": \"23042\"}")
 	@PostMapping("/phoneVerification")
 	public Result<String> phoneVerification(@RequestBody JSONObject jsonObject) {
 		Result<String> result = new Result<String>();
@@ -848,6 +857,7 @@ public class SysUserController {
 	/**
 	 * 用户更改密码
 	 */
+    @ApiOperation(value = "用户通过手机验证码更改密码", notes = "用户通过手机验证码更改密码")
 	@GetMapping("/passwordChange")
 	public Result<SysUser> passwordChange(@RequestParam(name="username")String username,
 										  @RequestParam(name="password")String password,
