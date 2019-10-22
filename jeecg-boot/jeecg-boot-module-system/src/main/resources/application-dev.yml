@@ -138,17 +138,10 @@ mybatis-plus:
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #jeecg专用配置
 jeecg :
-  path :
-    #文件上传根目录 设置
-    upload: /data/upload
-    #webapp文件路径
-    webapp: /data/upload
   #短信秘钥
   sms:
     accessKeyId: LTAI4FoeGoKjVX4YqxUAWhwL
     accessKeySecret: 1RF7XbZJu6M3ti8k5mgKzpJqWzqd7r
-  shiro:
-     excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**
   #阿里云oss存储配置
   oss:
     type: aliyun
