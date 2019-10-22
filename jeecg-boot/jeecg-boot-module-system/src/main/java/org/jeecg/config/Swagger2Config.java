@@ -13,17 +13,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 
 import io.swagger.annotations.ApiOperation;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.service.*;
 import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -65,8 +63,23 @@ public class Swagger2Config implements WebMvcConfigurer {
 	            .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
 				.paths(PathSelectors.any())
 				.build()
-				.securitySchemes(Collections.singletonList(securityScheme()));
-				//.globalOperationParameters(setHeaderToken());
+				.securitySchemes(Collections.singletonList(securityScheme()))
+				.securityContexts(Collections.singletonList(securityContexts()));
+//				.globalOperationParameters(setHeaderToken());
+	}
+
+	private SecurityContext securityContexts() {
+		return SecurityContext.builder()
+				.securityReferences(Collections.singletonList(defaultAuth()))
+//						.forPaths(PathSelectors.regex("^(?!auth).*$"))
+				.build();
+	}
+
+	SecurityReference defaultAuth() {
+		AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+		authorizationScopes[0] = authorizationScope;
+		return new SecurityReference(DefContants.X_ACCESS_TOKEN, authorizationScopes);
 	}
 
 	/***
@@ -99,14 +112,14 @@ public class Swagger2Config implements WebMvcConfigurer {
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 				// //大标题
-				.title("Jeecg-Boot 后台服务API接口文档")
+				.title("万邦教育后台服务API接口文档")
 				// 版本号
 				.version("1.0")
 //				.termsOfServiceUrl("NO terms of service")
 				// 描述
 				.description("后台API接口")
 				// 作者
-				.contact("JEECG团队")
+				.contact("万邦教育团队")
                 .license("The Apache License, Version 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
 				.build();

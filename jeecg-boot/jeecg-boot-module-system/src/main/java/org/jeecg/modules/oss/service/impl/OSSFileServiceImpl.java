@@ -22,13 +22,16 @@ public class OSSFileServiceImpl extends ServiceImpl<OSSFileMapper, OSSFile> impl
 	private OSSProperties properties;
 
 	@Override
-	public void upload(MultipartFile multipartFile) throws IOException {
-		String fileName = multipartFile.getOriginalFilename();
+	public String upload(MultipartFile multipartFile) throws IOException {
+
+		String orgName = multipartFile.getOriginalFilename();
+		String fileName = properties.getProperties().get("customFolder") + "/" + orgName.substring(0, orgName.lastIndexOf(".")) + "_" + System.currentTimeMillis() + orgName.substring(orgName.indexOf("."));
 		OSSFile ossFile = new OSSFile();
 		ossFile.setFileName(fileName);
-		ossFile.setUrl("https://" + properties.getBucketName() + "." + properties.getEndpoint() + "/" + fileName);
+		ossFile.setUrl(properties.getProperties().get("customDomain") + "/" + fileName);
 		this.save(ossFile);
 		ossManager.upload(fileName, multipartFile.getInputStream());
+		return ossFile.getUrl();
 	}
 
 	@Override

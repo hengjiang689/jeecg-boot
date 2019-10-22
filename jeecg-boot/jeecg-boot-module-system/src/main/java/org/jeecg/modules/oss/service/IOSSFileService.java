@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IOSSFileService extends IService<OSSFile> {
 
-	void upload(MultipartFile multipartFile) throws IOException;
+	String upload(MultipartFile multipartFile) throws IOException;
 
 	boolean delete(OSSFile ossFile);
 

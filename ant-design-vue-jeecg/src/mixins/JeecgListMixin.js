@@ -280,7 +280,8 @@ export const JeecgListMixin = {
       if(text && text.indexOf(",")>0){
         text = text.substring(0,text.indexOf(","))
       }
-      return window._CONFIG['imgDomainURL']+"/"+text
+      // return window._CONFIG['imgDomainURL']+"/"+text
+      return text
     },
     /* 文件下载 */
     uploadFile(text){

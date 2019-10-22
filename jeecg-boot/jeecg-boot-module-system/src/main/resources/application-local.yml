@@ -1,13 +1,9 @@
 server:
-  port: 443
-  ssl:
-    key-store: classpath:2933385_api.miairobot.com.pfx
-    key-store-password: 8C5FCTi6
-    keyStoreType: PKCS12
+  port: 8080
   tomcat: 
     max-swallow-size: -1
   servlet:
-    context-path: 
+    context-path:
     compression:
       enabled: true
       mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css,image/*
@@ -21,8 +17,8 @@ management:
 spring:
   servlet:
      multipart: 
-        max-file-size: 10MB
-        max-request-size: 10MB
+        max-file-size: 900MB
+        max-request-size: 900MB
   mail:
     host: smtp.163.com
     username: jeecgos@163.com
@@ -99,9 +95,9 @@ spring:
         connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
       datasource:
         master:
-          url: jdbc:mysql://rm-m5e0xx87c7744p867ko.mysql.rds.aliyuncs.com:3306/wanbang?characterEncoding=UTF-8&useUnicode=true&useSSL=false
-          username: wanbang
-          password: Happy528
+          url: jdbc:mysql://127.0.0.1:3306/wanbang?characterEncoding=UTF-8&useUnicode=true&useSSL=false
+          username: root
+          password:
           driver-class-name: com.mysql.jdbc.Driver
           # 多数据源配置
           #multi-datasource1:
