@@ -3,10 +3,10 @@ package org.jeecg.common.util;
 import org.apache.commons.lang.StringUtils;
 
 public enum DySmsEnum {
-	
-	LOGIN_TEMPLATE_CODE("SMS_175435174","JEECG","code"),
-	FORGET_PASSWORD_TEMPLATE_CODE("SMS_175435174","JEECG","code"),
-	REGISTER_TEMPLATE_CODE("SMS_175430166","JEECG","code");
+
+	LOGIN_TEMPLATE_CODE("SMS_175480612","万邦教育","code"),
+	FORGET_PASSWORD_TEMPLATE_CODE("SMS_175480614","万邦教育","code"),
+	REGISTER_TEMPLATE_CODE("SMS_175415132","万邦教育","code");
 	
 	/**
 	 * 短信模板编码

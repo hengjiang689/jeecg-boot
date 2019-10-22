@@ -102,6 +102,7 @@ public class LoginController {
 	 * @param response
 	 * @return
 	 */
+	@ApiOperation("退出登录")
 	@RequestMapping(value = "/logout")
 	public Result<Object> logout(HttpServletRequest request,HttpServletResponse response) {
 		//用户退出逻辑
@@ -205,6 +206,7 @@ public class LoginController {
 	 * @param jsonObject
 	 * @return
 	 */
+	@ApiOperation(value = "发送短信验证码", notes = "发送短信验证码 {\"mobile\": \"18566666661\", \"smsmode\": \"0\"} smsmode 短信模板方式  0 .登录模板、1.注册模板、2.忘记密码模板")
 	@PostMapping(value = "/sms")
 	public Result<String> sms(@RequestBody JSONObject jsonObject) {
 		Result<String> result = new Result<String>();
@@ -280,7 +282,7 @@ public class LoginController {
 	 * @param jsonObject
 	 * @return
 	 */
-	@ApiOperation("手机号登录接口")
+	@ApiOperation(value = "手机号登录", notes = "手机号登录 {\"mobile\": \"18566666661\", \"smscode\": \"2345\"}")
 	@PostMapping("/phoneLogin")
 	public Result<JSONObject> phoneLogin(@RequestBody JSONObject jsonObject) {
 		Result<JSONObject> result = new Result<JSONObject>();
@@ -293,7 +295,7 @@ public class LoginController {
 			return result;
 		}
 		
-		String smscode = jsonObject.getString("captcha");
+		String smscode = jsonObject.getString("smscode");
 		Object code = redisUtil.get(phone);
 		if (!smscode.equals(code)) {
 			result.setMessage("手机验证码错误");
@@ -386,6 +388,7 @@ public class LoginController {
 	 * @return
 	 * @throws Exception
 	 */
+	@ApiOperation(value = "App登录", notes = "App登录 {\"useranme\": \"admin\", \"password\": \"123456\"}")
 	@RequestMapping(value = "/mLogin", method = RequestMethod.POST)
 	public Result<JSONObject> mLogin(@RequestBody SysLoginModel sysLoginModel) throws Exception {
 		Result<JSONObject> result = new Result<JSONObject>();
