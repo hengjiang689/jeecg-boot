@@ -152,7 +152,7 @@ public class LoginController {
 	 * @return
 	 */
 	@ApiOperation("退出登录")
-	@RequestMapping(value = "/logout")
+	@PostMapping(value = "/logout")
 	public Result<Object> logout(HttpServletRequest request,HttpServletResponse response) {
 		//用户退出逻辑
 	    String token = request.getHeader(DefContants.X_ACCESS_TOKEN);
