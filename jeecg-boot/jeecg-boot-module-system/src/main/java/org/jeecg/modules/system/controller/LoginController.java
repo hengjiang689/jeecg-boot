@@ -23,7 +23,12 @@ import org.jeecg.modules.system.service.ISysDepartService;
 import org.jeecg.modules.system.service.ISysLogService;
 import org.jeecg.modules.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import weixin.popular.api.SnsAPI;
+import weixin.popular.bean.sns.Jscode2sessionResult;
+import weixin.popular.bean.wxa.WxaDUserInfo;
+import weixin.popular.util.WxaUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,8 +53,52 @@ public class LoginController {
     private RedisUtil redisUtil;
 	@Autowired
     private ISysDepartService sysDepartService;
+
+	@Value("${jeecg.mini-program.appId}")
+	private String appId;
+
+	@Value("${jeecg.mini-program.appSecret}")
+	private String appSecret;
 	
 	private static final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
+
+	@ApiOperation(value = "小程序登录接口", notes = "小程序登录接口 {\"code\": \"ewer23\", \"encryptedData\": \"dfasdf0asdfasdffasd\",  \"iv\": \"4sfs\"} ")
+	@RequestMapping(value = "/miniLogin", method = RequestMethod.POST)
+	public Result<JSONObject> weixinLogin(@RequestBody JSONObject jsonObject){
+		Result<JSONObject> result = new Result<JSONObject>();
+		Jscode2sessionResult jscode2sessionResult = SnsAPI.jscode2session(appId, appSecret, jsonObject.getString("code"));
+		WxaDUserInfo wxaDUserInfo = WxaUtil.decryptUserInfo(jscode2sessionResult.getSession_key(), jsonObject.getString("encryptedData"), jsonObject.getString("iv"));
+		String unionId = wxaDUserInfo.getUnionId();
+		SysUser sysUser = sysUserService.getUserByUnionId(unionId);
+		if(sysUser==null){
+			//register user
+			sysUser = new SysUser();
+			try {
+				sysUser.setCreateTime(new Date());// 设置创建时间
+				String salt = oConvertUtils.randomGen(8);
+				String passwordEncode = PasswordUtil.encrypt(unionId, unionId, salt);
+				sysUser.setSalt(salt);
+				sysUser.setUsername(unionId);
+				sysUser.setUnionId(unionId);
+				sysUser.setRealname(wxaDUserInfo.getNickName());
+				sysUser.setAvatar(wxaDUserInfo.getAvatarUrl());
+				sysUser.setPassword(passwordEncode);
+				sysUser.setStatus(1);
+				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
+				sysUserService.addUserWithRole(sysUser,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		result = sysUserService.checkUserIsEffective(sysUser);
+		if(!result.isSuccess()) {
+			return result;
+		}
+		userInfo(sysUser, result);
+		sysBaseAPI.addLog("用户名: " + sysUser.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
+		return result;
+	}
 
 	@ApiOperation("登录接口")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

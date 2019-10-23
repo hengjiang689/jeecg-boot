@@ -15,3 +15,6 @@ jeecg :
     webapp: /data/upload
   shiro:
     excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/carousel/wbCarousel/list
+  mini-program:
+    appId: wx424640421193d7af
+    appSecret: cb4a03fe66264afcf94e83f90e1f096c

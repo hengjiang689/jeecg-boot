@@ -56,6 +56,12 @@ public class SysUser implements Serializable {
     private String password;
 
     /**
+     * UnionId
+     */
+    @Excel(name = "UnionId", width = 15)
+    private String unionId;
+
+    /**
      * md5密码盐
      */
     private String salt;

@@ -117,6 +117,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	public SysUser getUserByName(String username) {
 		return userMapper.getUserByName(username);
 	}
+
+	@Override
+	public SysUser getUserByUnionId(String unionId) {
+		return userMapper.getUserByUnionId(unionId);
+	}
 	
 	
 	@Override
