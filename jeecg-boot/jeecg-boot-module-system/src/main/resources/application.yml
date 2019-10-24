@@ -18,3 +18,6 @@ jeecg :
   mini-program:
     appId: wx424640421193d7af
     appSecret: cb4a03fe66264afcf94e83f90e1f096c
+  mobile:
+    appId: wx424640421193d7af
+    appSecret: cb4a03fe66264afcf94e83f90e1f096c

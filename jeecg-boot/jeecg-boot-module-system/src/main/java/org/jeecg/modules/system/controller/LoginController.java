@@ -7,7 +7,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.api.ISysBaseAPI;
@@ -27,6 +26,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.bean.sns.Jscode2sessionResult;
+import weixin.popular.bean.sns.SnsToken;
+import weixin.popular.bean.user.User;
 import weixin.popular.bean.wxa.WxaDUserInfo;
 import weixin.popular.util.WxaUtil;
 
@@ -59,8 +60,53 @@ public class LoginController {
 
 	@Value("${jeecg.mini-program.appSecret}")
 	private String appSecret;
+
+	@Value("${jeecg.mobile.appId}")
+	private String mobileAppId;
+
+	@Value("${jeecg.mobile.appSecret}")
+	private String mobileSecret;
 	
 	private static final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
+
+	@ApiOperation(value = "移动端微信登录接口", notes = "移动应用登录接口 {\"code\": \"ewer23\"} ")
+	@RequestMapping(value = "/mobileWxLogin", method = RequestMethod.POST)
+	public Result<JSONObject> mobileWxLogin(@RequestBody JSONObject jsonObject){
+		Result<JSONObject> result = new Result<JSONObject>();
+		SnsToken snsToken = SnsAPI.oauth2AccessToken(mobileAppId, mobileSecret, jsonObject.getString("code"));
+		User user = SnsAPI.userinfo(snsToken.getAccess_token(),snsToken.getOpenid(),null);
+		String unionId = snsToken.getUnionid();
+		SysUser sysUser = sysUserService.getUserByUnionId(unionId);
+		if(sysUser==null){
+			//register user
+			sysUser = new SysUser();
+			try {
+				sysUser.setCreateTime(new Date());// 设置创建时间
+				String salt = oConvertUtils.randomGen(8);
+				String passwordEncode = PasswordUtil.encrypt(unionId, unionId, salt);
+				sysUser.setSalt(salt);
+				sysUser.setUsername(unionId);
+				sysUser.setUnionId(unionId);
+				sysUser.setRealname(user.getNickname());
+				sysUser.setAvatar(user.getHeadimgurl());
+				sysUser.setPassword(passwordEncode);
+				sysUser.setStatus(1);
+				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
+				sysUserService.addUserWithRole(sysUser,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		result = sysUserService.checkUserIsEffective(sysUser);
+		if(!result.isSuccess()) {
+			return result;
+		}
+		userInfo(sysUser, result);
+		result.getResult().put("openId",snsToken.getOpenid());
+		sysBaseAPI.addLog("用户名: " + sysUser.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
+		return result;
+	}
 
 	@ApiOperation(value = "小程序登录接口", notes = "小程序登录接口 {\"code\": \"ewer23\", \"encryptedData\": \"dfasdf0asdfasdffasd\",  \"iv\": \"4sfs\"} ")
 	@RequestMapping(value = "/miniLogin", method = RequestMethod.POST)
@@ -96,6 +142,7 @@ public class LoginController {
 			return result;
 		}
 		userInfo(sysUser, result);
+		result.getResult().put("openId",wxaDUserInfo.getOpenId());
 		sysBaseAPI.addLog("用户名: " + sysUser.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
 		return result;
 	}
