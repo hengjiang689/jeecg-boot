@@ -68,6 +68,15 @@ public class WbCourseController {
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
+		if(wbCourse.getTitle()!=null){
+			wbCourse.setTitle("*"+wbCourse.getTitle()+"*");
+		}
+		if(wbCourse.getTeacherName()!=null){
+			wbCourse.setTeacherName("*"+wbCourse.getTeacherName()+"*");
+		}
+		if(wbCourse.getCategory()!=null){
+			wbCourse.setCategory("*"+wbCourse.getCategory()+"*");
+		}
 		QueryWrapper<WbCourse> queryWrapper = QueryGenerator.initQueryWrapper(wbCourse, req.getParameterMap());
 		Page<WbCourse> page = new Page<WbCourse>(pageNo, pageSize);
 		IPage<WbCourse> pageList = wbCourseService.page(page, queryWrapper);

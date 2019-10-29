@@ -21,8 +21,8 @@
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="8">
-              <a-form-item label="发布日期">
-                <j-date placeholder="请选择发布日期" v-model="queryParam.publishDate"></j-date>
+              <a-form-item label="课程id">
+                <a-input placeholder="请输入课程id" v-model="queryParam.id"></a-input>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="8">
