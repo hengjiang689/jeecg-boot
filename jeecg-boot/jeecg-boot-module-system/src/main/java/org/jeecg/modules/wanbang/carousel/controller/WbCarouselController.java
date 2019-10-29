@@ -1,4 +1,4 @@
-package org.jeecg.modules.carousel.controller;
+package org.jeecg.modules.wanbang.carousel.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,14 +9,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.carousel.entity.WbCarousel;
-import org.jeecg.modules.carousel.service.IWbCarouselService;
+import org.jeecg.modules.wanbang.carousel.entity.WbCarousel;
+import org.jeecg.modules.wanbang.carousel.service.IWbCarouselService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -39,12 +36,11 @@ import com.alibaba.fastjson.JSON;
  /**
  * @Description: wb_carousel
  * @Author: jeecg-boot
- * @Date:   2019-10-20
+ * @Date:   2019-10-28
  * @Version: V1.0
  */
 @RestController
 @RequestMapping("/carousel/wbCarousel")
-@Api(tags="轮播图管理")
 @Slf4j
 public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouselService> {
 	@Autowired
@@ -59,7 +55,6 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @param req
 	 * @return
 	 */
-	@ApiOperation("轮播图列表")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(WbCarousel wbCarousel,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,

@@ -5,11 +5,33 @@
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="类型">
-              <j-dict-select-tag placeholder="请选择类型" v-model="queryParam.carouselType" dictCode="carousel_type"/>
+            <a-form-item label="课程标题">
+              <a-input placeholder="请输入课程标题" v-model="queryParam.title"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8" >
+          <a-col :md="6" :sm="8">
+            <a-form-item label="所属分类">
+              <j-dict-select-tag placeholder="请选择所属分类" v-model="queryParam.type" dictCode="course_type"/>
+            </a-form-item>
+          </a-col>
+          <template v-if="toggleSearchStatus">
+            <a-col :md="6" :sm="8">
+              <a-form-item label="所属类别">
+                <a-input placeholder="请输入所属类别" v-model="queryParam.category"></a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item label="发布日期">
+                <j-date placeholder="请选择发布日期" v-model="queryParam.publishDate"></j-date>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item label="讲师姓名">
+                <a-input placeholder="请输入讲师姓名" v-model="queryParam.teacherName"></a-input>
+              </a-form-item>
+            </a-col>
+          </template>
+          <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
@@ -28,7 +50,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('wb_carousel')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('万邦课程表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -56,8 +78,7 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{fixed:true,selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
         <template slot="htmlSlot" slot-scope="text">
@@ -99,27 +120,29 @@
       </a-table>
     </div>
 
-    <wbCarousel-modal ref="modalForm" @ok="modalFormOk"></wbCarousel-modal>
+    <wbCourse-modal ref="modalForm" @ok="modalFormOk"></wbCourse-modal>
   </a-card>
 </template>
 
 <script>
 
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import WbCarouselModal from './modules/WbCarouselModal'
+  import WbCourseModal from './modules/WbCourseModal'
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
+  import JDate from '@/components/jeecg/JDate.vue'
   import {initDictOptions, filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
-    name: "WbCarouselList",
+    name: "WbCourseList",
     mixins:[JeecgListMixin],
     components: {
       JDictSelectTag,
-      WbCarouselModal
+      JDate,
+      WbCourseModal
     },
     data () {
       return {
-        description: 'wb_carousel管理页面',
+        description: '万邦课程表管理页面',
         // 表头
         columns: [
           {
@@ -133,50 +156,76 @@
             }
           },
           {
-            title:'标题',
+            title:'课程标题',
             align:"center",
             dataIndex: 'title'
           },
           {
-            title:'类型',
+            title:'所属分类',
             align:"center",
-            dataIndex: 'carouselType',
+            dataIndex: 'type',
             customRender:(text)=>{
               if(!text){
                 return ''
               }else{
-                return filterMultiDictText(this.dictOptions['carouselType'], text+"")
+                return filterMultiDictText(this.dictOptions['type'], text+"")
               }
             }
           },
           {
-            title:'图片',
+            title:'所属类别',
             align:"center",
-            dataIndex: 'url',
-            scopedSlots: {customRender: 'imgSlot'}
+            dataIndex: 'category',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['category'], text+"")
+              }
+            }
           },
           {
-            title:'课程id',
+            title:'发布日期',
             align:"center",
-            dataIndex: 'courseId'
+            dataIndex: 'publishDate',
+            customRender:function (text) {
+              return !text?"":(text.length>10?text.substr(0,10):text)
+            }
+          },
+          {
+            title:'讲师姓名',
+            align:"center",
+            dataIndex: 'teacherName'
+          },
+          {
+            title:'学习人数',
+            align:"center",
+            dataIndex: 'learnNum'
+          },
+          {
+            title:'排序',
+            align:"center",
+            dataIndex: 'sortNo'
           },
           {
             title: '操作',
             dataIndex: 'action',
             align:"center",
-            scopedSlots: { customRender: 'action' }
+            scopedSlots: { customRender: 'action' },
           }
         ],
         url: {
-          list: "/carousel/wbCarousel/list",
-          delete: "/carousel/wbCarousel/delete",
-          deleteBatch: "/carousel/wbCarousel/deleteBatch",
-          exportXlsUrl: "/carousel/wbCarousel/exportXls",
-          importExcelUrl: "carousel/wbCarousel/importExcel",
+          list: "/course/wbCourse/list",
+          delete: "/course/wbCourse/delete",
+          deleteBatch: "/course/wbCourse/deleteBatch",
+          exportXlsUrl: "/course/wbCourse/exportXls",
+          importExcelUrl: "course/wbCourse/importExcel",
         },
         dictOptions:{
-         carouselType:[],
+         type:[],
+         category:[],
         },
+
       }
     },
     computed: {
@@ -186,9 +235,14 @@
     },
     methods: {
       initDictConfig(){
-        initDictOptions('carousel_type').then((res) => {
+        initDictOptions('course_type').then((res) => {
           if (res.success) {
-            this.$set(this.dictOptions, 'carouselType', res.result)
+            this.$set(this.dictOptions, 'type', res.result)
+          }
+        })
+        initDictOptions('course_category').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'category', res.result)
           }
         })
       }

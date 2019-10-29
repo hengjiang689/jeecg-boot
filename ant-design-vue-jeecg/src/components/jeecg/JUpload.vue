@@ -37,8 +37,8 @@
     name: 'JUpload',
     data(){
       return {
-        uploadAction:window._CONFIG['domianURL']+"/sys/common/upload",
-        urlDownload:window._CONFIG['domianURL'] + "/sys/common/download/",
+        uploadAction:'',
+        urlDownload:'',
         headers:{},
         fileList: []
       }

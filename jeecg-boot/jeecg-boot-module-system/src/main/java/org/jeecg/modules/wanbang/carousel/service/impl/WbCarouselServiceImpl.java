@@ -1,8 +1,8 @@
-package org.jeecg.modules.carousel.service.impl;
+package org.jeecg.modules.wanbang.carousel.service.impl;
 
-import org.jeecg.modules.carousel.entity.WbCarousel;
-import org.jeecg.modules.carousel.mapper.WbCarouselMapper;
-import org.jeecg.modules.carousel.service.IWbCarouselService;
+import org.jeecg.modules.wanbang.carousel.entity.WbCarousel;
+import org.jeecg.modules.wanbang.carousel.mapper.WbCarouselMapper;
+import org.jeecg.modules.wanbang.carousel.service.IWbCarouselService;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 /**
  * @Description: wb_carousel
  * @Author: jeecg-boot
- * @Date:   2019-10-20
+ * @Date:   2019-10-28
  * @Version: V1.0
  */
 @Service

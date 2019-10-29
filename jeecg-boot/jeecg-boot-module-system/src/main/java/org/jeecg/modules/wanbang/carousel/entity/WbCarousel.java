@@ -1,4 +1,4 @@
-package org.jeecg.modules.carousel.entity;
+package org.jeecg.modules.wanbang.carousel.entity;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -16,7 +16,7 @@ import org.jeecg.common.aspect.annotation.Dict;
 /**
  * @Description: wb_carousel
  * @Author: jeecg-boot
- * @Date:   2019-10-20
+ * @Date:   2019-10-28
  * @Version: V1.0
  */
 @Data
@@ -55,4 +55,7 @@ public class WbCarousel implements Serializable {
 	/**图片*/
 	@Excel(name = "图片", width = 15)
     private java.lang.String url;
+	/**课程id*/
+	@Excel(name = "课程id", width = 15)
+    private java.lang.String courseId;
 }
