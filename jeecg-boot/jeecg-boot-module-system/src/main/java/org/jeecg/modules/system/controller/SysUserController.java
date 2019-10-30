@@ -815,6 +815,7 @@ public class SysUserController {
 			if(sysUser3 !=null ){
                 user.setReferUserId(sysUser3.getId());
             }
+			user.setOrgCode("A01");
 //			user.setEmail(email);
 			user.setPhone(phone);
 			user.setStatus(1);
