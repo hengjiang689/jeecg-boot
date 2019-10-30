@@ -33,6 +33,14 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 	public SysUser getUserByUnionId(@Param("unionId") String unionId);
 
 	/**
+	 * 通过用户ReferralCode查询用户信息
+	 * @param referralCode
+	 * @return
+	 */
+	public SysUser getUserByReferralCode(@Param("referralCode") String referralCode);
+
+
+	/**
 	 *  根据部门Id查询用户信息
 	 * @param page
 	 * @param departId

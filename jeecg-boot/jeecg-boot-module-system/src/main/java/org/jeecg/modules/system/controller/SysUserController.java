@@ -68,6 +68,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static cn.hutool.crypto.SecureUtil.md5;
+
 /**
  * <p>
  * 用户表 前端控制器
@@ -373,7 +375,7 @@ public class SysUserController {
      * 导出excel
      *
      * @param request
-     * @param response
+     * @param sysUser
      */
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(SysUser sysUser,HttpServletRequest request) {
@@ -740,22 +742,30 @@ public class SysUserController {
 	 * @param user
 	 * @return
 	 */
-    @ApiOperation(value = "用户注册", notes = "用户注册 {\"phone\":\"15901038477\",\"username\":\"test\",\"email\":\"test@test.com\",\"password\": \"Uelrkjsdf!@@#323\", \"smsmode\": \"23042\"}")
+    @ApiOperation(value = "用户注册", notes = "用户注册 {\"phone\":\"15901038477\",\"password\": \"123456\", \"sms_code\": \"23042\",\"referral_code\": \"467987\"}")
 	@PostMapping("/register")
 	public Result<JSONObject> userRegister(@RequestBody JSONObject jsonObject, SysUser user) {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String phone = jsonObject.getString("phone");
-		String smscode = jsonObject.getString("smscode");
+		String smsCode = jsonObject.getString("sms_code");
+        String referralCode = jsonObject.getString("referral_code");
 		Object code = redisUtil.get(phone);
 		String username = jsonObject.getString("username");
+		if(username == null){
+            username = phone;
+        }else{
+            SysUser sysUser1 = sysUserService.getUserByName(username);
+            if (sysUser1 != null) {
+                result.setMessage("用户名已注册");
+                result.setSuccess(false);
+                return result;
+            }
+        }
+
 		String password = jsonObject.getString("password");
-		String email = jsonObject.getString("email");
-		SysUser sysUser1 = sysUserService.getUserByName(username);
-		if (sysUser1 != null) {
-			result.setMessage("用户名已注册");
-			result.setSuccess(false);
-			return result;
-		}
+//		String email = jsonObject.getString("email");
+
+
 		SysUser sysUser2 = sysUserService.getUserByPhone(phone);
 
 		if (sysUser2 != null) {
@@ -763,18 +773,32 @@ public class SysUserController {
 			result.setSuccess(false);
 			return result;
 		}
-		SysUser sysUser3 = sysUserService.getUserByEmail(email);
-		if (sysUser3 != null) {
-			result.setMessage("邮箱已被注册");
-			result.setSuccess(false);
-			return result;
-		}
 
-		if (!smscode.equals(code)) {
+        SysUser sysUser3 = sysUserService.getUserByReferralCode(referralCode);
+
+        if (sysUser3 == null) {
+            result.setMessage("该推荐码不存在");
+            result.setSuccess(false);
+            return result;
+        }
+//		SysUser sysUser3 = sysUserService.getUserByEmail(email);
+//		if (sysUser3 != null) {
+//			result.setMessage("邮箱已被注册");
+//			result.setSuccess(false);
+//			return result;
+//		}
+
+		if (!smsCode.equals(code)) {
 			result.setMessage("手机验证码错误");
 			result.setSuccess(false);
 			return result;
 		}
+
+		String myReferralCode = phone.substring(5);
+        SysUser sysUser4 = sysUserService.getUserByReferralCode(myReferralCode);
+		if(sysUser4 != null){
+            myReferralCode = UUID.randomUUID().toString().replace("o","").replace("0","").substring(0,6).toUpperCase();
+        }
 
 		try {
 			user.setCreateTime(new Date());// 设置创建时间
@@ -784,7 +808,11 @@ public class SysUserController {
 			user.setUsername(username);
 			user.setRealname(username);
 			user.setPassword(passwordEncode);
-			user.setEmail(email);
+			user.setReferralCode(myReferralCode);
+			if(sysUser3 !=null ){
+                user.setReferUserId(sysUser3.getId());
+            }
+//			user.setEmail(email);
 			user.setPhone(phone);
 			user.setStatus(1);
 			user.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
@@ -798,8 +826,9 @@ public class SysUserController {
 	}
 
 	/**
-	 * 
-	 * @param 根据用户名或手机号查询用户信息
+	 * 根据用户名或手机号查询用户信息
+     *
+	 * @param  sysUser
 	 * @return
 	 */
 	@GetMapping("/querySysUser")
@@ -836,7 +865,7 @@ public class SysUserController {
 	/**
 	 * 用户手机号验证
 	 */
-    @ApiOperation(value = "用户手机号验证", notes = "用户手机号验证 {\"phone\":\"15901038477\", \"smsmode\": \"23042\"}")
+    @ApiOperation(value = "用户手机号验证", notes = "用户手机号验证 {\"phone\":\"15901038477\", \"smscode\": \"23042\"}")
 	@PostMapping("/phoneVerification")
 	public Result<String> phoneVerification(@RequestBody JSONObject jsonObject) {
 		Result<String> result = new Result<String>();

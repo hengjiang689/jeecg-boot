@@ -122,6 +122,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	public SysUser getUserByUnionId(String unionId) {
 		return userMapper.getUserByUnionId(unionId);
 	}
+
+	@Override
+	public SysUser getUserByReferralCode(String referralCode) {
+		return userMapper.getUserByReferralCode(referralCode);
+	}
 	
 	
 	@Override

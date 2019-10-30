@@ -1,8 +1,6 @@
 package org.jeecg.modules.wanbang.course.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +10,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -37,7 +37,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import com.alibaba.fastjson.JSON;
 
  /**
  * @Description: 万邦课程表
@@ -47,6 +46,7 @@ import com.alibaba.fastjson.JSON;
  */
 @RestController
 @RequestMapping("/course/wbCourse")
+@Api(tags="课程管理")
 @Slf4j
 public class WbCourseController {
 	@Autowired
@@ -63,6 +63,7 @@ public class WbCourseController {
 	 * @param req
 	 * @return
 	 */
+	@ApiOperation(value = "课程列表", notes = "课程列表 type 1 为首页 2 为家庭教育 category ")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(WbCourse wbCourse,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,

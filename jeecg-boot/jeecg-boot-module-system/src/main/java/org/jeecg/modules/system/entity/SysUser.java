@@ -62,6 +62,18 @@ public class SysUser implements Serializable {
     private String unionId;
 
     /**
+     * 推荐码
+     */
+    @Excel(name = "referralCode", width = 15)
+    private String referralCode;
+
+    /**
+     * 推荐码
+     */
+    @Excel(name = "referUserId", width = 15)
+    private String referUserId;
+
+    /**
      * md5密码盐
      */
     private String salt;

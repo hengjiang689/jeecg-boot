@@ -59,6 +59,8 @@ public interface ISysUserService extends IService<SysUser> {
 	
 	public SysUser getUserByName(String username);
 
+	public SysUser getUserByReferralCode(String referralCode);
+
 	public SysUser getUserByUnionId(String unionId);
 	
 	/**

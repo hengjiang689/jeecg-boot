@@ -40,7 +40,7 @@ import java.util.Map;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "职务表")
+//@Api(tags = "职务表")
 @RestController
 @RequestMapping("/sys/position")
 public class SysPositionController {

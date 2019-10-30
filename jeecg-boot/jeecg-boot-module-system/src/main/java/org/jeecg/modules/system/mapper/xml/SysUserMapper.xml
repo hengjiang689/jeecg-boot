@@ -7,9 +7,14 @@
 		select * from  sys_user  where username = #{username} and del_flag = '0'
 	</select>
 
-	<!-- 根据用户名查询 -->
+	<!-- 根据UnionId查询 -->
 	<select id="getUserByUnionId" resultType="org.jeecg.modules.system.entity.SysUser">
 		select * from  sys_user  where union_id = #{unionId} and del_flag = '0'
+	</select>
+
+	<!-- 根据ReferralCode查询 -->
+	<select id="getUserByReferralCode" resultType="org.jeecg.modules.system.entity.SysUser">
+		select * from  sys_user  where referral_code = #{referralCode} and del_flag = '0'
 	</select>
 
 	<!-- 根据部门Id查询 -->
