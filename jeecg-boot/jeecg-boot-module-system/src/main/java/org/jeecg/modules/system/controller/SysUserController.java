@@ -774,13 +774,16 @@ public class SysUserController {
 			return result;
 		}
 
-        SysUser sysUser3 = sysUserService.getUserByReferralCode(referralCode);
-
-        if (sysUser3 == null) {
-            result.setMessage("该推荐码不存在");
-            result.setSuccess(false);
-            return result;
+        SysUser sysUser3 = null;
+		if(referralCode!=null){
+		    sysUser3 = sysUserService.getUserByReferralCode(referralCode);
+            if (sysUser3 == null) {
+                result.setMessage("该推荐码不存在");
+                result.setSuccess(false);
+                return result;
+            }
         }
+
 //		SysUser sysUser3 = sysUserService.getUserByEmail(email);
 //		if (sysUser3 != null) {
 //			result.setMessage("邮箱已被注册");
