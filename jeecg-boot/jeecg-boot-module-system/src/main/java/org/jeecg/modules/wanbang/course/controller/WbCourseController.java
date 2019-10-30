@@ -63,7 +63,7 @@ public class WbCourseController {
 	 * @param req
 	 * @return
 	 */
-	@ApiOperation(value = "课程列表", notes = "课程列表 type 1 为首页 2 为家庭教育 category ")
+	@ApiOperation(value = "课程列表", notes = "课程列表 type 1 为首页 2 为家庭教育 ")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(WbCourse wbCourse,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -146,6 +146,7 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据id查询课程详情")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		WbCourse wbCourse = wbCourseService.getById(id);
@@ -162,6 +163,7 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据课程id查询课程评论列表")
 	@GetMapping(value = "/queryWbCourseCommentByMainId")
 	public Result<?> queryWbCourseCommentListByMainId(@RequestParam(name="id",required=true) String id) {
 		List<WbCourseComment> wbCourseCommentList = wbCourseCommentService.selectByMainId(id);
