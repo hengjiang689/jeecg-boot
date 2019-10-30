@@ -35,7 +35,9 @@ public class WbCourseServiceImpl extends ServiceImpl<WbCourseMapper, WbCourse> i
 			for(WbCourseComment entity:wbCourseCommentList) {
 				//外键设置
 				entity.setCourseId(wbCourse.getId());
-				wbCourseCommentMapper.insert(entity);
+				if(entity.getContent().length()>0){
+					wbCourseCommentMapper.insert(entity);
+				}
 			}
 		}
 	}
@@ -53,7 +55,9 @@ public class WbCourseServiceImpl extends ServiceImpl<WbCourseMapper, WbCourse> i
 			for(WbCourseComment entity:wbCourseCommentList) {
 				//外键设置
 				entity.setCourseId(wbCourse.getId());
-				wbCourseCommentMapper.insert(entity);
+				if(entity.getContent().length()>0){
+					wbCourseCommentMapper.insert(entity);
+				}
 			}
 		}
 	}
