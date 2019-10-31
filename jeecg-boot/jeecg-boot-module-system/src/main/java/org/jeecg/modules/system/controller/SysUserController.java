@@ -775,7 +775,7 @@ public class SysUserController {
 		}
 
         SysUser sysUser3 = null;
-		if(referralCode!=null){
+        if (oConvertUtils.isNotEmpty(referralCode)) {
 		    sysUser3 = sysUserService.getUserByReferralCode(referralCode);
             if (sysUser3 == null) {
                 result.setMessage("该推荐码不存在");
