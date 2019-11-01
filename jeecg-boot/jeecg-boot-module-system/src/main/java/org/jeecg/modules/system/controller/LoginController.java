@@ -90,6 +90,7 @@ public class LoginController {
 				sysUser.setRealname(user.getNickname());
 				sysUser.setAvatar(user.getHeadimgurl());
 				sysUser.setPassword(passwordEncode);
+				sysUser.setOrgCode("A01");
 				sysUser.setStatus(1);
 				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
 				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
@@ -110,7 +111,7 @@ public class LoginController {
 
 	@ApiOperation(value = "小程序登录接口", notes = "小程序登录接口 {\"code\": \"ewer23\", \"encryptedData\": \"dfasdf0asdfasdffasd\",  \"iv\": \"4sfs\"} ")
 	@RequestMapping(value = "/miniLogin", method = RequestMethod.POST)
-	public Result<JSONObject> weixinLogin(@RequestBody JSONObject jsonObject){
+	public Result<JSONObject> miniLogin(@RequestBody JSONObject jsonObject){
 		Result<JSONObject> result = new Result<JSONObject>();
 		Jscode2sessionResult jscode2sessionResult = SnsAPI.jscode2session(appId, appSecret, jsonObject.getString("code"));
 		WxaDUserInfo wxaDUserInfo = WxaUtil.decryptUserInfo(jscode2sessionResult.getSession_key(), jsonObject.getString("encryptedData"), jsonObject.getString("iv"));
@@ -129,6 +130,7 @@ public class LoginController {
 				sysUser.setRealname(wxaDUserInfo.getNickName());
 				sysUser.setAvatar(wxaDUserInfo.getAvatarUrl());
 				sysUser.setPassword(passwordEncode);
+				sysUser.setOrgCode("A01");
 				sysUser.setStatus(1);
 				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
 				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
@@ -484,7 +486,7 @@ public class LoginController {
 	 * @return
 	 * @throws Exception
 	 */
-	@ApiOperation(value = "App登录", notes = "App登录 {\"useranme\": \"admin\", \"password\": \"123456\"}")
+	@ApiOperation(value = "App登录", notes = "App登录 {\"username\": \"admin\", \"password\": \"123456\"}")
 	@RequestMapping(value = "/mLogin", method = RequestMethod.POST)
 	public Result<JSONObject> mLogin(@RequestBody SysLoginModel sysLoginModel) throws Exception {
 		Result<JSONObject> result = new Result<JSONObject>();
