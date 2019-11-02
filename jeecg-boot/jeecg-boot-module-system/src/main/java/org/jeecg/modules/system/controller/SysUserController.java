@@ -732,7 +732,63 @@ public class SysUserController {
         return result;
     }
 
-    
+    /**
+     * 用户注册接口
+     *
+     * @param jsonObject
+     * @param user
+     * @return
+     */
+    @ApiOperation(value = "微信用户注册", notes = "微信用户注册 {\"union_id\":\"oQ3UOxO5EWOqNzfklZEgMm36hqx4\",\"phone\":\"15901038477\",\"password\": \"123456\",\"referral_code\": \"467987\",\"nick_name\":\"test\",\"avatar_url\":\"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdIyTr95vZyGgrAut7eKlXlSeEBBS8EV3ia5m8ZlQvZGrqZmwBzFXzbQzvHE7GPwxk6g9aQaaYQMw/132\"}")
+    @PostMapping("/weixinRegister")
+    public Result<JSONObject> weixinUserRegister(@RequestBody JSONObject jsonObject, SysUser user) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        String unionId = jsonObject.getString("union_id");
+        String phone = jsonObject.getString("phone");
+        String referralCode = jsonObject.getString("referral_code");
+        String password = jsonObject.getString("password");
+        String nickName = jsonObject.getString("nick_name");
+        String avatarUrl = jsonObject.getString("avatar_url");
+        SysUser sysUser3 = null;
+        if (oConvertUtils.isNotEmpty(referralCode)) {
+            sysUser3 = sysUserService.getUserByReferralCode(referralCode);
+            if (sysUser3 == null) {
+                result.setMessage("该推荐码不存在");
+                result.setSuccess(false);
+                return result;
+            }
+        }
+        String myReferralCode = phone.substring(5);
+        SysUser sysUser4 = sysUserService.getUserByReferralCode(myReferralCode);
+        if(sysUser4 != null){
+            myReferralCode = UUID.randomUUID().toString().replace("o","").replace("0","").substring(0,6).toUpperCase();
+        }
+        try {
+            user.setCreateTime(new Date());// 设置创建时间
+            String salt = oConvertUtils.randomGen(8);
+            String passwordEncode = PasswordUtil.encrypt(phone, password, salt);
+            user.setSalt(salt);
+            user.setUsername(phone);
+            user.setUnionId(unionId);
+            user.setRealname(nickName);
+            user.setAvatar(avatarUrl);
+            user.setPassword(passwordEncode);
+            user.setReferralCode(myReferralCode);
+            if(sysUser3 !=null ){
+                user.setReferUserId(sysUser3.getId());
+            }
+            user.setOrgCode("A01");
+            user.setPhone(phone);
+            user.setStatus(1);
+            user.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+            user.setActivitiSync(CommonConstant.ACT_SYNC_1);
+            sysUserService.addUserWithRole(user,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
+            result.success("注册成功");
+        } catch (Exception e) {
+            result.error500("注册失败");
+        }
+        return result;
+    }
 
 
 	/**

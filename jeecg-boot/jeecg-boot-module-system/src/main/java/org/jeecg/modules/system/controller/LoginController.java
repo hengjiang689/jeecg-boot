@@ -79,25 +79,30 @@ public class LoginController {
 		SysUser sysUser = sysUserService.getUserByUnionId(unionId);
 		if(sysUser==null){
 			//register user
-			sysUser = new SysUser();
-			try {
-				sysUser.setCreateTime(new Date());// 设置创建时间
-				String salt = oConvertUtils.randomGen(8);
-				String passwordEncode = PasswordUtil.encrypt(unionId, unionId, salt);
-				sysUser.setSalt(salt);
-				sysUser.setUsername(unionId);
-				sysUser.setUnionId(unionId);
-				sysUser.setRealname(user.getNickname());
-				sysUser.setAvatar(user.getHeadimgurl());
-				sysUser.setPassword(passwordEncode);
-				sysUser.setOrgCode("A01");
-				sysUser.setStatus(1);
-				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
-				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
-				sysUserService.addUserWithRole(sysUser,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			sysUser = new SysUser();
+//			try {
+//				sysUser.setCreateTime(new Date());// 设置创建时间
+//				String salt = oConvertUtils.randomGen(8);
+//				String passwordEncode = PasswordUtil.encrypt(unionId, unionId, salt);
+//				sysUser.setSalt(salt);
+//				sysUser.setUsername(unionId);
+//				sysUser.setUnionId(unionId);
+//				sysUser.setRealname(user.getNickname());
+//				sysUser.setAvatar(user.getHeadimgurl());
+//				sysUser.setPassword(passwordEncode);
+//				sysUser.setOrgCode("A01");
+//				sysUser.setStatus(1);
+//				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+//				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
+//				sysUserService.addUserWithRole(sysUser,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+			JSONObject obj = new JSONObject();
+			obj.put("unionId", unionId);
+			obj.put("openId", snsToken.getOpenid());
+			result.setResult(obj);
+			result.error500("用户尚未绑定手机号");
 		}
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
@@ -119,25 +124,30 @@ public class LoginController {
 		SysUser sysUser = sysUserService.getUserByUnionId(unionId);
 		if(sysUser==null){
 			//register user
-			sysUser = new SysUser();
-			try {
-				sysUser.setCreateTime(new Date());// 设置创建时间
-				String salt = oConvertUtils.randomGen(8);
-				String passwordEncode = PasswordUtil.encrypt(unionId, unionId, salt);
-				sysUser.setSalt(salt);
-				sysUser.setUsername(unionId);
-				sysUser.setUnionId(unionId);
-				sysUser.setRealname(wxaDUserInfo.getNickName());
-				sysUser.setAvatar(wxaDUserInfo.getAvatarUrl());
-				sysUser.setPassword(passwordEncode);
-				sysUser.setOrgCode("A01");
-				sysUser.setStatus(1);
-				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
-				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
-				sysUserService.addUserWithRole(sysUser,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			sysUser = new SysUser();
+//			try {
+//				sysUser.setCreateTime(new Date());// 设置创建时间
+//				String salt = oConvertUtils.randomGen(8);
+//				String passwordEncode = PasswordUtil.encrypt(unionId, unionId, salt);
+//				sysUser.setSalt(salt);
+//				sysUser.setUsername(unionId);
+//				sysUser.setUnionId(unionId);
+//				sysUser.setRealname(wxaDUserInfo.getNickName());
+//				sysUser.setAvatar(wxaDUserInfo.getAvatarUrl());
+//				sysUser.setPassword(passwordEncode);
+//				sysUser.setOrgCode("A01");
+//				sysUser.setStatus(1);
+//				sysUser.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+//				sysUser.setActivitiSync(CommonConstant.ACT_SYNC_1);
+//				sysUserService.addUserWithRole(sysUser,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+			JSONObject obj = new JSONObject();
+			obj.put("unionId", unionId);
+			obj.put("openId", wxaDUserInfo.getOpenId());
+			result.setResult(obj);
+			result.error500("用户尚未绑定手机号");
 		}
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
@@ -313,7 +323,7 @@ public class LoginController {
 		log.info(mobile);	
 		Object object = redisUtil.get(mobile);
 		if (object != null) {
-			result.setMessage("验证码10分钟内，仍然有效！");
+			result.setMessage("验证码5分钟内，仍然有效！");
 			result.setSuccess(false);
 			return result;
 		}
@@ -359,7 +369,7 @@ public class LoginController {
 				return result;
 			}
 			//验证码10分钟内有效
-			redisUtil.set(mobile, captcha, 600);
+			redisUtil.set(mobile, captcha, 300);
 			//update-begin--Author:scott  Date:20190812 for：issues#391
 			//result.setResult(captcha);
 			//update-end--Author:scott  Date:20190812 for：issues#391
@@ -380,25 +390,32 @@ public class LoginController {
 	 * @param jsonObject
 	 * @return
 	 */
-	@ApiOperation(value = "手机号登录", notes = "手机号登录 {\"mobile\": \"18566666661\", \"smscode\": \"2345\"}")
+	@ApiOperation(value = "手机号登录", notes = "手机号登录 {\"mobile\": \"18566666661\", \"smscode\": \"2345\",\"union_id\":\"oQ3UOxO5EWOqNzfklZEgMm36hqx4\",\"nick_name\":\"test\",\"avatar_url\":\"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdIyTr95vZyGgrAut7eKlXlSeEBBS8EV3ia5m8ZlQvZGrqZmwBzFXzbQzvHE7GPwxk6g9aQaaYQMw/132\"}")
 	@PostMapping("/phoneLogin")
 	public Result<JSONObject> phoneLogin(@RequestBody JSONObject jsonObject) {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String phone = jsonObject.getString("mobile");
-		
+		String unionId = jsonObject.getString("union_id");
+		String nickName = jsonObject.getString("nick_name");
+		String avatarUrl = jsonObject.getString("avatar_url");
+		String smsCode = jsonObject.getString("smscode");
+		Object code = redisUtil.get(phone);
+		if (!smsCode.equals(code)) {
+			result.setMessage("手机验证码错误");
+			return result;
+		}
 		//校验用户有效性
 		SysUser sysUser = sysUserService.getUserByPhone(phone);
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
 			return result;
+		}else if(!oConvertUtils.isEmpty(unionId) && !oConvertUtils.isEmpty(nickName) && !oConvertUtils.isEmpty(avatarUrl)){
+			sysUser.setUnionId(unionId);
+			sysUser.setRealname(nickName);
+			sysUser.setAvatar(avatarUrl);
+			sysUserService.save(sysUser);
 		}
-		
-		String smscode = jsonObject.getString("smscode");
-		Object code = redisUtil.get(phone);
-		if (!smscode.equals(code)) {
-			result.setMessage("手机验证码错误");
-			return result;
-		}
+
 		//用户信息
 		userInfo(sysUser, result);
 		//添加日志
