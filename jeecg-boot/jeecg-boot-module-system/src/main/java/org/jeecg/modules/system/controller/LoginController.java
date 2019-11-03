@@ -496,7 +496,19 @@ public class LoginController {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * 获取校验码
+	 */
+	@ApiOperation("获取验证码")
+	@GetMapping(value = "/getPhoneSmsCode")
+	public Result<String> getCheckCode(@RequestParam("phone") String phone){
+		Result<String> result = new Result<>();
+		result.setResult(redisUtil.get(phone).toString());
+		return result;
+	}
+
+
 	/**
 	 * app登录
 	 * @param sysLoginModel
