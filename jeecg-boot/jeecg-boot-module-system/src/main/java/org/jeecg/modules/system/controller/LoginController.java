@@ -69,6 +69,165 @@ public class LoginController {
 	
 	private static final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
 
+
+	/**
+	 * 用户注册接口
+	 *
+	 * @param jsonObject
+	 * @param user
+	 * @return
+	 */
+	@ApiOperation(value = "微信用户注册", notes = "微信用户注册 {\"union_id\":\"oQ3UOxO5EWOqNzfklZEgMm36hqx4\",\"phone\":\"15901038477\",\"password\": \"123456\",\"referral_code\": \"467987\",\"nick_name\":\"test\",\"avatar_url\":\"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdIyTr95vZyGgrAut7eKlXlSeEBBS8EV3ia5m8ZlQvZGrqZmwBzFXzbQzvHE7GPwxk6g9aQaaYQMw/132\"}")
+	@PostMapping("/user/weixinRegister")
+	public Result<JSONObject> weixinUserRegister(@RequestBody JSONObject jsonObject, SysUser user) {
+		Result<JSONObject> result = new Result<JSONObject>();
+		String unionId = jsonObject.getString("union_id");
+		String phone = jsonObject.getString("phone");
+		String referralCode = jsonObject.getString("referral_code");
+		String password = jsonObject.getString("password");
+		String nickName = jsonObject.getString("nick_name");
+		String avatarUrl = jsonObject.getString("avatar_url");
+		SysUser sysUser3 = null;
+		if (oConvertUtils.isNotEmpty(referralCode)) {
+			sysUser3 = sysUserService.getUserByReferralCode(referralCode);
+			if (sysUser3 == null) {
+				result.setMessage("该推荐码不存在");
+				result.setSuccess(false);
+				return result;
+			}
+		}
+		String myReferralCode = phone.substring(5);
+		SysUser sysUser4 = sysUserService.getUserByReferralCode(myReferralCode);
+		if(sysUser4 != null){
+			myReferralCode = UUID.randomUUID().toString().replace("o","").replace("0","").substring(0,6).toUpperCase();
+		}
+		try {
+			user.setCreateTime(new Date());// 设置创建时间
+			String salt = oConvertUtils.randomGen(8);
+			String passwordEncode = PasswordUtil.encrypt(phone, password, salt);
+			user.setSalt(salt);
+			user.setUsername(phone);
+			user.setUnionId(unionId);
+			user.setRealname(nickName);
+			user.setAvatar(avatarUrl);
+			user.setPassword(passwordEncode);
+			user.setReferralCode(myReferralCode);
+			if(sysUser3 !=null ){
+				user.setReferUserId(sysUser3.getId());
+			}
+			user.setOrgCode("A01");
+			user.setPhone(phone);
+			user.setStatus(1);
+			user.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+			user.setActivitiSync(CommonConstant.ACT_SYNC_1);
+			sysUserService.addUserWithRole(user,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
+			result.success("注册成功");
+		} catch (Exception e) {
+			result.error500("注册失败");
+		}
+		userInfo(sysUserService.getUserByPhone(phone), result);
+		sysBaseAPI.addLog("用户名: " + user.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
+		return result;
+	}
+
+
+	/**
+	 * 用户注册接口
+	 *
+	 * @param jsonObject
+	 * @param user
+	 * @return
+	 */
+	@ApiOperation(value = "用户注册", notes = "用户注册 {\"phone\":\"15901038477\",\"password\": \"123456\", \"sms_code\": \"23042\",\"referral_code\": \"467987\"}")
+	@PostMapping("/user/register")
+	public Result<JSONObject> userRegister(@RequestBody JSONObject jsonObject, SysUser user) {
+		Result<JSONObject> result = new Result<JSONObject>();
+		String phone = jsonObject.getString("phone");
+		String smsCode = jsonObject.getString("sms_code");
+		String referralCode = jsonObject.getString("referral_code");
+		Object code = redisUtil.get(phone);
+		String username = jsonObject.getString("username");
+		if(username == null){
+			username = phone;
+		}else{
+			SysUser sysUser1 = sysUserService.getUserByName(username);
+			if (sysUser1 != null) {
+				result.setMessage("用户名已注册");
+				result.setSuccess(false);
+				return result;
+			}
+		}
+
+		String password = jsonObject.getString("password");
+//		String email = jsonObject.getString("email");
+
+
+		SysUser sysUser2 = sysUserService.getUserByPhone(phone);
+
+		if (sysUser2 != null) {
+			result.setMessage("该手机号已注册");
+			result.setSuccess(false);
+			return result;
+		}
+
+		SysUser sysUser3 = null;
+		if (oConvertUtils.isNotEmpty(referralCode)) {
+			sysUser3 = sysUserService.getUserByReferralCode(referralCode);
+			if (sysUser3 == null) {
+				result.setMessage("该推荐码不存在");
+				result.setSuccess(false);
+				return result;
+			}
+		}
+
+//		SysUser sysUser3 = sysUserService.getUserByEmail(email);
+//		if (sysUser3 != null) {
+//			result.setMessage("邮箱已被注册");
+//			result.setSuccess(false);
+//			return result;
+//		}
+
+		if (!smsCode.equals(code)) {
+			result.setMessage("手机验证码错误");
+			result.setSuccess(false);
+			return result;
+		}
+
+		String myReferralCode = phone.substring(5);
+		SysUser sysUser4 = sysUserService.getUserByReferralCode(myReferralCode);
+		if(sysUser4 != null){
+			myReferralCode = UUID.randomUUID().toString().replace("o","").replace("0","").substring(0,6).toUpperCase();
+		}
+
+		try {
+			user.setCreateTime(new Date());// 设置创建时间
+			String salt = oConvertUtils.randomGen(8);
+			String passwordEncode = PasswordUtil.encrypt(username, password, salt);
+			user.setSalt(salt);
+			user.setUsername(username);
+			user.setRealname(username);
+			user.setPassword(passwordEncode);
+			user.setReferralCode(myReferralCode);
+			if(sysUser3 !=null ){
+				user.setReferUserId(sysUser3.getId());
+			}
+			user.setOrgCode("A01");
+//			user.setEmail(email);
+			user.setPhone(phone);
+			user.setStatus(1);
+			user.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+			user.setActivitiSync(CommonConstant.ACT_SYNC_1);
+			sysUserService.addUserWithRole(user,"ee8626f80f7c2619917b6236f3a7f02b");//默认临时角色 test
+			result.success("注册成功");
+		} catch (Exception e) {
+			result.error500("注册失败");
+		}
+		userInfo(sysUserService.getUserByPhone(phone), result);
+		sysBaseAPI.addLog("用户名: " + user.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
+		return result;
+	}
+
+
 	@ApiOperation(value = "移动端微信登录接口", notes = "移动应用登录接口 {\"code\": \"ewer23\"} ")
 	@RequestMapping(value = "/mobileWxLogin", method = RequestMethod.POST)
 	public Result<JSONObject> mobileWxLogin(@RequestBody JSONObject jsonObject){
@@ -368,7 +527,7 @@ public class LoginController {
 				result.setSuccess(false);
 				return result;
 			}
-			//验证码10分钟内有效
+			//验证码5分钟内有效
 			redisUtil.set(mobile, captcha, 300);
 			//update-begin--Author:scott  Date:20190812 for：issues#391
 			//result.setResult(captcha);
