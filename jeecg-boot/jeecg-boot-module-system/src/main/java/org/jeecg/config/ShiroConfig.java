@@ -71,6 +71,7 @@ public class ShiroConfig {
 		// 配置不会被拦截的链接 顺序判断
 		filterChainDefinitionMap.put("/sys/getCheckCode", "anon"); //登录验证码接口排除
 		filterChainDefinitionMap.put("/sys/mobileWxLogin", "anon");
+		filterChainDefinitionMap.put("/sys/user/weixinRegister", "anon");
 		filterChainDefinitionMap.put("/sys/miniLogin", "anon");
 		filterChainDefinitionMap.put("/sys/login", "anon"); //登录接口排除
 		filterChainDefinitionMap.put("/sys/mLogin", "anon"); //登录接口排除

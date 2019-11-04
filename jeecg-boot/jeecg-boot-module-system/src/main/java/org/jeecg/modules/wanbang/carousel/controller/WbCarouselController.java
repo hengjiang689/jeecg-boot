@@ -30,6 +30,9 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -42,6 +45,7 @@ import com.alibaba.fastjson.JSON;
  * @Date:   2019-10-28
  * @Version: V1.0
  */
+@CacheConfig(cacheNames = "carousel")
 @RestController
 @RequestMapping("/carousel/wbCarousel")
 @Api(tags="轮播图管理")
