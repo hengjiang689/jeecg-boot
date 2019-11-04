@@ -29,6 +29,9 @@ import org.jeecg.modules.wanbang.course.service.IWbCourseService;
 import org.jeecg.modules.wanbang.course.service.IWbCourseCommentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +47,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date:   2019-10-28
  * @Version: V1.0
  */
+ @CacheConfig(cacheNames = "course")
 @RestController
 @RequestMapping("/course/wbCourse")
 @Api(tags="课程管理")
@@ -63,6 +67,7 @@ public class WbCourseController {
 	 * @param req
 	 * @return
 	 */
+	@Cacheable
 	@ApiOperation(value = "课程列表", notes = "课程列表 type 1 为首页 2 为家庭教育 ")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(WbCourse wbCourse,
@@ -90,6 +95,7 @@ public class WbCourseController {
 	 * @param wbCoursePage
 	 * @return
 	 */
+	@CacheEvict
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody WbCoursePage wbCoursePage) {
 		WbCourse wbCourse = new WbCourse();
@@ -104,6 +110,7 @@ public class WbCourseController {
 	 * @param wbCoursePage
 	 * @return
 	 */
+	@CacheEvict
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody WbCoursePage wbCoursePage) {
 		WbCourse wbCourse = new WbCourse();
@@ -122,6 +129,7 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
+	@CacheEvict
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		wbCourseService.delMain(id);
@@ -134,6 +142,7 @@ public class WbCourseController {
 	 * @param ids
 	 * @return
 	 */
+	@CacheEvict
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.wbCourseService.delBatchMain(Arrays.asList(ids.split(",")));
@@ -146,6 +155,7 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
+	@Cacheable
 	@ApiOperation(value = "根据id查询课程详情")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
@@ -163,6 +173,7 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
+	@Cacheable
 	@ApiOperation(value = "根据课程id查询课程评论列表")
 	@GetMapping(value = "/queryWbCourseCommentByMainId")
 	public Result<?> queryWbCourseCommentListByMainId(@RequestParam(name="id",required=true) String id) {

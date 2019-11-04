@@ -31,6 +31,7 @@ import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +64,7 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @param req
 	 * @return
 	 */
+	@Cacheable
 	@ApiOperation(value = "轮播图列表", notes = "轮播图列表 carouselType 1 为首页 2 为家庭教育")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(WbCarousel wbCarousel,
@@ -81,6 +83,7 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @param wbCarousel
 	 * @return
 	 */
+	@CacheEvict
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody WbCarousel wbCarousel) {
 		wbCarouselService.save(wbCarousel);
@@ -93,6 +96,7 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @param wbCarousel
 	 * @return
 	 */
+	@CacheEvict
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody WbCarousel wbCarousel) {
 		wbCarouselService.updateById(wbCarousel);
@@ -105,6 +109,7 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @param id
 	 * @return
 	 */
+	@CacheEvict
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		wbCarouselService.removeById(id);
@@ -117,6 +122,7 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @param ids
 	 * @return
 	 */
+	@CacheEvict
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.wbCarouselService.removeByIds(Arrays.asList(ids.split(",")));
@@ -129,6 +135,7 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @param id
 	 * @return
 	 */
+	@Cacheable
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		WbCarousel wbCarousel = wbCarouselService.getById(id);

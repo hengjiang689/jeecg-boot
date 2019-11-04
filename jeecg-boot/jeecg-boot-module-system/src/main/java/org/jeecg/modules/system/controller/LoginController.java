@@ -413,7 +413,7 @@ public class LoginController {
 			sysUser.setUnionId(unionId);
 			sysUser.setRealname(nickName);
 			sysUser.setAvatar(avatarUrl);
-			sysUserService.save(sysUser);
+			sysUserService.saveOrUpdate(sysUser);
 		}
 
 		//用户信息
