@@ -156,7 +156,7 @@
         activeKey: 'wbCourseComment',
         // 万邦课程评论
         wbCourseCommentTable: {
-          loading: false,
+          loading: true,
           dataSource: [],
           columns: [
             {
@@ -173,8 +173,8 @@
               type: FormTypes.select,
               dictCode:"checkbox_type",
               width:"200px",
-              placeholder: '请输入${title}',
-              defaultValue: '',
+              placeholder: '请选择是否${title}',
+              defaultValue: '0',
             },
           ]
         },
