@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * @Description: 万邦课程表
  * @Author: jeecg-boot
- * @Date:   2019-10-28
+ * @Date:   2019-11-05
  * @Version: V1.0
  */
 @Data
@@ -59,6 +59,8 @@ public class WbCourse implements Serializable {
     private java.util.Date publishDate;
 	/**讲师姓名*/
     private java.lang.String teacherName;
+	/**专题*/
+    private java.lang.String specialTopic;
 	/**学习人数*/
     private java.lang.Integer learnNum;
 	/**排序*/

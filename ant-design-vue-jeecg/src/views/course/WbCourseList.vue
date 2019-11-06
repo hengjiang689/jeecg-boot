@@ -17,17 +17,22 @@
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
               <a-form-item label="所属类别">
-                <j-dict-select-tag placeholder="请输入所属类别" v-model="queryParam.category" dictCode="course_category"></j-dict-select-tag>
+                <a-input placeholder="请输入所属类别" v-model="queryParam.category"></a-input>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="8">
-              <a-form-item label="课程id">
-                <a-input placeholder="请输入课程id" v-model="queryParam.id"></a-input>
+              <a-form-item label="发布日期">
+                <j-date placeholder="请选择发布日期" v-model="queryParam.publishDate"></j-date>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="8">
               <a-form-item label="讲师姓名">
                 <a-input placeholder="请输入讲师姓名" v-model="queryParam.teacherName"></a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item label="专题">
+                <j-dict-select-tag placeholder="请选择专题" v-model="queryParam.specialTopic" dictCode="special_topics"/>
               </a-form-item>
             </a-col>
           </template>
@@ -156,12 +161,6 @@
             }
           },
           {
-            title:'课程id',
-            align:"center",
-            width:60,
-            dataIndex: 'id'
-          },
-          {
             title:'课程标题',
             align:"center",
             dataIndex: 'title'
@@ -204,6 +203,18 @@
             dataIndex: 'teacherName'
           },
           {
+            title:'专题',
+            align:"center",
+            dataIndex: 'specialTopic',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['specialTopic'], text+"")
+              }
+            }
+          },
+          {
             title:'学习人数',
             align:"center",
             dataIndex: 'learnNum'
@@ -230,6 +241,7 @@
         dictOptions:{
          type:[],
          category:[],
+         specialTopic:[],
         },
 
       }
@@ -249,6 +261,11 @@
         initDictOptions('course_category').then((res) => {
           if (res.success) {
             this.$set(this.dictOptions, 'category', res.result)
+          }
+        })
+        initDictOptions('special_topics').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'specialTopic', res.result)
           }
         })
       }

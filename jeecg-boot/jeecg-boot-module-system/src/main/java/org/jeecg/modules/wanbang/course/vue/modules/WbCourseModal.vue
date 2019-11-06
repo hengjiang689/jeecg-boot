@@ -63,6 +63,11 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
+            <a-form-item label="专题" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag type="list" v-decorator="['specialTopic']" :trigger-change="true" dictCode="special_topics" placeholder="请选择专题"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
             <a-form-item label="学习人数" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input-number v-decorator="[ 'learnNum', validatorRules.learnNum]" placeholder="请输入学习人数" style="width: 100%"/>
             </a-form-item>
@@ -142,6 +147,7 @@
           description:{},
           publishDate:{},
           teacherName:{},
+          specialTopic:{},
           learnNum:{},
           sortNo:{},
         },
@@ -157,6 +163,15 @@
               title: '评论内容',
               key: 'content',
               type: FormTypes.input,
+              width:"200px",
+              placeholder: '请输入${title}',
+              defaultValue: '',
+            },
+            {
+              title: '发布',
+              key: 'publish',
+              type: FormTypes.select,
+              dictCode:"checkbox_type",
               width:"200px",
               placeholder: '请输入${title}',
               defaultValue: '',
@@ -179,7 +194,7 @@
       },
       /** 调用完edit()方法之后会自动调用此方法 */
       editAfter() {
-        let fieldval = pick(this.model,'title','type','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','learnNum','sortNo')
+        let fieldval = pick(this.model,'title','type','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','specialTopic','learnNum','sortNo')
         this.$nextTick(() => {
           this.form.setFieldsValue(fieldval)
         })
@@ -202,7 +217,7 @@
         this.$message.error(msg)
       },
      popupCallback(row){
-       this.form.setFieldsValue(pick(row,'title','type','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','learnNum','sortNo'))
+       this.form.setFieldsValue(pick(row,'title','type','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','specialTopic','learnNum','sortNo'))
      },
 
     }

@@ -51,6 +51,32 @@ public class SysUser implements Serializable {
     private String realname;
 
     /**
+     * 昵称
+     */
+    @Excel(name = "昵称", width = 15)
+    private String nickname;
+
+
+    /**
+     * 身份证号码
+     */
+    @Excel(name = "身份证号码", width = 15)
+    private String identityNo;
+
+    /**
+     * 银行卡号
+     */
+    @Excel(name = "银行卡号", width = 15)
+    private String cardNo;
+
+    /**
+     * 银行卡号
+     */
+    @Excel(name = "开户行名称", width = 15)
+    private String bankName;
+
+
+    /**
      * 密码
      */
     private String password;

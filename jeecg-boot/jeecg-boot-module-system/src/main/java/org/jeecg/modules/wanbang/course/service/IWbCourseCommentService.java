@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @Description: 万邦课程评论
  * @Author: jeecg-boot
- * @Date:   2019-10-28
+ * @Date:   2019-11-05
  * @Version: V1.0
  */
 public interface IWbCourseCommentService extends IService<WbCourseComment> {

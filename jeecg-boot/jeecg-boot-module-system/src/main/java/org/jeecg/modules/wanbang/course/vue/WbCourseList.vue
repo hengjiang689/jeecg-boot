@@ -30,6 +30,11 @@
                 <a-input placeholder="请输入讲师姓名" v-model="queryParam.teacherName"></a-input>
               </a-form-item>
             </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item label="专题">
+                <j-dict-select-tag placeholder="请选择专题" v-model="queryParam.specialTopic" dictCode="special_topics"/>
+              </a-form-item>
+            </a-col>
           </template>
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
@@ -198,6 +203,18 @@
             dataIndex: 'teacherName'
           },
           {
+            title:'专题',
+            align:"center",
+            dataIndex: 'specialTopic',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['specialTopic'], text+"")
+              }
+            }
+          },
+          {
             title:'学习人数',
             align:"center",
             dataIndex: 'learnNum'
@@ -224,6 +241,7 @@
         dictOptions:{
          type:[],
          category:[],
+         specialTopic:[],
         },
 
       }
@@ -243,6 +261,11 @@
         initDictOptions('course_category').then((res) => {
           if (res.success) {
             this.$set(this.dictOptions, 'category', res.result)
+          }
+        })
+        initDictOptions('special_topics').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'specialTopic', res.result)
           }
         })
       }

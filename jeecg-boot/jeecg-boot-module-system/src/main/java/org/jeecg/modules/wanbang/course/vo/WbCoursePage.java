@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * @Description: 万邦课程表
  * @Author: jeecg-boot
- * @Date:   2019-10-28
+ * @Date:   2019-11-05
  * @Version: V1.0
  */
 @Data
@@ -73,6 +73,9 @@ public class WbCoursePage {
 	/**讲师姓名*/
 	@Excel(name = "讲师姓名", width = 15)
 	private java.lang.String teacherName;
+	/**专题*/
+	@Excel(name = "专题", width = 15)
+	private java.lang.String specialTopic;
 	/**学习人数*/
 	@Excel(name = "学习人数", width = 15)
 	private java.lang.Integer learnNum;

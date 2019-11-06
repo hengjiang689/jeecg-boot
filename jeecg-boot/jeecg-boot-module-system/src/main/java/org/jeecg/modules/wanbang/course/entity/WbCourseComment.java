@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * @Description: 万邦课程评论
  * @Author: jeecg-boot
- * @Date:   2019-10-28
+ * @Date:   2019-11-05
  * @Version: V1.0
  */
 @Data
@@ -46,6 +46,9 @@ public class WbCourseComment implements Serializable {
 	/**评论内容*/
 	@Excel(name = "评论内容", width = 15)
 	private java.lang.String content;
+	/**发布*/
+	@Excel(name = "发布", width = 15)
+	private java.lang.String publish;
 	/**外键*/
 	private java.lang.String courseId;
 }

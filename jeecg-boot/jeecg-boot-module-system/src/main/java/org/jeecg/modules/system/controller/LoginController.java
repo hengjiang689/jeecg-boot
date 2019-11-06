@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.bean.sns.Jscode2sessionResult;
 import weixin.popular.bean.sns.SnsToken;
-import weixin.popular.bean.user.User;
 import weixin.popular.bean.wxa.WxaDUserInfo;
 import weixin.popular.util.WxaUtil;
 
@@ -108,7 +107,7 @@ public class LoginController {
 			user.setSalt(salt);
 			user.setUsername(phone);
 			user.setUnionId(unionId);
-			user.setRealname(nickName);
+			user.setNickname(nickName);
 			user.setAvatar(avatarUrl);
 			user.setPassword(passwordEncode);
 			user.setReferralCode(myReferralCode);
@@ -205,7 +204,6 @@ public class LoginController {
 			String passwordEncode = PasswordUtil.encrypt(username, password, salt);
 			user.setSalt(salt);
 			user.setUsername(username);
-			user.setRealname(username);
 			user.setPassword(passwordEncode);
 			user.setReferralCode(myReferralCode);
 			if(sysUser3 !=null ){
@@ -233,7 +231,6 @@ public class LoginController {
 	public Result<JSONObject> mobileWxLogin(@RequestBody JSONObject jsonObject){
 		Result<JSONObject> result = new Result<JSONObject>();
 		SnsToken snsToken = SnsAPI.oauth2AccessToken(mobileAppId, mobileSecret, jsonObject.getString("code"));
-		User user = SnsAPI.userinfo(snsToken.getAccess_token(),snsToken.getOpenid(),null);
 		String unionId = snsToken.getUnionid();
 		SysUser sysUser = sysUserService.getUserByUnionId(unionId);
 		if(sysUser==null){
