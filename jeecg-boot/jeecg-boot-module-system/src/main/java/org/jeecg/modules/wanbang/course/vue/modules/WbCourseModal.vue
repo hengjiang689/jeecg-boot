@@ -18,13 +18,8 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="所属分类" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag type="list" v-decorator="['type']" :trigger-change="true" dictCode="course_type" placeholder="请选择所属分类"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
             <a-form-item label="所属类别" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-multi-select-tag type="list_multi" v-decorator="['category']" :trigger-change="true" dictCode="course_category" placeholder="请选择所属类别"/>
+              <j-category-select v-decorator="['category']" pcode="A01" placeholder="请选择所属类别" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -44,7 +39,7 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="课程简介" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-upload v-decorator="['introduction']" :trigger-change="true"></j-upload>
+              <a-input v-decorator="[ 'introduction', validatorRules.introduction]" placeholder="请输入课程简介"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="24">
@@ -63,8 +58,28 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="专题" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag type="list" v-decorator="['specialTopic']" :trigger-change="true" dictCode="special_topics" placeholder="请选择专题"/>
+            <a-form-item label="价格" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="[ 'price', validatorRules.price]" placeholder="请输入价格" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="时长" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="[ 'duration', validatorRules.duration]" placeholder="请输入时长"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="总课时" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="[ 'classNum', validatorRules.classNum]" placeholder="请输入总课时" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="是否免费" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag type="radio" v-decorator="['isFree']" :trigger-change="true" dictCode="checkbox_type" placeholder="请选择是否免费"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="是否置顶" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag type="radio" v-decorator="['isTop']" :trigger-change="true" dictCode="checkbox_type" placeholder="请选择是否置顶"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -95,6 +110,18 @@
             :actionButton="true"/>
         </a-tab-pane>
         
+        <a-tab-pane tab="万邦子课程表" :key="refKeys[1]" :forceRender="true">
+          <j-editable-table
+            :ref="refKeys[1]"
+            :loading="wbClassTable.loading"
+            :columns="wbClassTable.columns"
+            :dataSource="wbClassTable.dataSource"
+            :maxHeight="300"
+            :rowNumber="true"
+            :rowSelection="true"
+            :actionButton="true"/>
+        </a-tab-pane>
+        
       </a-tabs>
 
     </a-spin>
@@ -109,7 +136,7 @@
   import JDate from '@/components/jeecg/JDate'  
   import JUpload from '@/components/jeecg/JUpload'
   import JDictSelectTag from "@/components/dict/JDictSelectTag"
-  import JMultiSelectTag from "@/components/dict/JMultiSelectTag"
+  import JCategorySelect from '@/components/jeecg/JCategorySelect'
 
   export default {
     name: 'WbCourseModal',
@@ -118,7 +145,7 @@
       JDate,
       JUpload,
       JDictSelectTag,
-      JMultiSelectTag,
+      JCategorySelect
     },
     data() {
       return {
@@ -138,7 +165,6 @@
         addDefaultRowNum: 1,
         validatorRules: {
           title: { rules: [{ required: true, message: '请输入课程标题!' }] },
-          type: { rules: [{ required: true, message: '请输入所属分类!' }] },
           category: { rules: [{ required: true, message: '请输入所属类别!' }] },
           image:{},
           videoUrl:{},
@@ -147,12 +173,16 @@
           description:{},
           publishDate:{},
           teacherName:{},
-          specialTopic:{},
+          price:{},
+          duration:{},
+          classNum:{},
+          isFree:{},
+          isTop:{},
           learnNum:{},
           sortNo:{},
         },
-        refKeys: ['wbCourseComment', ],
-        tableKeys:['wbCourseComment', ],
+        refKeys: ['wbCourseComment', 'wbClass', ],
+        tableKeys:['wbCourseComment', 'wbClass', ],
         activeKey: 'wbCourseComment',
         // 万邦课程评论
         wbCourseCommentTable: {
@@ -178,11 +208,74 @@
             },
           ]
         },
+        // 万邦子课程表
+        wbClassTable: {
+          loading: false,
+          dataSource: [],
+          columns: [
+            {
+              title: '标题',
+              key: 'title',
+              type: FormTypes.input,
+              width:"200px",
+              placeholder: '请输入${title}',
+              defaultValue: '',
+            },
+            {
+              title: '是否免费',
+              key: 'isFree',
+              type: FormTypes.select,
+              dictCode:"checkbox_type",
+              width:"200px",
+              placeholder: '请输入${title}',
+              defaultValue: '',
+            },
+            {
+              title: '课程id',
+              key: 'courseId',
+              type: FormTypes.input,
+              width:"200px",
+              placeholder: '请输入${title}',
+              defaultValue: '',
+            },
+            {
+              title: '视频文件',
+              key: 'videoUrl',
+              type: FormTypes.file,
+              token:true,
+              responseName:"message",
+              width:"200px",
+              placeholder: '请选择文件',
+              defaultValue: '',
+            },
+            {
+              title: '音频文件',
+              key: 'audioUrl',
+              type: FormTypes.file,
+              token:true,
+              responseName:"message",
+              width:"200px",
+              placeholder: '请选择文件',
+              defaultValue: '',
+            },
+            {
+              title: '排序',
+              key: 'sortNo',
+              type: FormTypes.input,
+              width:"200px",
+              placeholder: '请输入${title}',
+              defaultValue: '',
+            },
+          ]
+        },
         url: {
           add: "/course/wbCourse/add",
           edit: "/course/wbCourse/edit",
           wbCourseComment: {
             list: '/course/wbCourse/queryWbCourseCommentByMainId'
+          },
+          wbClass: {
+            list: '/course/wbCourse/queryWbClassByMainId'
           },
         }
       }
@@ -194,7 +287,7 @@
       },
       /** 调用完edit()方法之后会自动调用此方法 */
       editAfter() {
-        let fieldval = pick(this.model,'title','type','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','specialTopic','learnNum','sortNo')
+        let fieldval = pick(this.model,'title','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','price','duration','classNum','isFree','isTop','learnNum','sortNo')
         this.$nextTick(() => {
           this.form.setFieldsValue(fieldval)
         })
@@ -202,6 +295,7 @@
         if (this.model.id) {
           let params = { id: this.model.id }
           this.requestSubTableData(this.url.wbCourseComment.list, params, this.wbCourseCommentTable)
+          this.requestSubTableData(this.url.wbClass.list, params, this.wbClassTable)
         }
       },
       /** 整理成formData */
@@ -211,14 +305,18 @@
         return {
           ...main, // 展开
           wbCourseCommentList: allValues.tablesValue[0].values,
+          wbClassList: allValues.tablesValue[1].values,
         }
       },
       validateError(msg){
         this.$message.error(msg)
       },
      popupCallback(row){
-       this.form.setFieldsValue(pick(row,'title','type','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','specialTopic','learnNum','sortNo'))
+       this.form.setFieldsValue(pick(row,'title','category','image','videoUrl','audioUrl','introduction','description','publishDate','teacherName','price','duration','classNum','isFree','isTop','learnNum','sortNo'))
      },
+     handleCategoryChange(value,backObj){
+       this.form.setFieldsValue(backObj)
+      }
 
     }
   }

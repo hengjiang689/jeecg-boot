@@ -22,8 +22,8 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
 
-        <a-form-item label="用户账号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入用户账号" v-decorator="[ 'username', validatorRules.username]" :readOnly="!!model.id"/>
+        <a-form-item label="用户名" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入用户名" v-decorator="[ 'username', validatorRules.username]" :readOnly="!!model.id"/>
         </a-form-item>
 
         <template v-if="!model.id">
@@ -36,12 +36,28 @@
           </a-form-item>
         </template>
 
-        <a-form-item label="用户名字" :labelCol="labelCol" :wrapperCol="wrapperCol" >
-          <a-input placeholder="请输入用户名称" v-decorator="[ 'realname', validatorRules.realname]" />
+        <a-form-item label="真实名字" :labelCol="labelCol" :wrapperCol="wrapperCol" >
+          <a-input placeholder="请输入用户真实名称" v-decorator="[ 'realname', validatorRules.realname]" />
         </a-form-item>
 
-        <a-form-item label="工号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入工号" v-decorator="[ 'workNo', validatorRules.workNo]" />
+        <a-form-item label="昵称" :labelCol="labelCol" :wrapperCol="wrapperCol" >
+          <a-input placeholder="请输入用户昵称" v-decorator="[ 'nickname', validatorRules.nickname]" />
+        </a-form-item>
+
+        <a-form-item label="手机号码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入手机号码" :disabled="isDisabledAuth('user:form:phone')" v-decorator="[ 'phone', validatorRules.phone]" />
+        </a-form-item>
+
+        <a-form-item label="身份证号码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入身份证号码" v-decorator="[ 'identityNo', validatorRules.identityNo]"/>
+        </a-form-item>
+
+        <a-form-item label="银行卡号码" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入银行卡号码" v-decorator="[ 'cardNo', validatorRules.cardNo]"/>
+        </a-form-item>
+
+        <a-form-item label="开户行名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入开户行名称" v-decorator="[ 'bankName', validatorRules.bankName]"/>
         </a-form-item>
 
         <a-form-item label="职务" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -108,12 +124,12 @@
           <a-input placeholder="请输入邮箱" v-decorator="[ 'email', validatorRules.email]" />
         </a-form-item>
 
-        <a-form-item label="手机号码" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input placeholder="请输入手机号码" :disabled="isDisabledAuth('user:form:phone')" v-decorator="[ 'phone', validatorRules.phone]" />
-        </a-form-item>
-
         <a-form-item label="座机" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-input placeholder="请输入座机" v-decorator="[ 'telephone', validatorRules.telephone]"/>
+        </a-form-item>
+
+        <a-form-item label="工号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input placeholder="请输入工号" v-decorator="[ 'workNo', validatorRules.workNo]" />
         </a-form-item>
 
         <a-form-item label="工作流引擎" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -192,7 +208,7 @@
               validator: this.compareToFirstPassword,
             }],
           },
-          realname:{rules: [{ required: true, message: '请输入用户名称!' }]},
+          realname:{rules: [{ required: false, message: '请输入用户名称!' }]},
           phone:{rules: [{validator: this.validatePhone}]},
           email:{
             rules: [{
@@ -203,7 +219,7 @@
           //  sex:{initialValue:((!this.model.sex)?"": (this.model.sex+""))}
           workNo: {
             rules: [
-              { required: true, message: '请输入工号' },
+              { required: false, message: '请输入工号' },
               { validator: this.validateWorkNo }
             ]
           },

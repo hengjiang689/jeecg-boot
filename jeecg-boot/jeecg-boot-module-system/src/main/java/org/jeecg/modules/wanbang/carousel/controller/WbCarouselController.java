@@ -65,7 +65,7 @@ public class WbCarouselController extends JeecgController<WbCarousel, IWbCarouse
 	 * @return
 	 */
 	@Cacheable
-	@ApiOperation(value = "轮播图列表", notes = "轮播图列表 carouselType 1 为首页 2 为家庭教育")
+	@ApiOperation(value = "轮播图列表", notes = "轮播图列表 carouselType 1 为志慧学堂 2 为幸福学院 3 为百家讲坛")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(WbCarousel wbCarousel,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,

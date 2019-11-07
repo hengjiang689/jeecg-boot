@@ -11,14 +11,14 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 import java.util.Date;
 
 /**
- * @Description: 万邦课程评论
+ * @Description: 万邦子课程表
  * @Author: jeecg-boot
  * @Date:   2019-11-07
  * @Version: V1.0
  */
 @Data
-@TableName("wb_course_comment")
-public class WbCourseComment implements Serializable {
+@TableName("wb_class")
+public class WbClass implements Serializable {
     private static final long serialVersionUID = 1L;
     
 	/**主键*/
@@ -43,12 +43,21 @@ public class WbCourseComment implements Serializable {
 	/**所属部门*/
 	@Excel(name = "所属部门", width = 15)
 	private java.lang.String sysOrgCode;
-	/**评论内容*/
-	@Excel(name = "评论内容", width = 15)
-	private java.lang.String content;
-	/**发布*/
-	@Excel(name = "发布", width = 15)
-	private java.lang.String publish;
-	/**外键*/
+	/**标题*/
+	@Excel(name = "标题", width = 15)
+	private java.lang.String title;
+	/**是否免费*/
+	@Excel(name = "是否免费", width = 15)
+	private java.lang.String isFree;
+	/**课程id*/
 	private java.lang.String courseId;
+	/**视频文件*/
+	@Excel(name = "视频文件", width = 15)
+	private java.lang.String videoUrl;
+	/**音频文件*/
+	@Excel(name = "音频文件", width = 15)
+	private java.lang.String audioUrl;
+	/**排序*/
+	@Excel(name = "排序", width = 15)
+	private java.lang.Double sortNo;
 }

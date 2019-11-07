@@ -10,16 +10,11 @@
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
-            <a-form-item label="所属分类">
-              <j-dict-select-tag placeholder="请选择所属分类" v-model="queryParam.type" dictCode="course_type"/>
+            <a-form-item label="所属类别">
+              <a-input placeholder="请输入所属类别" v-model="queryParam.category"></a-input>
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="所属类别">
-                <a-input placeholder="请输入所属类别" v-model="queryParam.category"></a-input>
-              </a-form-item>
-            </a-col>
             <a-col :md="6" :sm="8">
               <a-form-item label="发布日期">
                 <j-date placeholder="请选择发布日期" v-model="queryParam.publishDate"></j-date>
@@ -31,8 +26,13 @@
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="8">
-              <a-form-item label="专题">
-                <j-dict-select-tag placeholder="请选择专题" v-model="queryParam.specialTopic" dictCode="special_topics"/>
+              <a-form-item label="是否免费">
+                <j-dict-select-tag placeholder="请选择是否免费" v-model="queryParam.isFree" dictCode="checkbox_type"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item label="是否置顶">
+                <j-dict-select-tag placeholder="请选择是否置顶" v-model="queryParam.isTop" dictCode="checkbox_type"/>
               </a-form-item>
             </a-col>
           </template>
@@ -136,6 +136,7 @@
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
   import JDate from '@/components/jeecg/JDate.vue'
   import {initDictOptions, filterMultiDictText} from '@/components/dict/JDictSelectUtil'
+  import { loadCategoryData } from '@/api/api'
 
   export default {
     name: "WbCourseList",
@@ -166,18 +167,6 @@
             dataIndex: 'title'
           },
           {
-            title:'所属分类',
-            align:"center",
-            dataIndex: 'type',
-            customRender:(text)=>{
-              if(!text){
-                return ''
-              }else{
-                return filterMultiDictText(this.dictOptions['type'], text+"")
-              }
-            }
-          },
-          {
             title:'所属类别',
             align:"center",
             dataIndex: 'category',
@@ -203,14 +192,31 @@
             dataIndex: 'teacherName'
           },
           {
-            title:'专题',
+            title:'价格',
             align:"center",
-            dataIndex: 'specialTopic',
+            dataIndex: 'price'
+          },
+          {
+            title:'是否免费',
+            align:"center",
+            dataIndex: 'isFree',
             customRender:(text)=>{
               if(!text){
                 return ''
               }else{
-                return filterMultiDictText(this.dictOptions['specialTopic'], text+"")
+                return filterMultiDictText(this.dictOptions['isFree'], text+"")
+              }
+            }
+          },
+          {
+            title:'是否置顶',
+            align:"center",
+            dataIndex: 'isTop',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['isTop'], text+"")
               }
             }
           },
@@ -239,9 +245,8 @@
           importExcelUrl: "course/wbCourse/importExcel",
         },
         dictOptions:{
-         type:[],
-         category:[],
-         specialTopic:[],
+         isFree:[],
+         isTop:[],
         },
 
       }
@@ -253,19 +258,19 @@
     },
     methods: {
       initDictConfig(){
-        initDictOptions('course_type').then((res) => {
-          if (res.success) {
-            this.$set(this.dictOptions, 'type', res.result)
-          }
-        })
-        initDictOptions('course_category').then((res) => {
+        loadCategoryData({code:"A01"}).then((res) => {
           if (res.success) {
             this.$set(this.dictOptions, 'category', res.result)
           }
         })
-        initDictOptions('special_topics').then((res) => {
+        initDictOptions('checkbox_type').then((res) => {
           if (res.success) {
-            this.$set(this.dictOptions, 'specialTopic', res.result)
+            this.$set(this.dictOptions, 'isFree', res.result)
+          }
+        })
+        initDictOptions('checkbox_type').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'isTop', res.result)
           }
         })
       }

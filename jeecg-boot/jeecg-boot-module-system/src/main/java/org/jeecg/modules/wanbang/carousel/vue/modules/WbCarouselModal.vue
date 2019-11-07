@@ -14,7 +14,7 @@
           <a-input v-decorator="[ 'title', validatorRules.title]" placeholder="请输入标题"></a-input>
         </a-form-item>
         <a-form-item label="类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <j-dict-select-tag type="list" v-decorator="['carouselType']" :trigger-change="true" dictCode="carousel_type" placeholder="请选择类型"/>
+          <j-dict-select-tag type="list" v-decorator="['carouselType']" :trigger-change="true" dictCode="course_type" placeholder="请选择类型"/>
         </a-form-item>
         <a-form-item label="图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <j-upload v-decorator="['url']" :trigger-change="true"></j-upload>

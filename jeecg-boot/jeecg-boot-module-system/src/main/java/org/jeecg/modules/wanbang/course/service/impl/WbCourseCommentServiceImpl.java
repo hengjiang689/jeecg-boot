@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * @Description: 万邦课程评论
  * @Author: jeecg-boot
- * @Date:   2019-11-05
+ * @Date:   2019-11-07
  * @Version: V1.0
  */
 @Service

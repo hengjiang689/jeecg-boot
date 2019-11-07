@@ -1,6 +1,8 @@
 package org.jeecg.modules.wanbang.course.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,15 +25,16 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.wanbang.course.entity.WbCourseComment;
+import org.jeecg.modules.wanbang.course.entity.WbClass;
 import org.jeecg.modules.wanbang.course.entity.WbCourse;
 import org.jeecg.modules.wanbang.course.vo.WbCoursePage;
 import org.jeecg.modules.wanbang.course.service.IWbCourseService;
 import org.jeecg.modules.wanbang.course.service.IWbCourseCommentService;
+import org.jeecg.modules.wanbang.course.service.IWbClassService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,23 +43,26 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import com.alibaba.fastjson.JSON;
 
  /**
  * @Description: 万邦课程表
  * @Author: jeecg-boot
- * @Date:   2019-10-28
+ * @Date:   2019-11-07
  * @Version: V1.0
  */
  @CacheConfig(cacheNames = "course")
-@RestController
-@RequestMapping("/course/wbCourse")
-@Api(tags="课程管理")
+ @RestController
+ @RequestMapping("/course/wbCourse")
+ @Api(tags="课程管理")
 @Slf4j
 public class WbCourseController {
 	@Autowired
 	private IWbCourseService wbCourseService;
 	@Autowired
 	private IWbCourseCommentService wbCourseCommentService;
+	@Autowired
+	private IWbClassService wbClassService;
 	
 	/**
 	 * 分页列表查询
@@ -68,7 +74,7 @@ public class WbCourseController {
 	 * @return
 	 */
 //	@Cacheable
-	@ApiOperation(value = "课程列表", notes = "课程列表 type 1 为首页 2 为家庭教育 ")
+	@ApiOperation(value = "课程列表", notes = "课程列表 type 1 为志慧学堂 2 为幸福学院 3 为百家讲坛 ")
 	@GetMapping(value = "/list")
 	public Result<?> queryPageList(WbCourse wbCourse,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -95,12 +101,11 @@ public class WbCourseController {
 	 * @param wbCoursePage
 	 * @return
 	 */
-	@CacheEvict
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody WbCoursePage wbCoursePage) {
 		WbCourse wbCourse = new WbCourse();
 		BeanUtils.copyProperties(wbCoursePage, wbCourse);
-		wbCourseService.saveMain(wbCourse, wbCoursePage.getWbCourseCommentList());
+		wbCourseService.saveMain(wbCourse, wbCoursePage.getWbCourseCommentList(),wbCoursePage.getWbClassList());
 		return Result.ok("添加成功！");
 	}
 	
@@ -110,7 +115,7 @@ public class WbCourseController {
 	 * @param wbCoursePage
 	 * @return
 	 */
-	@CacheEvict
+	@CacheEvict(allEntries = true)
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody WbCoursePage wbCoursePage) {
 		WbCourse wbCourse = new WbCourse();
@@ -119,7 +124,7 @@ public class WbCourseController {
 		if(wbCourseEntity==null) {
 			return Result.error("未找到对应数据");
 		}
-		wbCourseService.updateMain(wbCourse, wbCoursePage.getWbCourseCommentList());
+		wbCourseService.updateMain(wbCourse, wbCoursePage.getWbCourseCommentList(),wbCoursePage.getWbClassList());
 		return Result.ok("编辑成功!");
 	}
 	
@@ -129,7 +134,7 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
-	@CacheEvict
+	@CacheEvict(allEntries = true)
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		wbCourseService.delMain(id);
@@ -142,7 +147,7 @@ public class WbCourseController {
 	 * @param ids
 	 * @return
 	 */
-	@CacheEvict
+	@CacheEvict(allEntries = true)
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		this.wbCourseService.delBatchMain(Arrays.asList(ids.split(",")));
@@ -211,6 +216,8 @@ public class WbCourseController {
           BeanUtils.copyProperties(main, vo);
           List<WbCourseComment> wbCourseCommentList = wbCourseCommentService.selectByMainId(main.getId());
           vo.setWbCourseCommentList(wbCourseCommentList);
+          List<WbClass> wbClassList = wbClassService.selectByMainId(main.getId());
+          vo.setWbClassList(wbClassList);
           pageList.add(vo);
       }
 
@@ -245,7 +252,7 @@ public class WbCourseController {
               for (WbCoursePage page : list) {
                   WbCourse po = new WbCourse();
                   BeanUtils.copyProperties(page, po);
-                  wbCourseService.saveMain(po, page.getWbCourseCommentList());
+                  wbCourseService.saveMain(po, page.getWbCourseCommentList(),page.getWbClassList());
               }
               return Result.ok("文件导入成功！数据行数:" + list.size());
           } catch (Exception e) {

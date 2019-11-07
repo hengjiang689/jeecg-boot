@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * @Description: wb_carousel
  * @Author: jeecg-boot
- * @Date:   2019-10-28
+ * @Date:   2019-11-07
  * @Version: V1.0
  */
 public interface WbCarouselMapper extends BaseMapper<WbCarousel> {

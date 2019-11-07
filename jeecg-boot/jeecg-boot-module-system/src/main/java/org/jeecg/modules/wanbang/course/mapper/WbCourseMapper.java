@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * @Description: 万邦课程表
  * @Author: jeecg-boot
- * @Date:   2019-11-05
+ * @Date:   2019-11-07
  * @Version: V1.0
  */
 public interface WbCourseMapper extends BaseMapper<WbCourse> {

@@ -3,6 +3,7 @@ package org.jeecg.modules.wanbang.course.vo;
 import java.util.List;
 import org.jeecg.modules.wanbang.course.entity.WbCourse;
 import org.jeecg.modules.wanbang.course.entity.WbCourseComment;
+import org.jeecg.modules.wanbang.course.entity.WbClass;
 import lombok.Data;
 import org.jeecgframework.poi.excel.annotation.Excel;
 import org.jeecgframework.poi.excel.annotation.ExcelEntity;
@@ -14,7 +15,7 @@ import java.util.Date;
 /**
  * @Description: 万邦课程表
  * @Author: jeecg-boot
- * @Date:   2019-11-05
+ * @Date:   2019-11-07
  * @Version: V1.0
  */
 @Data
@@ -44,9 +45,6 @@ public class WbCoursePage {
 	/**课程标题*/
 	@Excel(name = "课程标题", width = 15)
 	private java.lang.String title;
-	/**所属分类*/
-	@Excel(name = "所属分类", width = 15)
-	private java.lang.String type;
 	/**所属类别*/
 	@Excel(name = "所属类别", width = 15)
 	private java.lang.String category;
@@ -73,9 +71,21 @@ public class WbCoursePage {
 	/**讲师姓名*/
 	@Excel(name = "讲师姓名", width = 15)
 	private java.lang.String teacherName;
-	/**专题*/
-	@Excel(name = "专题", width = 15)
-	private java.lang.String specialTopic;
+	/**价格*/
+	@Excel(name = "价格", width = 15)
+	private java.lang.Double price;
+	/**时长*/
+	@Excel(name = "时长", width = 15)
+	private java.lang.String duration;
+	/**总课时*/
+	@Excel(name = "总课时", width = 15)
+	private java.lang.Integer classNum;
+	/**是否免费*/
+	@Excel(name = "是否免费", width = 15)
+	private java.lang.String isFree;
+	/**是否置顶*/
+	@Excel(name = "是否置顶", width = 15)
+	private java.lang.String isTop;
 	/**学习人数*/
 	@Excel(name = "学习人数", width = 15)
 	private java.lang.Integer learnNum;
@@ -85,5 +95,7 @@ public class WbCoursePage {
 	
 	@ExcelCollection(name="万邦课程评论")
 	private List<WbCourseComment> wbCourseCommentList;	
+	@ExcelCollection(name="万邦子课程表")
+	private List<WbClass> wbClassList;	
 	
 }

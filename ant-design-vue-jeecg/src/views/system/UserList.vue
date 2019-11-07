@@ -219,6 +219,12 @@
             dataIndex: 'realname',
           },
           {
+            title: '昵称',
+            align: "center",
+            width: 100,
+            dataIndex: 'nickname',
+          },
+          {
             title: '头像',
             align: "center",
             width: 120,
@@ -244,11 +250,6 @@
             align: "center",
             width: 100,
             dataIndex: 'phone'
-          },
-          {
-            title: '邮箱',
-            align: "center",
-            dataIndex: 'email'
           },
           {
             title: '状态',

@@ -15,16 +15,22 @@ ALTER TABLE `sys_user`
 ALTER TABLE `wb_course`
   ADD COLUMN `special_topic` varchar(3) NULL COMMENT '专题' AFTER `publish_date`;
 
+ALTER TABLE `wb_course`
+  ADD COLUMN `price` double(8,2) NULL COMMENT '价格' AFTER `special_topic`;
+
+
+ALTER TABLE `wb_course`
+  ADD COLUMN `duration` varchar(32) NULL COMMENT '时长' AFTER `price`;
 
 
 ALTER TABLE `wb_course_comment`
   ADD COLUMN `publish` varchar(1) default 0 COMMENT '发布' AFTER `content`;
 
 ALTER TABLE `sys_user`
-  ADD COLUMN `nick_name` varchar(100) NULL COMMENT '昵称' AFTER `realname`;
+  ADD COLUMN `nickname` varchar(100) NULL COMMENT '昵称' AFTER `realname`;
 
 ALTER TABLE `sys_user`
-  ADD COLUMN `identity_no` varchar(18) NULL COMMENT '身份证号码' AFTER `nick_name`;
+  ADD COLUMN `identity_no` varchar(18) NULL COMMENT '身份证号码' AFTER `nickname`;
 ALTER TABLE `sys_user`
   ADD COLUMN `card_no` varchar(20) NULL COMMENT '银行卡号' AFTER `identity_no`;
 ALTER TABLE `sys_user`

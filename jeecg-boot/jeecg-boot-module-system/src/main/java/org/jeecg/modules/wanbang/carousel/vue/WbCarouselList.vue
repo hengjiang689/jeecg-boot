@@ -6,7 +6,7 @@
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
             <a-form-item label="类型">
-              <j-dict-select-tag placeholder="请选择类型" v-model="queryParam.carouselType" dictCode="carousel_type"/>
+              <j-dict-select-tag placeholder="请选择类型" v-model="queryParam.carouselType" dictCode="course_type"/>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8" >
@@ -186,7 +186,7 @@
     },
     methods: {
       initDictConfig(){
-        initDictOptions('carousel_type').then((res) => {
+        initDictOptions('course_type').then((res) => {
           if (res.success) {
             this.$set(this.dictOptions, 'carouselType', res.result)
           }
