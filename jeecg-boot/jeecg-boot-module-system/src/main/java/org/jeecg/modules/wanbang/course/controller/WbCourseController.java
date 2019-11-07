@@ -184,6 +184,17 @@ public class WbCourseController {
 		List<WbCourseComment> wbCourseCommentList = wbCourseCommentService.selectByMainId(id);
 		return Result.ok(wbCourseCommentList);
 	}
+	/**
+	 * 通过id查询
+	 *
+	 * @param id
+	 * @return
+	 */
+	@GetMapping(value = "/queryWbClassByMainId")
+	public Result<?> queryWbClassListByMainId(@RequestParam(name="id",required=true) String id) {
+		List<WbClass> wbClassList = wbClassService.selectByMainId(id);
+		return Result.ok(wbClassList);
+	}
 
     /**
     * 导出excel
