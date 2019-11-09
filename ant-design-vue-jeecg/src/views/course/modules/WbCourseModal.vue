@@ -29,17 +29,17 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="视频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-search-select-tag v-decorator="['videoUrl']" dict="oss_file,file_name,url" />
+              <a-input v-decorator="[ 'videoUrl', validatorRules.videoUrl]" placeholder="请输入视频文件"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="音频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-search-select-tag v-decorator="['audioUrl']" dict="oss_file,file_name,url" />
+              <a-input v-decorator="[ 'audioUrl', validatorRules.audioUrl]" placeholder="请输入音频文件"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="课程简介" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-search-select-tag v-decorator="['introduction']" dict="oss_file,file_name,url" />
+              <a-input v-decorator="[ 'introduction', validatorRules.introduction]" placeholder="请输入课程简介"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -136,7 +136,6 @@
   import JDate from '@/components/jeecg/JDate'  
   import JUpload from '@/components/jeecg/JUpload'
   import JDictSelectTag from "@/components/dict/JDictSelectTag"
-  import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
 
   export default {
@@ -146,7 +145,6 @@
       JDate,
       JUpload,
       JDictSelectTag,
-      JSearchSelectTag,
       JCategorySelect
     },
     data() {
@@ -195,7 +193,7 @@
               title: '评论内容',
               key: 'content',
               type: FormTypes.input,
-              width:"900px",
+              width:"800px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -204,7 +202,7 @@
               key: 'publish',
               type: FormTypes.select,
               dictCode:"checkbox_type",
-              width:"100px",
+              width:"150px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -219,7 +217,7 @@
               title: '标题',
               key: 'title',
               type: FormTypes.input,
-              width:"400px",
+              width:"200px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -235,18 +233,16 @@
             {
               title: '视频文件',
               key: 'videoUrl',
-              type: FormTypes.sel_search,
-              dictCode:"oss_file,file_name,url",
-              width:"600px",
+              type: FormTypes.input,
+              width:"300px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
             {
               title: '音频文件',
               key: 'audioUrl',
-              type: FormTypes.sel_search,
-              dictCode:"oss_file,file_name,url",
-              width:"600px",
+              type: FormTypes.input,
+              width:"300px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
