@@ -197,6 +197,7 @@ public class SysUserController {
                 BeanUtils.copyProperties(user,sysUser, SpringUtil.getNullPropertyNames(user));
                 sysUser.setUpdateTime(new Date());
                 sysUserService.updateById(sysUser);
+                result.setResult(sysUser);
                 result.success("修改成功!");
             }
         } catch (Exception e) {
