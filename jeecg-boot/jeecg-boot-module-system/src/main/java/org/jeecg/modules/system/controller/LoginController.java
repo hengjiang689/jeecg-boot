@@ -568,7 +568,7 @@ public class LoginController {
 			return result;
 		}else if(!oConvertUtils.isEmpty(unionId) && !oConvertUtils.isEmpty(nickName) && !oConvertUtils.isEmpty(avatarUrl)){
 			sysUser.setUnionId(unionId);
-			sysUser.setRealname(nickName);
+			sysUser.setNickname(nickName);
 			sysUser.setAvatar(avatarUrl);
 			sysUserService.saveOrUpdate(sysUser);
 		}
