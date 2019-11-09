@@ -36,3 +36,5 @@ ALTER TABLE `sys_user`
 ALTER TABLE `sys_user`
   ADD COLUMN `bank_name` varchar(50) NULL COMMENT '开户行名称' AFTER `card_no`;
 
+ALTER TABLE `sys_user`
+  ADD COLUMN `card_type` varchar(50) NULL COMMENT '银行卡类型' AFTER `card_no`;

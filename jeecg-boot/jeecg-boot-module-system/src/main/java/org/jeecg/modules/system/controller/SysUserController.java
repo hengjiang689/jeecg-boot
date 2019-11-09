@@ -38,6 +38,7 @@ import org.jeecg.modules.system.service.ISysDepartService;
 import org.jeecg.modules.system.service.ISysUserDepartService;
 import org.jeecg.modules.system.service.ISysUserRoleService;
 import org.jeecg.modules.system.service.ISysUserService;
+import org.jeecg.modules.system.util.SpringUtil;
 import org.jeecg.modules.system.vo.SysDepartUsersVO;
 import org.jeecg.modules.system.vo.SysUserRoleVO;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
@@ -45,6 +46,7 @@ import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -168,6 +170,40 @@ public class SysUserController {
 		}
 		return result;
 	}
+
+    @ApiOperation(value = "移动端编辑用户", notes = "移动端编辑用户 {\n" +
+            "    \"id\": \"string\",\n" +
+            "    \"avatar\": \"string\",\n" +
+            "    \"bankName\": \"string\",\n" +
+            "    \"cardType\": \"string\",\n" +
+            "    \"cardNo\": \"string\",\n" +
+            "    \"email\": \"string\",\n" +
+            "    \"identityNo\": \"string\",\n" +
+            "    \"nickname\": \"string\",\n" +
+            "    \"realname\": \"string\"\n" +
+            "  }")
+    @RequestMapping(value = "/mobile/edit", method = RequestMethod.PUT)
+    //@RequiresPermissions("user:edit")
+    public Result<SysUser> mobileEdit(@RequestBody JSONObject jsonObject) {
+        Result<SysUser> result = new Result<SysUser>();
+        try {
+            SysUser sysUser = sysUserService.getById(jsonObject.getString("id"));
+            sysBaseAPI.addLog("编辑用户，id： " +jsonObject.getString("id") ,CommonConstant.LOG_TYPE_2, 2);
+            if(sysUser==null) {
+                result.error500("未找到对应实体");
+            }else {
+                SysUser user = JSON.parseObject(jsonObject.toJSONString(), SysUser.class);
+                BeanUtils.copyProperties(user,sysUser, SpringUtil.getNullPropertyNames(user));
+                sysUser.setUpdateTime(new Date());
+                sysUserService.updateById(sysUser);
+                result.success("修改成功!");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            result.error500("操作失败");
+        }
+        return result;
+    }
 
 	/**
 	 * 删除用户

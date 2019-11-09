@@ -22,23 +22,23 @@
               <j-category-select v-decorator="['category']" pcode="A01" placeholder="请选择所属类别" />
             </a-form-item>
           </a-col>
-          <a-col :span="12">
-            <a-form-item label="展示图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-col :span="24">
+            <a-form-item label="展示图片" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
               <j-upload v-decorator="['image']" :trigger-change="true"></j-upload>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
-            <a-form-item label="视频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-col :span="24">
+            <a-form-item label="视频文件" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
               <j-upload v-decorator="['videoUrl']" :trigger-change="true"></j-upload>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
-            <a-form-item label="音频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-col :span="24">
+            <a-form-item label="音频文件" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
               <j-upload v-decorator="['audioUrl']" :trigger-change="true"></j-upload>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
-            <a-form-item label="课程简介" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-col :span="24">
+            <a-form-item label="课程简介" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
               <a-input v-decorator="[ 'introduction', validatorRules.introduction]" placeholder="请输入课程简介"></a-input>
             </a-form-item>
           </a-col>
@@ -67,11 +67,7 @@
               <a-input v-decorator="[ 'duration', validatorRules.duration]" placeholder="请输入时长"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :span="12">
-            <a-form-item label="总课时" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="[ 'classNum', validatorRules.classNum]" placeholder="请输入总课时" style="width: 100%"/>
-            </a-form-item>
-          </a-col>
+
           <a-col :span="12">
             <a-form-item label="是否免费" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-dict-select-tag type="radio" v-decorator="['isFree']" :trigger-change="true" dictCode="checkbox_type" placeholder="请选择是否免费"/>
@@ -80,6 +76,11 @@
           <a-col :span="12">
             <a-form-item label="是否置顶" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-dict-select-tag type="radio" v-decorator="['isTop']" :trigger-change="true" dictCode="checkbox_type" placeholder="请选择是否置顶"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="总课时" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="[ 'classNum', validatorRules.classNum]" placeholder="请输入总课时" style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -217,7 +218,7 @@
               title: '标题',
               key: 'title',
               type: FormTypes.input,
-              width:"200px",
+              width:"400px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -226,7 +227,7 @@
               key: 'isFree',
               type: FormTypes.select,
               dictCode:"checkbox_type",
-              width:"200px",
+              width:"100px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -234,7 +235,7 @@
               title: '课程id',
               key: 'courseId',
               type: FormTypes.input,
-              width:"200px",
+              width:"100px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -262,7 +263,7 @@
               title: '排序',
               key: 'sortNo',
               type: FormTypes.input,
-              width:"200px",
+              width:"50px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },

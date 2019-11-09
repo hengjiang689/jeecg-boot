@@ -70,6 +70,12 @@ public class SysUser implements Serializable {
     private String cardNo;
 
     /**
+     * 银行卡类型
+     */
+    @Excel(name = "银行卡类型", width = 15)
+    private String cardType;
+
+    /**
      * 银行卡号
      */
     @Excel(name = "开户行名称", width = 15)
