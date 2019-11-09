@@ -304,6 +304,7 @@ public class LoginController {
 			obj.put("openId", wxaDUserInfo.getOpenId());
 			result.setResult(obj);
 			result.error500("用户尚未绑定手机号");
+			return result;
 		}
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
