@@ -38,12 +38,12 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a
-          style="font-weight: 600">{{
-        selectedRowKeys.length }}</a>项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-      </div>
+<!--      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">-->
+<!--        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a-->
+<!--          style="font-weight: 600">{{-->
+<!--        selectedRowKeys.length }}</a>项-->
+<!--        <a style="margin-left: 24px" @click="onClearSelected">清空</a>-->
+<!--      </div>-->
 
       <a-table
           ref="table"
@@ -82,7 +82,7 @@
             title: '#',
             dataIndex: '',
             key: 'rowIndex',
-            width: 60,
+            width: 50,
             align: "center",
             customRender: function (t, r, index) {
               return parseInt(index) + 1;
@@ -91,16 +91,22 @@
           {
             title: '文件名称',
             align: "center",
+            width: 400,
             dataIndex: 'fileName'
           },
           {
             title: '文件地址',
             align: "center",
-            dataIndex: 'url'
+            dataIndex: 'url',
+            width: 400,
+            customRender: function (text) {
+              return <a target="_blank" href={text}>{text}</a>;
+            }
           },
           {
             title: '操作',
             dataIndex: 'action',
+            width: 50,
             align: "center",
             scopedSlots: {customRender: 'action'},
           }

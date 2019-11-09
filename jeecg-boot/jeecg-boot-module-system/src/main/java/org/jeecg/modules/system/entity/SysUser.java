@@ -76,11 +76,41 @@ public class SysUser implements Serializable {
     private String cardType;
 
     /**
+     * 银行卡关联手机号
+     */
+    @Excel(name = "银行卡关联手机号", width = 15)
+    private String cardPhone;
+
+    /**
      * 银行卡号
      */
     @Excel(name = "开户行名称", width = 15)
     private String bankName;
 
+    /**
+     * 账户余额
+     */
+    @Excel(name = "账户余额", width = 15)
+    private Double balance;
+
+    /**
+     * 可提现余额
+     */
+    @Excel(name = "可提现余额", width = 15)
+    private Double availableBalance;
+
+
+    /**
+     * 账户余额
+     */
+    @Excel(name = "累计收入", width = 15)
+    private Double totalIncome;
+
+    /**
+     * 是否会员
+     */
+    @Excel(name = "是否会员", width = 15)
+    private Boolean isMember;
 
     /**
      * 密码

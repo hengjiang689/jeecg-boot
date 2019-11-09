@@ -38,3 +38,20 @@ ALTER TABLE `sys_user`
 
 ALTER TABLE `sys_user`
   ADD COLUMN `card_type` varchar(50) NULL COMMENT '银行卡类型' AFTER `card_no`;
+ALTER TABLE `sys_user`
+  ADD COLUMN `card_phone` varchar(50) NULL COMMENT '银行卡关联手机号' AFTER `card_type`;
+
+  ALTER TABLE `sys_user`
+  ADD COLUMN `balance` double(8,2) NULL COMMENT '账户余额' AFTER `card_phone`;
+  ALTER TABLE `sys_user`
+  ADD COLUMN `available_balance` double(8,2) NULL COMMENT '可提现余额' AFTER `balance`;
+  ALTER TABLE `sys_user`
+  ADD COLUMN `total_income` double(8,2) NULL COMMENT '累计收入' AFTER `available_balance`;
+
+  ALTER TABLE `sys_user`
+  ADD COLUMN `is_member` tinyint(1) NULL COMMENT '是否会员' AFTER `total_income`;
+
+
+
+ALTER TABLE `wb_course`
+  ADD COLUMN `category_code` varchar(32) NULL COMMENT '类别值' AFTER `category`;

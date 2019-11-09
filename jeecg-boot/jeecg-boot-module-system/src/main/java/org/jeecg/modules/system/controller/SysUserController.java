@@ -177,6 +177,7 @@ public class SysUserController {
             "    \"bankName\": \"string\",\n" +
             "    \"cardType\": \"string\",\n" +
             "    \"cardNo\": \"string\",\n" +
+            "    \"cardPhone\": \"string\",\n" +
             "    \"email\": \"string\",\n" +
             "    \"identityNo\": \"string\",\n" +
             "    \"nickname\": \"string\",\n" +

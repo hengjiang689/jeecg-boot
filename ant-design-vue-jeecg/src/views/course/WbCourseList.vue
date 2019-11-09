@@ -11,7 +11,7 @@
           </a-col>
           <a-col :md="6" :sm="8">
             <a-form-item label="所属类别">
-              <a-input placeholder="请输入所属类别" v-model="queryParam.category"></a-input>
+              <j-category-select v-model="queryParam.category" pcode="A01" placeholder="请选择所属类别" />
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
@@ -137,12 +137,14 @@
   import JDate from '@/components/jeecg/JDate.vue'
   import {initDictOptions, filterMultiDictText} from '@/components/dict/JDictSelectUtil'
   import { loadCategoryData } from '@/api/api'
+  import JCategorySelect from '@/components/jeecg/JCategorySelect'
 
   export default {
     name: "WbCourseList",
     mixins:[JeecgListMixin],
     components: {
       JDictSelectTag,
+      JCategorySelect,
       JDate,
       WbCourseModal
     },

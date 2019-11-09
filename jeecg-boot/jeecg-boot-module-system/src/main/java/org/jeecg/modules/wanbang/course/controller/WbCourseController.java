@@ -1,8 +1,6 @@
 package org.jeecg.modules.wanbang.course.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
+import org.jeecg.modules.system.service.ISysCategoryService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -63,6 +63,8 @@ public class WbCourseController {
 	private IWbCourseCommentService wbCourseCommentService;
 	@Autowired
 	private IWbClassService wbClassService;
+	@Autowired
+	private ISysCategoryService sysCategoryService;
 	
 	/**
 	 * 分页列表查询
@@ -87,7 +89,8 @@ public class WbCourseController {
 			wbCourse.setTeacherName("*"+wbCourse.getTeacherName()+"*");
 		}
 		if(wbCourse.getCategory()!=null){
-			wbCourse.setCategory("*"+wbCourse.getCategory()+"*");
+			wbCourse.setCategoryCode(sysCategoryService.getById(wbCourse.getCategory()).getCode()+"*");
+			wbCourse.setCategory(null);
 		}
 		QueryWrapper<WbCourse> queryWrapper = QueryGenerator.initQueryWrapper(wbCourse, req.getParameterMap());
 		Page<WbCourse> page = new Page<WbCourse>(pageNo, pageSize);
@@ -105,6 +108,9 @@ public class WbCourseController {
 	public Result<?> add(@RequestBody WbCoursePage wbCoursePage) {
 		WbCourse wbCourse = new WbCourse();
 		BeanUtils.copyProperties(wbCoursePage, wbCourse);
+		if(!StringUtils.isBlank(wbCourse.getCategory())){
+			wbCourse.setCategoryCode(sysCategoryService.getById(wbCourse.getCategory()).getCode());
+		}
 		wbCourseService.saveMain(wbCourse, wbCoursePage.getWbCourseCommentList(),wbCoursePage.getWbClassList());
 		return Result.ok("添加成功！");
 	}
@@ -120,6 +126,9 @@ public class WbCourseController {
 	public Result<?> edit(@RequestBody WbCoursePage wbCoursePage) {
 		WbCourse wbCourse = new WbCourse();
 		BeanUtils.copyProperties(wbCoursePage, wbCourse);
+		if(!StringUtils.isBlank(wbCourse.getCategory())){
+			wbCourse.setCategoryCode(sysCategoryService.getById(wbCourse.getCategory()).getCode());
+		}
 		WbCourse wbCourseEntity = wbCourseService.getById(wbCourse.getId());
 		if(wbCourseEntity==null) {
 			return Result.error("未找到对应数据");

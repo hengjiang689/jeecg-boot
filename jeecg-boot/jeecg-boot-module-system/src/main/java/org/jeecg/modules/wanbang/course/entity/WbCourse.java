@@ -41,6 +41,8 @@ public class WbCourse implements Serializable {
     private java.lang.String title;
 	/**所属类别*/
     private java.lang.String category;
+    /**所属类别code*/
+    private java.lang.String categoryCode;
 	/**展示图片*/
     private java.lang.String image;
 	/**视频文件*/
