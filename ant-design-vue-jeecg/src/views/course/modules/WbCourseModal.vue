@@ -22,29 +22,29 @@
               <j-category-select v-decorator="['category']" pcode="A01" placeholder="请选择所属类别" />
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="展示图片" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
+          <a-col :span="12">
+            <a-form-item label="展示图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-upload v-decorator="['image']" :trigger-change="true"></j-upload>
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="视频文件" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
-              <j-upload v-decorator="['videoUrl']" :trigger-change="true"></j-upload>
+          <a-col :span="12">
+            <a-form-item label="视频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-search-select-tag v-decorator="['videoUrl']" dict="oss_file,file_name,url" />
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="音频文件" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
-              <j-upload v-decorator="['audioUrl']" :trigger-change="true"></j-upload>
+          <a-col :span="12">
+            <a-form-item label="音频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-search-select-tag v-decorator="['audioUrl']" dict="oss_file,file_name,url" />
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="课程简介" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
-              <a-input v-decorator="[ 'introduction', validatorRules.introduction]" placeholder="请输入课程简介"></a-input>
+          <a-col :span="12">
+            <a-form-item label="课程简介" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-search-select-tag v-decorator="['introduction']" dict="oss_file,file_name,url" />
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="课程描述" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
-              <a-textarea v-decorator="['description']" rows="4" placeholder="请输入课程描述"/>
+          <a-col :span="12">
+            <a-form-item label="课程描述" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="[ 'description', validatorRules.description]" placeholder="请输入课程描述"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -67,7 +67,11 @@
               <a-input v-decorator="[ 'duration', validatorRules.duration]" placeholder="请输入时长"></a-input>
             </a-form-item>
           </a-col>
-
+          <a-col :span="12">
+            <a-form-item label="总课时" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-decorator="[ 'classNum', validatorRules.classNum]" placeholder="请输入总课时" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
           <a-col :span="12">
             <a-form-item label="是否免费" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-dict-select-tag type="radio" v-decorator="['isFree']" :trigger-change="true" dictCode="checkbox_type" placeholder="请选择是否免费"/>
@@ -76,11 +80,6 @@
           <a-col :span="12">
             <a-form-item label="是否置顶" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-dict-select-tag type="radio" v-decorator="['isTop']" :trigger-change="true" dictCode="checkbox_type" placeholder="请选择是否置顶"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="总课时" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input-number v-decorator="[ 'classNum', validatorRules.classNum]" placeholder="请输入总课时" style="width: 100%"/>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -137,6 +136,7 @@
   import JDate from '@/components/jeecg/JDate'  
   import JUpload from '@/components/jeecg/JUpload'
   import JDictSelectTag from "@/components/dict/JDictSelectTag"
+  import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
 
   export default {
@@ -146,6 +146,7 @@
       JDate,
       JUpload,
       JDictSelectTag,
+      JSearchSelectTag,
       JCategorySelect
     },
     data() {
@@ -194,7 +195,7 @@
               title: '评论内容',
               key: 'content',
               type: FormTypes.input,
-              width:"800px",
+              width:"900px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -227,43 +228,33 @@
               key: 'isFree',
               type: FormTypes.select,
               dictCode:"checkbox_type",
-              width:"100px",
-              placeholder: '请输入${title}',
-              defaultValue: '',
-            },
-            {
-              title: '课程id',
-              key: 'courseId',
-              type: FormTypes.input,
-              width:"100px",
+              width:"150px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
             {
               title: '视频文件',
               key: 'videoUrl',
-              type: FormTypes.file,
-              token:true,
-              responseName:"message",
-              width:"200px",
-              placeholder: '请选择文件',
+              type: FormTypes.sel_search,
+              dictCode:"oss_file,file_name,url",
+              width:"600px",
+              placeholder: '请输入${title}',
               defaultValue: '',
             },
             {
               title: '音频文件',
               key: 'audioUrl',
-              type: FormTypes.file,
-              token:true,
-              responseName:"message",
-              width:"200px",
-              placeholder: '请选择文件',
+              type: FormTypes.sel_search,
+              dictCode:"oss_file,file_name,url",
+              width:"600px",
+              placeholder: '请输入${title}',
               defaultValue: '',
             },
             {
               title: '排序',
               key: 'sortNo',
               type: FormTypes.input,
-              width:"50px",
+              width:"150px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },

@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * @Description: 万邦子课程表
  * @Author: jeecg-boot
- * @Date:   2019-11-07
+ * @Date:   2019-11-09
  * @Version: V1.0
  */
 public interface WbClassMapper extends BaseMapper<WbClass> {

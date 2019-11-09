@@ -29,22 +29,22 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="视频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-upload v-decorator="['videoUrl']" :trigger-change="true"></j-upload>
+              <j-search-select-tag v-decorator="['videoUrl']" dict="oss_file,file_name,url" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="音频文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-upload v-decorator="['audioUrl']" :trigger-change="true"></j-upload>
+              <j-search-select-tag v-decorator="['audioUrl']" dict="oss_file,file_name,url" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="课程简介" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <a-input v-decorator="[ 'introduction', validatorRules.introduction]" placeholder="请输入课程简介"></a-input>
+              <j-search-select-tag v-decorator="['introduction']" dict="oss_file,file_name,url" />
             </a-form-item>
           </a-col>
-          <a-col :span="24">
-            <a-form-item label="课程描述" :labelCol="labelCol2" :wrapperCol="wrapperCol2">
-              <a-textarea v-decorator="['description']" rows="4" placeholder="请输入课程描述"/>
+          <a-col :span="12">
+            <a-form-item label="课程描述" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="[ 'description', validatorRules.description]" placeholder="请输入课程描述"></a-input>
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -136,6 +136,7 @@
   import JDate from '@/components/jeecg/JDate'  
   import JUpload from '@/components/jeecg/JUpload'
   import JDictSelectTag from "@/components/dict/JDictSelectTag"
+  import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
   import JCategorySelect from '@/components/jeecg/JCategorySelect'
 
   export default {
@@ -145,6 +146,7 @@
       JDate,
       JUpload,
       JDictSelectTag,
+      JSearchSelectTag,
       JCategorySelect
     },
     data() {
@@ -231,31 +233,21 @@
               defaultValue: '',
             },
             {
-              title: '课程id',
-              key: 'courseId',
-              type: FormTypes.input,
+              title: '视频文件',
+              key: 'videoUrl',
+              type: FormTypes.sel_search,
+              dictCode:"oss_file,file_name,url",
               width:"200px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
             {
-              title: '视频文件',
-              key: 'videoUrl',
-              type: FormTypes.file,
-              token:true,
-              responseName:"message",
-              width:"200px",
-              placeholder: '请选择文件',
-              defaultValue: '',
-            },
-            {
               title: '音频文件',
               key: 'audioUrl',
-              type: FormTypes.file,
-              token:true,
-              responseName:"message",
+              type: FormTypes.sel_search,
+              dictCode:"oss_file,file_name,url",
               width:"200px",
-              placeholder: '请选择文件',
+              placeholder: '请输入${title}',
               defaultValue: '',
             },
             {

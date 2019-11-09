@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * @Description: 万邦课程评论
  * @Author: jeecg-boot
- * @Date:   2019-11-07
+ * @Date:   2019-11-09
  * @Version: V1.0
  */
 public interface WbCourseCommentMapper extends BaseMapper<WbCourseComment> {

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @Description: 万邦课程表
  * @Author: jeecg-boot
- * @Date:   2019-11-07
+ * @Date:   2019-11-09
  * @Version: V1.0
  */
 public interface IWbCourseService extends IService<WbCourse> {

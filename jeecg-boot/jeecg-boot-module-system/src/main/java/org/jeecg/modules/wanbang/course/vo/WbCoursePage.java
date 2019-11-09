@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * @Description: 万邦课程表
  * @Author: jeecg-boot
- * @Date:   2019-11-07
+ * @Date:   2019-11-09
  * @Version: V1.0
  */
 @Data
@@ -48,6 +48,9 @@ public class WbCoursePage {
 	/**所属类别*/
 	@Excel(name = "所属类别", width = 15)
 	private java.lang.String category;
+	/**类别值*/
+	@Excel(name = "类别值", width = 15)
+	private java.lang.String categoryCode;
 	/**展示图片*/
 	@Excel(name = "展示图片", width = 15)
 	private java.lang.String image;
