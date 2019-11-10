@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.jeecg.modules.system.service.ISysCategoryService;
+import org.jeecg.modules.wanbang.course.entity.WbCourseUserComment;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -202,12 +203,25 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation(value = "根据课程id查询课程评论列表")
 	@GetMapping(value = "/queryWbCourseCommentByMainId")
 	public Result<?> queryWbCourseCommentListByMainId(@RequestParam(name="id",required=true) String id) {
 		List<WbCourseComment> wbCourseCommentList = wbCourseCommentService.selectByMainId(id);
 		return Result.ok(wbCourseCommentList);
 	}
+
+	 /**
+	  * 通过id查询
+	  *
+	  * @param id
+	  * @return
+	  */
+	 @ApiOperation(value = "根据课程id查询课程评论列表")
+	 @GetMapping(value = "/queryWbCourseUserCommentByMainId")
+	 public Result<?> queryWbCourseUserCommentListByMainId(@RequestParam(name="id",required=true) String id) {
+		 List<WbCourseUserComment> wbCourseUserCommentList = wbCourseCommentService.selectByMainIdWithUser(id);
+		 return Result.ok(wbCourseUserCommentList);
+	 }
+
 	/**
 	 * 通过id查询
 	 *

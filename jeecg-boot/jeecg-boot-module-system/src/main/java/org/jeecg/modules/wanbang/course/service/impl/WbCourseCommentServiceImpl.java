@@ -1,6 +1,7 @@
 package org.jeecg.modules.wanbang.course.service.impl;
 
 import org.jeecg.modules.wanbang.course.entity.WbCourseComment;
+import org.jeecg.modules.wanbang.course.entity.WbCourseUserComment;
 import org.jeecg.modules.wanbang.course.mapper.WbCourseCommentMapper;
 import org.jeecg.modules.wanbang.course.service.IWbCourseCommentService;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,10 @@ public class WbCourseCommentServiceImpl extends ServiceImpl<WbCourseCommentMappe
 	@Override
 	public List<WbCourseComment> selectByMainId(String mainId) {
 		return wbCourseCommentMapper.selectByMainId(mainId);
+	}
+
+	@Override
+	public List<WbCourseUserComment> selectByMainIdWithUser(String mainId) {
+		return wbCourseCommentMapper.selectByMainIdWithUser(mainId);
 	}
 }

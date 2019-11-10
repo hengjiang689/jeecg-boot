@@ -4,13 +4,19 @@
 
 	<delete id="deleteByMainId" parameterType="java.lang.String">
 		DELETE 
-		FROM  wb_course_comment 
+		FROM  wb_course_comment
 		WHERE
 			 course_id = #{mainId} 	</delete>
-	
+
 	<select id="selectByMainId" parameterType="java.lang.String" resultType="org.jeecg.modules.wanbang.course.entity.WbCourseComment">
-		SELECT * 
+		SELECT *
 		FROM  wb_course_comment
 		WHERE
 			 course_id = #{mainId} 	</select>
+
+	<select id="selectByMainIdWithUser" parameterType="java.lang.String" resultType="org.jeecg.modules.wanbang.course.entity.WbCourseUserComment">
+		SELECT com.*,suser.avatar,suser.nickname
+		FROM  wb_course_comment com,sys_user suser
+		WHERE com.create_by = suser.username and com.publish = 1 and
+			 com.course_id = #{mainId} order by com.create_time DESC	</select>
 </mapper>
