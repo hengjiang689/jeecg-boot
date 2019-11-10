@@ -98,7 +98,7 @@
 
       <!-- 子表单区域 -->
       <a-tabs v-model="activeKey" @change="handleChangeTabs">
-        <a-tab-pane tab="万邦课程评论" :key="refKeys[0]" :forceRender="true">
+        <a-tab-pane tab="课程评论" :key="refKeys[0]" :forceRender="true">
           <j-editable-table
             :ref="refKeys[0]"
             :loading="wbCourseCommentTable.loading"
@@ -110,7 +110,7 @@
             :actionButton="true"/>
         </a-tab-pane>
         
-        <a-tab-pane tab="万邦子课程表" :key="refKeys[1]" :forceRender="true">
+        <a-tab-pane tab="课程章节" :key="refKeys[1]" :forceRender="true">
           <j-editable-table
             :ref="refKeys[1]"
             :loading="wbClassTable.loading"

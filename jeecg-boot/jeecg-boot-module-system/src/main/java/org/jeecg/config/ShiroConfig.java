@@ -103,7 +103,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/carousel/wbCarousel/list", "anon");
 		filterChainDefinitionMap.put("/course/wbCourse/list", "anon");
 		filterChainDefinitionMap.put("/course/wbCourse/queryById", "anon");
-		filterChainDefinitionMap.put("/course/wbCourse/queryWbCourseCommentByMainId", "anon");
+		filterChainDefinitionMap.put("/course/wbCourse/queryWbCourseUserCommentByMainId", "anon");
 		filterChainDefinitionMap.put("/course/wbCourse/queryWbClassByMainId", "anon");
 
 
