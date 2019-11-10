@@ -189,7 +189,12 @@ public class QueryGenerator {
 				column = column.substring(0, column.lastIndexOf(CommonConstant.DICT_TEXT_SUFFIX));
 			}
 			//SQL注入check
-			SqlInjectionUtil.filterContent(column); 
+			if(column.contains(",")){
+				SqlInjectionUtil.filterContent(column.split(","));
+			}else{
+				SqlInjectionUtil.filterContent(column);
+			}
+
 			
 			if (order.toUpperCase().indexOf(ORDER_TYPE_ASC)>=0) {
 				queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));

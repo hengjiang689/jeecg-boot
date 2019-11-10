@@ -164,6 +164,12 @@
             }
           },
           {
+            title:'id',
+            align:"center",
+            width: 100,
+            dataIndex: 'id'
+          },
+          {
             title:'课程标题',
             align:"center",
             dataIndex: 'title'

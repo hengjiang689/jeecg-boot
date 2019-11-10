@@ -11,6 +11,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
@@ -55,6 +57,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Version: V1.0
  */
 @RestController
+@Api(tags="消息管理")
 @RequestMapping("/sys/annountCement")
 @Slf4j
 public class SysAnnouncementController {
@@ -193,6 +196,7 @@ public class SysAnnouncementController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据id获取消息", notes = "根据id获取消息")
 	@RequestMapping(value = "/queryById", method = RequestMethod.GET)
 	public Result<SysAnnouncement> queryById(@RequestParam(name="id",required=true) String id) {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
@@ -277,6 +281,7 @@ public class SysAnnouncementController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "用户消息列表", notes = "用户消息列表")
 	@RequestMapping(value = "/listByUser", method = RequestMethod.GET)
 	public Result<Map<String,Object>> listByUser() {
 		Result<Map<String,Object>> result = new Result<Map<String,Object>>();

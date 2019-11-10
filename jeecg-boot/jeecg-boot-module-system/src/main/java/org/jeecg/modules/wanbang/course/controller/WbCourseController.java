@@ -82,13 +82,13 @@ public class WbCourseController {
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		if(wbCourse.getTitle()!=null){
+		if(!StringUtils.isBlank(wbCourse.getTitle())){
 			wbCourse.setTitle("*"+wbCourse.getTitle()+"*");
 		}
-		if(wbCourse.getTeacherName()!=null){
+		if(!StringUtils.isBlank(wbCourse.getTeacherName())){
 			wbCourse.setTeacherName("*"+wbCourse.getTeacherName()+"*");
 		}
-		if(wbCourse.getCategory()!=null){
+		if(!StringUtils.isBlank(wbCourse.getCategory())){
 			wbCourse.setCategoryCode(sysCategoryService.getById(wbCourse.getCategory()).getCode()+"*");
 			wbCourse.setCategory(null);
 		}
