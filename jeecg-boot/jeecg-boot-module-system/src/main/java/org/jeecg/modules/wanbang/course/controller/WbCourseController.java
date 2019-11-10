@@ -136,7 +136,22 @@ public class WbCourseController {
 		wbCourseService.updateMain(wbCourse, wbCoursePage.getWbCourseCommentList(),wbCoursePage.getWbClassList());
 		return Result.ok("编辑成功!");
 	}
-	
+
+	 @ApiOperation(value = "新增评论", notes = "新增评论 {\n" +
+			 "  \"content\": \"string\",\n" +
+			 "  \"courseId\": \"courseId\"\n" +
+			 "}")
+	 @PostMapping(value = "/addComment")
+	 public Result<?> addComment(@RequestBody WbCourseComment wbCourseComment) {
+		 WbCourse wbCourseEntity = wbCourseService.getById(wbCourseComment.getCourseId());
+		 if(wbCourseEntity==null) {
+			 return Result.error("未找到对应数据");
+		 }
+		 wbCourseComment.setId(null);
+		 wbCourseCommentService.save(wbCourseComment);
+		 return Result.ok("添加成功!");
+	 }
+
 	/**
 	 *   通过id删除
 	 *
