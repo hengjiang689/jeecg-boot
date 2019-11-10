@@ -93,7 +93,6 @@ public class WbCourseController {
 			wbCourse.setCategory(null);
 		}
 		QueryWrapper<WbCourse> queryWrapper = QueryGenerator.initQueryWrapper(wbCourse, req.getParameterMap());
-		queryWrapper.orderByDesc("sort_no");
 		Page<WbCourse> page = new Page<WbCourse>(pageNo, pageSize);
 		IPage<WbCourse> pageList = wbCourseService.page(page, queryWrapper);
 		return Result.ok(pageList);
