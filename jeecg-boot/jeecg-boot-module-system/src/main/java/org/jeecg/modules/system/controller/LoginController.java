@@ -502,11 +502,11 @@ public class LoginController {
 				b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.REGISTER_TEMPLATE_CODE);
 			}else {
 				//登录模式，校验用户有效性
-				SysUser sysUser = sysUserService.getUserByPhone(mobile);
-				result = sysUserService.checkUserIsEffective(sysUser);
-				if(!result.isSuccess()) {
-					return result;
-				}
+//				SysUser sysUser = sysUserService.getUserByPhone(mobile);
+//				result = sysUserService.checkUserIsEffective(sysUser);
+//				if(!result.isSuccess()) {
+//					return result;
+//				}
 				
 				/**
 				 * smsmode 短信模板方式  0 .登录模板、1.注册模板、2.忘记密码模板
