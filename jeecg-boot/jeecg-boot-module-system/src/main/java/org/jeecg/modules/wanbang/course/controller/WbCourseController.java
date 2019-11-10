@@ -199,6 +199,7 @@ public class WbCourseController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "根据课程id查询子课程列表")
 	@GetMapping(value = "/queryWbClassByMainId")
 	public Result<?> queryWbClassListByMainId(@RequestParam(name="id",required=true) String id) {
 		List<WbClass> wbClassList = wbClassService.selectByMainId(id);

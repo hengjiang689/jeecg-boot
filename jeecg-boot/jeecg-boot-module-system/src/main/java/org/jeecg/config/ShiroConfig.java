@@ -101,7 +101,12 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/**/*.ico", "anon");
 
 		filterChainDefinitionMap.put("/carousel/wbCarousel/list", "anon");
-		filterChainDefinitionMap.put("/carousel/wbCarousel/queryById?id=*", "anon");
+		filterChainDefinitionMap.put("/course/wbCourse/list", "anon");
+		filterChainDefinitionMap.put("/course/wbCourse/queryById", "anon");
+		filterChainDefinitionMap.put("/course/wbCourse/queryWbCourseCommentByMainId", "anon");
+		filterChainDefinitionMap.put("/course/wbCourse/queryWbClassByMainId", "anon");
+
+
 		filterChainDefinitionMap.put("/sys/getPhoneSmsCode", "anon");
 
 		// update-begin--Author:sunjianlei Date:20190813 for：排除字体格式的后缀
