@@ -100,6 +100,10 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/**/*.png", "anon");
 		filterChainDefinitionMap.put("/**/*.ico", "anon");
 
+		filterChainDefinitionMap.put("/carousel/wbCarousel/list", "anon");
+		filterChainDefinitionMap.put("/carousel/wbCarousel/queryById", "anon");
+		filterChainDefinitionMap.put("/sys/getPhoneSmsCode", "anon");
+		
 		// update-begin--Author:sunjianlei Date:20190813 for：排除字体格式的后缀
 		filterChainDefinitionMap.put("/**/*.ttf", "anon");
 		filterChainDefinitionMap.put("/**/*.woff", "anon");
