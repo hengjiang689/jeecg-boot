@@ -162,7 +162,7 @@
               title: '评论内容',
               key: 'content',
               type: FormTypes.input,
-              width:"800px",
+              width:"1300px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
@@ -186,13 +186,21 @@
               title: '标题',
               key: 'title',
               type: FormTypes.input,
-              width:"250px",
+              width:"300px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
             {
               title: '视频文件',
               key: 'videoUrl',
+              type: FormTypes.input,
+              width:"300px",
+              placeholder: '请输入${title}',
+              defaultValue: '',
+            },
+            {
+              title: '音频文件',
+              key: 'audioUrl',
               type: FormTypes.input,
               width:"300px",
               placeholder: '请输入${title}',
@@ -231,14 +239,7 @@
               placeholder: '请输入${title}',
               defaultValue: '',
             },
-            {
-              title: '音频文件',
-              key: 'audioUrl',
-              type: FormTypes.input,
-              width:"300px",
-              placeholder: '请输入${title}',
-              defaultValue: '',
-            },
+
           ]
         },
         url: {

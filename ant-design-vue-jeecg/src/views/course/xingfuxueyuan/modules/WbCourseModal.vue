@@ -175,7 +175,7 @@
               title: '评论内容',
               key: 'content',
               type: FormTypes.input,
-              width:"800px",
+              width:"1000px",
               placeholder: '请输入${title}',
               defaultValue: '',
             },
