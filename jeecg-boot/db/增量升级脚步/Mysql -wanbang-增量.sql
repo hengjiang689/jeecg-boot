@@ -55,3 +55,11 @@ ALTER TABLE `sys_user`
 
 ALTER TABLE `wb_course`
   ADD COLUMN `category_code` varchar(32) NULL COMMENT '类别值' AFTER `category`;
+
+
+ALTER TABLE `wb_class`
+  ADD COLUMN `duration` varchar(32) NULL COMMENT '时长' AFTER `course_id`;
+
+
+ALTER TABLE `wb_class`
+  ADD COLUMN `learn_no` varchar(32) NULL COMMENT '学习人数' AFTER `duration`;

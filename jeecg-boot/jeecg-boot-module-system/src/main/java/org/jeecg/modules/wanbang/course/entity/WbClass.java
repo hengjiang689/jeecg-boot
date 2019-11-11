@@ -51,6 +51,10 @@ public class WbClass implements Serializable {
 	private java.lang.String isFree;
 	/**课程id*/
 	private java.lang.String courseId;
+	/**时长*/
+	private java.lang.String duration;
+	/**学习人数*/
+	private java.lang.String learnNo;
 	/**视频文件*/
 	@Excel(name = "视频文件", width = 15)
 	private java.lang.String videoUrl;

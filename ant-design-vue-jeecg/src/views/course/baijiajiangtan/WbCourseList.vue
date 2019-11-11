@@ -11,23 +11,13 @@
           </a-col>
           <a-col :md="6" :sm="8">
             <a-form-item label="所属类别">
-              <j-category-select v-model="queryParam.category" pcode="A01" placeholder="请选择所属类别" />
+              <j-category-select v-model="queryParam.category" pcode="A01A03" placeholder="请选择所属类别" />
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
-              <a-form-item label="发布日期">
-                <j-date placeholder="请选择发布日期" v-model="queryParam.publishDate"></j-date>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
               <a-form-item label="讲师姓名">
                 <a-input placeholder="请输入讲师姓名" v-model="queryParam.teacherName"></a-input>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="8">
-              <a-form-item label="是否免费">
-                <j-dict-select-tag placeholder="请选择是否免费" v-model="queryParam.isFree" dictCode="checkbox_type"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="8">
@@ -187,14 +177,6 @@
             }
           },
           {
-            title:'发布日期',
-            align:"center",
-            dataIndex: 'publishDate',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
-          },
-          {
             title:'讲师姓名',
             align:"center",
             dataIndex: 'teacherName'
@@ -203,18 +185,6 @@
             title:'价格',
             align:"center",
             dataIndex: 'price'
-          },
-          {
-            title:'是否免费',
-            align:"center",
-            dataIndex: 'isFree',
-            customRender:(text)=>{
-              if(!text){
-                return ''
-              }else{
-                return filterMultiDictText(this.dictOptions['isFree'], text+"")
-              }
-            }
           },
           {
             title:'是否置顶',
@@ -246,7 +216,7 @@
           }
         ],
         url: {
-          list: "/course/wbCourse/list",
+          list: "/course/wbCourse/list?categoryCode=A01A03*",
           delete: "/course/wbCourse/delete",
           deleteBatch: "/course/wbCourse/deleteBatch",
           exportXlsUrl: "/course/wbCourse/exportXls",

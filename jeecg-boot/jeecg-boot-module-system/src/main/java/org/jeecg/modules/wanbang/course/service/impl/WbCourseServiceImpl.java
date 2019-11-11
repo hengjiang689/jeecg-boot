@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Collection;
@@ -39,14 +41,18 @@ public class WbCourseServiceImpl extends ServiceImpl<WbCourseMapper, WbCourse> i
 			for(WbCourseComment entity:wbCourseCommentList) {
 				//外键设置
 				entity.setCourseId(wbCourse.getId());
-				wbCourseCommentMapper.insert(entity);
+				if(!StringUtils.isEmpty(entity.getContent())){
+					wbCourseCommentMapper.insert(entity);
+				}
 			}
 		}
 		if(wbClassList!=null && wbClassList.size()>0) {
 			for(WbClass entity:wbClassList) {
 				//外键设置
 				entity.setCourseId(wbCourse.getId());
-				wbClassMapper.insert(entity);
+				if(!StringUtils.isEmpty(entity.getTitle())){
+					wbClassMapper.insert(entity);
+				}
 			}
 		}
 	}
@@ -65,14 +71,18 @@ public class WbCourseServiceImpl extends ServiceImpl<WbCourseMapper, WbCourse> i
 			for(WbCourseComment entity:wbCourseCommentList) {
 				//外键设置
 				entity.setCourseId(wbCourse.getId());
-				wbCourseCommentMapper.insert(entity);
+				if(!StringUtils.isEmpty(entity.getContent())){
+					wbCourseCommentMapper.insert(entity);
+				}
 			}
 		}
 		if(wbClassList!=null && wbClassList.size()>0) {
 			for(WbClass entity:wbClassList) {
 				//外键设置
 				entity.setCourseId(wbCourse.getId());
-				wbClassMapper.insert(entity);
+				if(!StringUtils.isEmpty(entity.getTitle())){
+					wbClassMapper.insert(entity);
+				}
 			}
 		}
 	}
