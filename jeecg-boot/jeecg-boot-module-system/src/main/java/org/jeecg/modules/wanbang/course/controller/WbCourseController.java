@@ -98,6 +98,19 @@ public class WbCourseController {
 		IPage<WbCourse> pageList = wbCourseService.page(page, queryWrapper);
 		return Result.ok(pageList);
 	}
+
+	 @GetMapping(value = "/comment/list")
+	 public Result<?> queryCommentPageList(WbCourseComment wbCourseComment,
+									@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+									@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+									HttpServletRequest req) {
+		 QueryWrapper<WbCourseComment> queryWrapper = QueryGenerator.initQueryWrapper(wbCourseComment, req.getParameterMap());
+		 Page<WbCourseComment> page = new Page<>(pageNo, pageSize);
+		 IPage<WbCourseComment> pageList = wbCourseCommentService.page(page, queryWrapper);
+		 return Result.ok(pageList);
+	 }
+
+
 	
 	/**
 	 *   添加
@@ -138,6 +151,18 @@ public class WbCourseController {
 		return Result.ok("编辑成功!");
 	}
 
+	 @PutMapping(value = "/comment/edit")
+	 public Result<?> commentEdit(@RequestBody WbCourseComment wbCourseComment) {
+		 WbCourseComment wbCourseComment1 = wbCourseCommentService.getById(wbCourseComment.getId());
+		 if(wbCourseComment1==null) {
+			 return Result.error("未找到对应数据");
+		 }
+		 wbCourseComment1.setContent(wbCourseComment.getContent());
+		 wbCourseComment1.setPublish(wbCourseComment.getPublish());
+		 wbCourseCommentService.updateById(wbCourseComment1);
+		 return Result.ok("编辑成功!");
+	 }
+
 	 @ApiOperation(value = "新增评论", notes = "新增评论 {\n" +
 			 "  \"content\": \"string\",\n" +
 			 "  \"courseId\": \"courseId\"\n" +
@@ -165,7 +190,13 @@ public class WbCourseController {
 		wbCourseService.delMain(id);
 		return Result.ok("删除成功!");
 	}
-	
+
+	 @DeleteMapping(value = "/comment/delete")
+	 public Result<?> deleteComment(@RequestParam(name="id",required=true) String id) {
+		 wbCourseCommentService.removeById(id);
+		 return Result.ok("删除成功!");
+	 }
+
 	/**
 	 *  批量删除
 	 *

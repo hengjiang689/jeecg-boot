@@ -33,6 +33,11 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
+            <a-form-item label="课程描述" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input v-decorator="[ 'description', validatorRules.description]" placeholder="请输入课程描述"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
             <a-form-item label="讲师姓名" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <a-input v-decorator="[ 'teacherName', validatorRules.teacherName]" placeholder="请输入讲师姓名"></a-input>
             </a-form-item>
@@ -261,7 +266,7 @@
       },
       /** 调用完edit()方法之后会自动调用此方法 */
       editAfter() {
-        let fieldval = pick(this.model,'title','category','image','introduction','teacherName','price','classNum','isTop','learnNum','sortNo')
+        let fieldval = pick(this.model,'title','category','image','introduction','description','teacherName','price','classNum','isTop','learnNum','sortNo')
         this.$nextTick(() => {
           this.form.setFieldsValue(fieldval)
         })
@@ -286,7 +291,7 @@
         this.$message.error(msg)
       },
      popupCallback(row){
-       this.form.setFieldsValue(pick(row,'title','category','image','introduction','teacherName','price','classNum','isTop','learnNum','sortNo'))
+       this.form.setFieldsValue(pick(row,'title','category','image','introduction','description','teacherName','price','classNum','isTop','learnNum','sortNo'))
      },
      handleCategoryChange(value,backObj){
        this.form.setFieldsValue(backObj)
