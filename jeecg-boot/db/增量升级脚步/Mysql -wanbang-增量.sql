@@ -63,3 +63,18 @@ ALTER TABLE `wb_class`
 
 ALTER TABLE `wb_class`
   ADD COLUMN `learn_no` varchar(32) NULL COMMENT '学习人数' AFTER `duration`;
+
+
+CREATE TABLE `wb_course_history` (
+  `id` varchar(36) NOT NULL COMMENT '主键',
+  `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `update_by` varchar(50) DEFAULT NULL COMMENT '更新人',
+  `update_time` datetime DEFAULT NULL COMMENT '更新日期',
+  `sys_org_code` varchar(64) DEFAULT NULL COMMENT '所属部门',
+  `course_id` varchar(36) NOT NULL COMMENT '外键',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+create view `wb_course_user_history` as select history.`id`,history.`create_by`,history.`create_time`,history.`update_by`,history.`update_time`,history.`sys_org_code`,history.`course_id`,course.`title`,course.`image`,course.`description` from `wb_course_history` history, `wb_course` course
+where history.course_id = course.id;

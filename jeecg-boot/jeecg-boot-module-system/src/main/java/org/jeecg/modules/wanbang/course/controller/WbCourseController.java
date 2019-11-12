@@ -10,11 +10,13 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.jeecg.modules.system.service.ISysCategoryService;
-import org.jeecg.modules.wanbang.course.entity.WbCourseUserComment;
+import org.jeecg.modules.wanbang.course.entity.*;
+import org.jeecg.modules.wanbang.course.service.*;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -25,13 +27,7 @@ import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.wanbang.course.entity.WbCourseComment;
-import org.jeecg.modules.wanbang.course.entity.WbClass;
-import org.jeecg.modules.wanbang.course.entity.WbCourse;
 import org.jeecg.modules.wanbang.course.vo.WbCoursePage;
-import org.jeecg.modules.wanbang.course.service.IWbCourseService;
-import org.jeecg.modules.wanbang.course.service.IWbCourseCommentService;
-import org.jeecg.modules.wanbang.course.service.IWbClassService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -62,6 +58,10 @@ public class WbCourseController {
 	private IWbCourseService wbCourseService;
 	@Autowired
 	private IWbCourseCommentService wbCourseCommentService;
+	@Autowired
+	private IWbCourseHistoryService wbCourseHistoryService;
+	@Autowired
+	private IWbCourseUserHistoryService wbCourseUserHistoryService;
 	@Autowired
 	private IWbClassService wbClassService;
 	@Autowired
@@ -107,6 +107,20 @@ public class WbCourseController {
 		 QueryWrapper<WbCourseComment> queryWrapper = QueryGenerator.initQueryWrapper(wbCourseComment, req.getParameterMap());
 		 Page<WbCourseComment> page = new Page<>(pageNo, pageSize);
 		 IPage<WbCourseComment> pageList = wbCourseCommentService.page(page, queryWrapper);
+		 return Result.ok(pageList);
+	 }
+
+	 @ApiOperation(value = "用户访问课程历史记录", notes = "/history/list?column=createTime&order=desc&pageNo=1&pageSize=10")
+	 @GetMapping(value = "/history/list")
+	 public Result<?> queryHistoryPageList(WbCourseUserHistory wbCourseUserHistory,
+										   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+										   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+										   HttpServletRequest req) {
+		 LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+		 wbCourseUserHistory.setCreateBy(sysUser.getUsername());
+		 QueryWrapper<WbCourseUserHistory> queryWrapper = QueryGenerator.initQueryWrapper(wbCourseUserHistory, req.getParameterMap());
+		 Page<WbCourseUserHistory> page = new Page<>(pageNo, pageSize);
+		 IPage<WbCourseUserHistory> pageList = wbCourseUserHistoryService.page(page, queryWrapper);
 		 return Result.ok(pageList);
 	 }
 
@@ -223,6 +237,13 @@ public class WbCourseController {
 		WbCourse wbCourse = wbCourseService.getById(id);
 		if(wbCourse==null) {
 			return Result.error("未找到对应数据");
+		}
+		WbCourseHistory wbCourseHistory = new WbCourseHistory();
+		wbCourseHistory.setCourseId(id);
+		try{
+			wbCourseHistoryService.save(wbCourseHistory);
+		}catch (Exception e){
+
 		}
 		return Result.ok(wbCourse);
 
