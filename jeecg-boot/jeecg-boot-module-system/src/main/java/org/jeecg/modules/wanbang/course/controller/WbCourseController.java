@@ -238,12 +238,16 @@ public class WbCourseController {
 		if(wbCourse==null) {
 			return Result.error("未找到对应数据");
 		}
-		WbCourseHistory wbCourseHistory = new WbCourseHistory();
-		wbCourseHistory.setCourseId(id);
-		try{
-			wbCourseHistoryService.save(wbCourseHistory);
-		}catch (Exception e){
+		LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+		if(sysUser!=null){
+			WbCourseHistory wbCourseHistory = new WbCourseHistory();
+			wbCourseHistory.setCreateBy(sysUser.getUsername());
+			wbCourseHistory.setCourseId(id);
+			try{
+				wbCourseHistoryService.save(wbCourseHistory);
+			}catch (Exception e){
 
+			}
 		}
 		return Result.ok(wbCourse);
 
