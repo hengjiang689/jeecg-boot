@@ -1,6 +1,7 @@
 package org.jeecg.modules.wanbang.course.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -231,27 +232,36 @@ public class WbCourseController {
 	 * @return
 	 */
 //	@Cacheable
-	@ApiOperation(value = "根据id查询课程详情")
+	@ApiOperation(value = "未登陆状态下根据id查询课程详情")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		WbCourse wbCourse = wbCourseService.getById(id);
 		if(wbCourse==null) {
 			return Result.error("未找到对应数据");
 		}
-		LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
-		if(sysUser!=null){
-			WbCourseHistory wbCourseHistory = new WbCourseHistory();
-			wbCourseHistory.setCreateBy(sysUser.getUsername());
-			wbCourseHistory.setCourseId(id);
-			try{
-				wbCourseHistoryService.save(wbCourseHistory);
-			}catch (Exception e){
-
-			}
-		}
 		return Result.ok(wbCourse);
-
 	}
+
+	 @ApiOperation(value = "根据id查询课程详情使用用户登陆状态")
+	 @GetMapping(value = "/queryByIdWithUser")
+	 public Result<?> queryByIdWithUser(@RequestParam(name="id",required=true) String id) {
+		 WbCourse wbCourse = wbCourseService.getById(id);
+		 if(wbCourse==null) {
+			 return Result.error("未找到对应数据");
+		 }
+		 LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+		 if(sysUser!=null){
+			 WbCourseHistory wbCourseHistory = new WbCourseHistory();
+			 wbCourseHistory.setCreateBy(sysUser.getUsername());
+			 wbCourseHistory.setCourseId(id);
+			 try{
+				 wbCourseHistoryService.save(wbCourseHistory);
+			 }catch (Exception e){
+
+			 }
+		 }
+		 return Result.ok(wbCourse);
+	 }
 	
 	/**
 	 * 通过id查询
