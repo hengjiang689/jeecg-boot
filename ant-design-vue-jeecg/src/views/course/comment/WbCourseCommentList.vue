@@ -112,6 +112,12 @@
             }
           },
           {
+            title:'用户名',
+            align:"center",
+            width:150,
+            dataIndex: 'createBy'
+          },
+          {
             title:'内容',
             align:"center",
             // width:800,
