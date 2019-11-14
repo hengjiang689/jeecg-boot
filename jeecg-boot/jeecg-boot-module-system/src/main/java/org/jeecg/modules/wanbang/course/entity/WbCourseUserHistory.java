@@ -55,5 +55,31 @@ public class WbCourseUserHistory implements Serializable {
 	private java.lang.String category;
 	/**类别值*/
 	private java.lang.String categoryCode;
+	/**视频文件*/
+	private java.lang.String videoUrl;
+	/**音频文件*/
+	private java.lang.String audioUrl;
+	/**课程简介*/
+	private java.lang.String introduction;
+	/**发布日期*/
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private java.util.Date publishDate;
+	/**讲师姓名*/
+	private java.lang.String teacherName;
+	/**价格*/
+	private java.lang.Double price;
+	/**时长*/
+	private java.lang.String duration;
+	/**总课时*/
+	private java.lang.Integer classNum;
+	/**是否免费*/
+	private java.lang.String isFree;
+	/**是否置顶*/
+	private java.lang.String isTop;
+	/**学习人数*/
+	private java.lang.Integer learnNum;
+	/**排序*/
+	private java.lang.Double sortNo;
 
 }
