@@ -76,5 +76,6 @@ CREATE TABLE `wb_course_history` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-create view `wb_course_user_history` as select history.`id`,history.`create_by`,history.`create_time`,history.`update_by`,history.`update_time`,history.`sys_org_code`,history.`course_id`,course.`title`,course.`image`,course.`description` from `wb_course_history` history, `wb_course` course
-where history.course_id = course.id;
+
+create view `wb_course_user_history` as select history.`id`,history.`create_by`,history.`create_time`,history.`update_by`,history.`update_time`,history.`sys_org_code`,history.`course_id`,course.`title`,course.`image`,course.`description`,course.`category`,course.`category_code` from `wb_course_history` history, `wb_course` course
+where history.course_id = course.id

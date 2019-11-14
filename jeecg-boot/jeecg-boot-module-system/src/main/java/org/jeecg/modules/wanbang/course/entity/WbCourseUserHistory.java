@@ -51,4 +51,9 @@ public class WbCourseUserHistory implements Serializable {
 	private java.lang.String image;
 	/**课程描述*/
 	private java.lang.String description;
+	/**所属类别*/
+	private java.lang.String category;
+	/**类别值*/
+	private java.lang.String categoryCode;
+
 }
