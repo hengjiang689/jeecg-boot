@@ -64,7 +64,6 @@ import lombok.extern.slf4j.Slf4j;
  * @Author zhangweijian
  * @since 2018-12-28
  */
-@Api(tags="数据字典管理")
 @RestController
 @RequestMapping("/sys/dict")
 @Slf4j
@@ -128,7 +127,6 @@ public class SysDictController {
 	 * @param dictCode 表名,文本字段,code字段  | 举例：sys_user,realname,id
 	 * @return
 	 */
-	@ApiOperation(value = "获取字典数据By字典code", notes = "获取字典数据By字典code")
 	@RequestMapping(value = "/getDictItems/{dictCode}", method = RequestMethod.GET)
 	public Result<List<DictModel>> getDictItems(@PathVariable String dictCode) {
 		log.info(" dictCode : "+ dictCode);
@@ -179,7 +177,6 @@ public class SysDictController {
 	 * @param dictCode
 	 * @return
 	 */
-	@ApiOperation(value = "获取字典数据By字典code和key", notes = "获取字典数据By字典code和key")
 	@RequestMapping(value = "/getDictText/{dictCode}/{key}", method = RequestMethod.GET)
 	public Result<String> getDictItems(@PathVariable("dictCode") String dictCode, @PathVariable("key") String key) {
 		log.info(" dictCode : "+ dictCode);
