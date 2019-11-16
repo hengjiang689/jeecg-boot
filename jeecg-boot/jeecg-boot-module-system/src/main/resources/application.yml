@@ -14,7 +14,7 @@ jeecg :
     #webapp文件路径
     webapp: /data/upload
   shiro:
-    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/payment/wbPaymentTransaction/weixin/notify
+    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/payment/wbPaymentTransaction/weixin/notify,/sys/dict/getDictText/system_config/membership_fee
   mini-program:
     appId: wx424640421193d7af
     appSecret: cb4a03fe66264afcf94e83f90e1f096c
