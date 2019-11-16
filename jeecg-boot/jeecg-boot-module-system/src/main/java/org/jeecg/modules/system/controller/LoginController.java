@@ -225,10 +225,10 @@ public class LoginController {
 		return result;
 	}
 
-
 	@ApiOperation(value = "移动端微信登录接口", notes = "移动应用登录接口 {\"code\": \"ewer23\"} ")
 	@RequestMapping(value = "/mobileWxLogin", method = RequestMethod.POST)
 	public Result<JSONObject> mobileWxLogin(@RequestBody JSONObject jsonObject){
+
 		Result<JSONObject> result = new Result<JSONObject>();
 		SnsToken snsToken = SnsAPI.oauth2AccessToken(mobileAppId, mobileSecret, jsonObject.getString("code"));
 		String unionId = snsToken.getUnionid();
@@ -256,7 +256,6 @@ public class LoginController {
 //			}
 			JSONObject obj = new JSONObject();
 			obj.put("unionId", unionId);
-			obj.put("openId", snsToken.getOpenid());
 			result.setResult(obj);
 			result.error500("用户尚未绑定手机号");
 		}
@@ -301,7 +300,6 @@ public class LoginController {
 //			}
 			JSONObject obj = new JSONObject();
 			obj.put("unionId", unionId);
-			obj.put("openId", wxaDUserInfo.getOpenId());
 			result.setResult(obj);
 			result.error500("用户尚未绑定手机号");
 			return result;

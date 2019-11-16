@@ -1,46 +1,42 @@
 <template>
-  <a-drawer
+  <a-modal
     :title="title"
     :width="width"
-    placement="right"
-    :closable="false"
-    @close="close"
-    :visible="visible">
-  
+    :visible="visible"
+    :confirmLoading="confirmLoading"
+    @ok="handleOk"
+    @cancel="handleCancel"
+    cancelText="关闭">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
 
-        <a-form-item label="标题" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-decorator="[ 'title', validatorRules.title]" placeholder="请输入标题"></a-input>
+        <a-form-item label="商品描述" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'body', validatorRules.body]" placeholder="请输入商品描述"></a-input>
         </a-form-item>
-        <a-form-item label="类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <j-dict-select-tag type="list" v-decorator="['carouselType']" :trigger-change="true" dictCode="course_type" placeholder="请选择类型"/>
+        <a-form-item label="商户订单号" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'outTradeNo', validatorRules.outTradeNo]" placeholder="请输入商户订单号"></a-input>
         </a-form-item>
-        <a-form-item label="图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <j-upload v-decorator="['url']" :trigger-change="true"></j-upload>
+        <a-form-item label="预支付交易会话标识" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-input v-decorator="[ 'prepayId', validatorRules.prepayId]" placeholder="请输入预支付交易会话标识"></a-input>
         </a-form-item>
-        <a-form-item label="课程id" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-decorator="[ 'courseId', validatorRules.courseId]" placeholder="请输入课程id"></a-input>
+        <a-form-item label="支付平台" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag type="list" v-decorator="['platform']" :trigger-change="true" dictCode="platform_type" placeholder="请选择支付平台"/>
         </a-form-item>
-        
+
       </a-form>
     </a-spin>
-    <a-button type="primary" @click="handleOk">确定</a-button>
-    <a-button type="primary" @click="handleCancel">取消</a-button>
-  </a-drawer>
+  </a-modal>
 </template>
 
 <script>
 
   import { httpAction } from '@/api/manage'
   import pick from 'lodash.pick'
-  import JUpload from '@/components/jeecg/JUpload'
   import JDictSelectTag from "@/components/dict/JDictSelectTag"
-  
+
   export default {
-    name: "WbCarouselModal",
+    name: "WbPaymentTransactionModal",
     components: { 
-      JUpload,
       JDictSelectTag,
     },
     data () {
@@ -61,14 +57,14 @@
 
         confirmLoading: false,
         validatorRules:{
-        title:{rules: [{ required: true, message: '请输入标题!' }]},
-        carouselType:{rules: [{ required: true, message: '请输入类型!' }]},
-        url:{rules: [{ required: true, message: '请输入图片!' }]},
-        courseId:{},
+        body:{rules: [{ required: true, message: '请输入商品描述!' }]},
+        outTradeNo:{},
+        prepayId:{},
+        platform:{},
         },
         url: {
-          add: "/carousel/wbCarousel/add",
-          edit: "/carousel/wbCarousel/edit",
+          add: "/payment/wbPaymentTransaction/add",
+          edit: "/payment/wbPaymentTransaction/edit",
         }
      
       }
@@ -84,7 +80,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'title','carouselType','url','courseId'))
+          this.form.setFieldsValue(pick(this.model,'createBy','createTime','body','status','outTradeNo','prepayId','tradeType','totalFee','settlementTotalFee','platform'))
         })
       },
       close () {
@@ -127,18 +123,10 @@
         this.close()
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'title','carouselType','url','courseId'))
-      }
+        this.form.setFieldsValue(pick(row,'createBy','createTime','body','status','outTradeNo','prepayId','tradeType','totalFee','settlementTotalFee','platform'))
+      },
+
       
     }
   }
 </script>
-
-<style lang="less" scoped>
-/** Button按钮间距 */
-  .ant-btn {
-    margin-left: 30px;
-    margin-bottom: 30px;
-    float: right;
-  }
-</style>

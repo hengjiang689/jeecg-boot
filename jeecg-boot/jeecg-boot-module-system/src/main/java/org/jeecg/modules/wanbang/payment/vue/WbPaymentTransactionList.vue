@@ -5,10 +5,32 @@
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
-            <a-form-item label="类型">
-              <j-dict-select-tag placeholder="请选择类型" v-model="queryParam.carouselType" dictCode="course_type"/>
+            <a-form-item label="创建人">
+              <a-input placeholder="请输入创建人" v-model="queryParam.createBy"></a-input>
             </a-form-item>
           </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="状态">
+              <j-dict-select-tag placeholder="请选择状态" v-model="queryParam.status" dictCode="payment_status"/>
+            </a-form-item>
+          </a-col>
+          <template v-if="toggleSearchStatus">
+            <a-col :md="6" :sm="8">
+              <a-form-item label="商户订单号">
+                <a-input placeholder="请输入商户订单号" v-model="queryParam.outTradeNo"></a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item label="交易类型">
+                <j-dict-select-tag placeholder="请选择交易类型" v-model="queryParam.tradeType" dictCode="trade_type"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="8">
+              <a-form-item label="支付平台">
+                <j-dict-select-tag placeholder="请选择支付平台" v-model="queryParam.platform" dictCode="platform_type"/>
+              </a-form-item>
+            </a-col>
+          </template>
           <a-col :md="6" :sm="8" >
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -28,7 +50,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('wb_carousel')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('万邦支付交易表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -99,27 +121,27 @@
       </a-table>
     </div>
 
-    <wbCarousel-modal ref="modalForm" @ok="modalFormOk"></wbCarousel-modal>
+    <wbPaymentTransaction-modal ref="modalForm" @ok="modalFormOk"></wbPaymentTransaction-modal>
   </a-card>
 </template>
 
 <script>
 
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import WbCarouselModal from './modules/WbCarouselModal'
+  import WbPaymentTransactionModal from './modules/WbPaymentTransactionModal'
   import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
   import {initDictOptions, filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
-    name: "WbCarouselList",
+    name: "WbPaymentTransactionList",
     mixins:[JeecgListMixin],
     components: {
       JDictSelectTag,
-      WbCarouselModal
+      WbPaymentTransactionModal
     },
     data () {
       return {
-        description: 'wb_carousel管理页面',
+        description: '万邦支付交易表管理页面',
         // 表头
         columns: [
           {
@@ -133,32 +155,68 @@
             }
           },
           {
-            title:'标题',
+            title:'创建人',
             align:"center",
-            dataIndex: 'title'
+            dataIndex: 'createBy'
           },
           {
-            title:'类型',
+            title:'创建日期',
             align:"center",
-            dataIndex: 'carouselType',
+            dataIndex: 'createTime',
+            customRender:function (text) {
+              return !text?"":(text.length>10?text.substr(0,10):text)
+            }
+          },
+          {
+            title:'商品描述',
+            align:"center",
+            dataIndex: 'body'
+          },
+          {
+            title:'状态',
+            align:"center",
+            dataIndex: 'status',
             customRender:(text)=>{
               if(!text){
                 return ''
               }else{
-                return filterMultiDictText(this.dictOptions['carouselType'], text+"")
+                return filterMultiDictText(this.dictOptions['status'], text+"")
               }
             }
           },
           {
-            title:'图片',
+            title:'交易类型',
             align:"center",
-            dataIndex: 'url',
-            scopedSlots: {customRender: 'imgSlot'}
+            dataIndex: 'tradeType',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['tradeType'], text+"")
+              }
+            }
           },
           {
-            title:'课程id',
+            title:'标价金额',
             align:"center",
-            dataIndex: 'courseId'
+            dataIndex: 'totalFee'
+          },
+          {
+            title:'结算金额',
+            align:"center",
+            dataIndex: 'settlementTotalFee'
+          },
+          {
+            title:'支付平台',
+            align:"center",
+            dataIndex: 'platform',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['platform'], text+"")
+              }
+            }
           },
           {
             title: '操作',
@@ -168,14 +226,16 @@
           }
         ],
         url: {
-          list: "/carousel/wbCarousel/list",
-          delete: "/carousel/wbCarousel/delete",
-          deleteBatch: "/carousel/wbCarousel/deleteBatch",
-          exportXlsUrl: "/carousel/wbCarousel/exportXls",
-          importExcelUrl: "carousel/wbCarousel/importExcel",
+          list: "/payment/wbPaymentTransaction/list",
+          delete: "/payment/wbPaymentTransaction/delete",
+          deleteBatch: "/payment/wbPaymentTransaction/deleteBatch",
+          exportXlsUrl: "/payment/wbPaymentTransaction/exportXls",
+          importExcelUrl: "payment/wbPaymentTransaction/importExcel",
         },
         dictOptions:{
-         carouselType:[],
+         status:[],
+         tradeType:[],
+         platform:[],
         },
       }
     },
@@ -186,9 +246,19 @@
     },
     methods: {
       initDictConfig(){
-        initDictOptions('course_type').then((res) => {
+        initDictOptions('payment_status').then((res) => {
           if (res.success) {
-            this.$set(this.dictOptions, 'carouselType', res.result)
+            this.$set(this.dictOptions, 'status', res.result)
+          }
+        })
+        initDictOptions('trade_type').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'tradeType', res.result)
+          }
+        })
+        initDictOptions('platform_type').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'platform', res.result)
           }
         })
       }
