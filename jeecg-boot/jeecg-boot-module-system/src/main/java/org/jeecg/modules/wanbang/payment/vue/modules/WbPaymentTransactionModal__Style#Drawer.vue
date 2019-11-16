@@ -82,7 +82,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'createBy','createTime','body','status','outTradeNo','prepayId','tradeType','totalFee','settlementTotalFee','platform'))
+          this.form.setFieldsValue(pick(this.model,'createBy','createTime','body','status','outTradeNo','prepayId','tradeType','totalFee','platform'))
         })
       },
       close () {
@@ -125,7 +125,7 @@
         this.close()
       },
       popupCallback(row){
-        this.form.setFieldsValue(pick(row,'createBy','createTime','body','status','outTradeNo','prepayId','tradeType','totalFee','settlementTotalFee','platform'))
+        this.form.setFieldsValue(pick(row,'createBy','createTime','body','status','outTradeNo','prepayId','tradeType','totalFee','platform'))
       }
       
     }

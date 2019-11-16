@@ -3,6 +3,7 @@ package org.jeecg.modules.wanbang.payment.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.jeecg.modules.wanbang.course.entity.WbCourseUserComment;
 import org.jeecg.modules.wanbang.payment.entity.WbPaymentTransaction;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -13,5 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface WbPaymentTransactionMapper extends BaseMapper<WbPaymentTransaction> {
-
+    public WbPaymentTransaction getByOutTradeNo(@Param("outTradeNo") String outTradeNo);
 }

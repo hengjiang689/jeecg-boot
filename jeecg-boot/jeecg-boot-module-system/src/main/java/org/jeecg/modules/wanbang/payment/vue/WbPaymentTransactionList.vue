@@ -202,11 +202,6 @@
             dataIndex: 'totalFee'
           },
           {
-            title:'结算金额',
-            align:"center",
-            dataIndex: 'settlementTotalFee'
-          },
-          {
             title:'支付平台',
             align:"center",
             dataIndex: 'platform',

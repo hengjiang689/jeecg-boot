@@ -1,24 +1,32 @@
 package org.jeecg.modules.wanbang.payment.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.service.ISysDictService;
 import org.jeecg.modules.wanbang.course.entity.WbCourse;
 import org.jeecg.modules.wanbang.course.service.IWbCourseService;
+import org.jeecg.modules.wanbang.payment.entity.CallBackResult;
 import org.jeecg.modules.wanbang.payment.entity.WbPaymentTransaction;
 import org.jeecg.modules.wanbang.payment.service.IWbPaymentTransactionService;
 
@@ -43,12 +51,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.api.SnsAPI;
+import weixin.popular.bean.paymch.MchPayNotify;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.bean.sns.Jscode2sessionResult;
 import weixin.popular.bean.sns.SnsToken;
-import weixin.popular.util.JsonUtil;
-import weixin.popular.util.PayUtil;
+import weixin.popular.util.*;
 
 /**
  * @Description: 万邦支付交易表
@@ -145,12 +153,38 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		}
 	}
 
-	@PostMapping("/weixin/notify")
-	public String wxNotify(@RequestBody JSONObject jsonObject){
-
-		return "";
+	@SneakyThrows
+	@RequestMapping("/weixin/notify")
+	public String wxNotify(HttpServletRequest request){
+		log.info("================================================开始处理微信的异步通知");
+		String xmlResult = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+		log.info("=返回值=="+xmlResult);
+		Map<String, String> resultMap = XMLConverUtil.convertToMap(xmlResult);
+		MchPayNotify mchPayNotify = XMLConverUtil.convertToObject(MchPayNotify.class,xmlResult);
+		String resultCode;
+		String resultMsg;
+		if(SignatureUtil.validateSign(resultMap,wxMchKey)){
+			if ("SUCCESS".equalsIgnoreCase(mchPayNotify.getResult_code())) {//业务结果为SUCCESS
+				WbPaymentTransaction wbPaymentTransaction = wbPaymentTransactionService.getByOutTradeNo(mchPayNotify.getOut_trade_no());
+				if(wbPaymentTransaction.getStatus()==0){
+					wbPaymentTransaction.setCashFee(mchPayNotify.getCash_fee());
+					wbPaymentTransaction.setStatus(1);
+					wbPaymentTransaction.setTimeEnd(mchPayNotify.getTime_end());
+					wbPaymentTransaction.setTransactionId(mchPayNotify.getTransaction_id());
+					wbPaymentTransactionService.updateById(wbPaymentTransaction);
+				}
+				resultCode = "SUCCESS";
+				resultMsg = "成功";
+			} else {
+				resultCode = "FAIL";
+				resultMsg = "业务结果为FAIL";
+			}
+		}else{
+			resultCode = "FAIL";
+			resultMsg = "验签未通过";
+		}
+		return XMLConverUtil.convertToXML(new CallBackResult(resultCode,resultMsg));
 	}
-
 
 	/**
 	 * 分页列表查询

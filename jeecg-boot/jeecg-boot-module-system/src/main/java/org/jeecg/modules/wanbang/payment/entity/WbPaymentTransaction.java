@@ -74,7 +74,8 @@ public class WbPaymentTransaction implements Serializable {
 	@Excel(name = "交易ID", width = 15)
     private java.lang.String transactionId;
 	/**交易结束时间*/
-    private String timeEnd;
+	@Excel(name = "交易结束时间", width = 15)
+    private java.lang.String timeEnd;
 	/**支付平台*/
 	@Excel(name = "支付平台", width = 15)
     private java.lang.Integer platform;
