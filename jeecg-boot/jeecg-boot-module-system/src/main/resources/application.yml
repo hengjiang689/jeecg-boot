@@ -14,7 +14,7 @@ jeecg :
     #webapp文件路径
     webapp: /data/upload
   shiro:
-    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/payment/wbPaymentTransaction/weixin/notify,/sys/dict/getDictText/system_config/membership_fee
+    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/payment/wbPaymentTransaction/weixin/notify,/sys/dict/getDictItems/system_config
   mini-program:
     appId: wx424640421193d7af
     appSecret: cb4a03fe66264afcf94e83f90e1f096c
@@ -26,3 +26,4 @@ jeecg :
       mchId: 1560064031
       mchKey: 7iyck99g46bxwg3bhvy5oc8zv8pbfnta
       callBackUrl: https://api.miairobot.com/payment/wbPaymentTransaction/weixin/notify
+  membershipFee: 360

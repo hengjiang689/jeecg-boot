@@ -1,28 +1,16 @@
 package org.jeecg.modules.wanbang.payment.controller;
 
-import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.SneakyThrows;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.service.ISysDictService;
 import org.jeecg.modules.wanbang.course.entity.WbCourse;
 import org.jeecg.modules.wanbang.course.service.IWbCourseService;
@@ -35,27 +23,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
-import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.excel.def.NormalExcelConstants;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.ImportParams;
-import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import com.alibaba.fastjson.JSON;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.bean.paymch.MchPayNotify;
 import weixin.popular.bean.paymch.Unifiedorder;
 import weixin.popular.bean.paymch.UnifiedorderResult;
 import weixin.popular.bean.sns.Jscode2sessionResult;
-import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.util.*;
 
 /**
@@ -64,6 +43,7 @@ import weixin.popular.util.*;
  * @Date:   2019-11-15
  * @Version: V1.0
  */
+@Api(tags="万邦支付管理")
 @RestController
 @RequestMapping("/payment/wbPaymentTransaction")
 @Slf4j
@@ -89,6 +69,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 
 	@Value("${jeecg.payment.weixin.callBackUrl}")
 	private String wxCallBackUrl;
+
+	@Value("${jeecg.membershipFee}")
+	private Float membershipFee;
 
 	@Autowired
 	private IWbPaymentTransactionService wbPaymentTransactionService;
@@ -124,7 +107,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		String totalFee;
 		if(StringUtils.isEmpty(jsonObject.getBigInteger("courseId"))){
 			body="万邦教育VIP会员";
-			totalFee = Integer.parseInt(sysDictService.queryDictTextByKey("system_config", "membership_fee"))*100+"";
+			totalFee = membershipFee*100+"";
 		}else{
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
 			body="购买课程:"+wbCourse.getTitle();
