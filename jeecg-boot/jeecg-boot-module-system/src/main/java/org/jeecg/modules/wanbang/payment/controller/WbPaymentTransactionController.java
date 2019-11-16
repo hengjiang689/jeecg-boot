@@ -84,10 +84,10 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 	@Value("${jeecg.payment.weixin.mchId}")
 	private String wxMchId;
 
-	@Value("${eecg.payment.weixin.mchKey}")
+	@Value("${jeecg.payment.weixin.mchKey}")
 	private String wxMchKey;
 
-	@Value("${eecg.payment.weixin.callBackUrl}")
+	@Value("${jeecg.payment.weixin.callBackUrl}")
 	private String wxCallBackUrl;
 
 	@Autowired
