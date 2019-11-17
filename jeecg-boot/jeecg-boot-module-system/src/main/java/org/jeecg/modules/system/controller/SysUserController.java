@@ -770,6 +770,25 @@ public class SysUserController {
         return result;
     }
 
+    /**
+     *  查询当前用户信息
+     * @return
+     */
+    @ApiOperation(value = "查询当前用户信息", notes = "查询当前用户信息")
+    @RequestMapping(value = "/getCurrentUser", method = RequestMethod.GET)
+    public Result<?> getCurrentUser() {
+        Result<SysUser> result = new Result<>();
+        try {
+            LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+            result.setSuccess(true);
+            result.setResult(sysUserService.getUserByName(sysUser.getUsername()));
+        }catch(Exception e) {
+            log.error(e.getMessage(), e);
+            result.error500("查询失败！");
+        }
+        return result;
+    }
+
 	/**
 	 * 根据用户名或手机号查询用户信息
      *
