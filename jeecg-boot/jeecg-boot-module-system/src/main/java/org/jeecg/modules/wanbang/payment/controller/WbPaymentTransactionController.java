@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.SneakyThrows;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.modules.system.entity.SysUser;
+import org.jeecg.modules.system.service.ISysUserService;
 import org.jeecg.modules.wanbang.course.entity.WbCourse;
 import org.jeecg.modules.wanbang.course.entity.WbCourseHistory;
 import org.jeecg.modules.wanbang.course.service.IWbCourseHistoryService;
@@ -82,6 +84,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 
 	@Autowired
 	private IWbCourseService wbCourseService;
+
+	@Autowired
+	private ISysUserService sysUserService;
 
 	@ApiOperation(value = "微信生成支付unifiedorder", notes = "微信生成支付unifiedorder,courseId 为可选{\n" +
 			"  \"code\": \"d8df70\",\n" +
@@ -168,6 +173,10 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 						WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectHistoryByCourseId(wbPaymentTransaction.getCourseId());
 						wbCourseHistory.setIsPaid("1");
 						wbCourseHistoryService.updateById(wbCourseHistory);
+					}else{
+						SysUser sysUser = sysUserService.getUserByName(wbPaymentTransaction.getCreateBy());
+						sysUser.setIsMember(true);
+						sysUserService.updateById(sysUser);
 					}
 				}
 				resultCode = "SUCCESS";
