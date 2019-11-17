@@ -155,6 +155,11 @@
             }
           },
           {
+            title:'交易ID',
+            align:"center",
+            dataIndex: 'transactionId'
+          },
+          {
             title:'创建人',
             align:"center",
             dataIndex: 'createBy'
@@ -204,7 +209,7 @@
           {
             title:'结算金额',
             align:"center",
-            dataIndex: 'settlementTotalFee'
+            dataIndex: 'cashFee'
           },
           {
             title:'支付平台',

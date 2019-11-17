@@ -51,7 +51,7 @@ public class WbPaymentTransaction implements Serializable {
     private java.lang.String body;
 	/**状态*/
 	@Excel(name = "状态", width = 15)
-    private java.lang.Integer status;
+    private java.lang.String status;
 	/**订单优惠标记*/
 	@Excel(name = "订单优惠标记", width = 15)
     private java.lang.String goodsTag;
@@ -78,7 +78,7 @@ public class WbPaymentTransaction implements Serializable {
     private java.lang.String timeEnd;
 	/**支付平台*/
 	@Excel(name = "支付平台", width = 15)
-    private java.lang.Integer platform;
+    private java.lang.String platform;
 	/**课程ID*/
 	@Excel(name = "课程ID", width = 15)
     private java.lang.String courseId;

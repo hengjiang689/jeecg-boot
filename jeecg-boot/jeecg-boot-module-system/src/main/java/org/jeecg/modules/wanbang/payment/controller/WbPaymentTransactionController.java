@@ -8,11 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import lombok.SneakyThrows;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.modules.system.service.ISysDictService;
 import org.jeecg.modules.wanbang.course.entity.WbCourse;
 import org.jeecg.modules.wanbang.course.service.IWbCourseService;
 import org.jeecg.modules.wanbang.payment.entity.CallBackResult;
@@ -122,9 +120,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		wbPaymentTransaction.setBody(unifiedorder.getBody());
 		wbPaymentTransaction.setCourseId(jsonObject.getString("courseId"));
 		wbPaymentTransaction.setOutTradeNo(unifiedorder.getOut_trade_no());
-		wbPaymentTransaction.setPlatform(0);
+		wbPaymentTransaction.setPlatform("0");
 		wbPaymentTransaction.setPrepayId(unifiedorderResult.getPrepay_id());
-		wbPaymentTransaction.setStatus(0);
+		wbPaymentTransaction.setStatus("0");
 		log.info("=total_fee=="+Integer.getInteger(totalFee));
 		wbPaymentTransaction.setTotalFee(Integer.getInteger(totalFee));
 		wbPaymentTransaction.setTradeType(unifiedorder.getTrade_type());
@@ -152,9 +150,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 				//业务结果为SUCCESS
 				log.info("=outTradeNo=="+mchPayNotify.getOut_trade_no());
 				WbPaymentTransaction wbPaymentTransaction = wbPaymentTransactionService.getByOutTradeNo(mchPayNotify.getOut_trade_no());
-				if(wbPaymentTransaction.getStatus()==0){
+				if(wbPaymentTransaction.getStatus().equalsIgnoreCase("0")){
 					wbPaymentTransaction.setCashFee(mchPayNotify.getCash_fee());
-					wbPaymentTransaction.setStatus(1);
+					wbPaymentTransaction.setStatus("1");
 					wbPaymentTransaction.setTimeEnd(mchPayNotify.getTime_end());
 					wbPaymentTransaction.setTransactionId(mchPayNotify.getTransaction_id());
 					wbPaymentTransactionService.updateById(wbPaymentTransaction);
