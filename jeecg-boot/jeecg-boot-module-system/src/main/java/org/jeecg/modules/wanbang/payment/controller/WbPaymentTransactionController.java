@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.SneakyThrows;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
@@ -71,13 +72,10 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 	private String wxCallBackUrl;
 
 	@Value("${jeecg.membershipFee}")
-	private Float membershipFee;
+	private Integer membershipFee;
 
 	@Autowired
 	private IWbPaymentTransactionService wbPaymentTransactionService;
-
-	@Autowired
-	private ISysDictService sysDictService;
 
 	@Autowired
 	private IWbCourseService wbCourseService;
@@ -111,7 +109,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		}else{
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
 			body="购买课程:"+wbCourse.getTitle();
-			totalFee = wbCourse.getPrice()*100+"";
+			totalFee = Integer.parseInt(wbCourse.getPrice()*100+"")+"";
 		}
 		unifiedorder.setBody(body);
 		unifiedorder.setOut_trade_no(UUID.randomUUID().toString().replace("-",""));
