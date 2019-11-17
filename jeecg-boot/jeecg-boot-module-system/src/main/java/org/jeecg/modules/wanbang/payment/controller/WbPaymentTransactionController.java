@@ -116,6 +116,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		unifiedorder.setNonce_str(UUID.randomUUID().toString().replace("-",""));
 		unifiedorder.setOpenid(openId);
 		UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder,wxMchKey);
+		if(unifiedorderResult.getPrepay_id()==null){
+			return "";
+		}
 		WbPaymentTransaction wbPaymentTransaction = new WbPaymentTransaction();
 		wbPaymentTransaction.setBody(unifiedorder.getBody());
 		wbPaymentTransaction.setCourseId(jsonObject.getString("courseId"));
@@ -123,7 +126,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		wbPaymentTransaction.setPlatform("0");
 		wbPaymentTransaction.setPrepayId(unifiedorderResult.getPrepay_id());
 		wbPaymentTransaction.setStatus("0");
-		log.info("=total_fee=="+Integer.getInteger(totalFee));
+		log.info("=total_fee=="+totalFee);
 		wbPaymentTransaction.setTotalFee(Integer.getInteger(totalFee));
 		wbPaymentTransaction.setTradeType(unifiedorder.getTrade_type());
 		wbPaymentTransactionService.save(wbPaymentTransaction);
