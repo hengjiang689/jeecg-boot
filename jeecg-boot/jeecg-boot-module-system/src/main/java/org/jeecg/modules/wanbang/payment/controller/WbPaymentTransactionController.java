@@ -125,7 +125,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		wbPaymentTransaction.setPlatform(0);
 		wbPaymentTransaction.setPrepayId(unifiedorderResult.getPrepay_id());
 		wbPaymentTransaction.setStatus(0);
-		wbPaymentTransaction.setTotalFee(Integer.getInteger(unifiedorder.getTotal_fee()));
+		wbPaymentTransaction.setTotalFee(Integer.getInteger(totalFee));
 		wbPaymentTransaction.setTradeType(unifiedorder.getTrade_type());
 		wbPaymentTransactionService.save(wbPaymentTransaction);
 		if(tradeType.equalsIgnoreCase("APP")){
@@ -146,7 +146,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		String resultCode;
 		String resultMsg;
 		if(SignatureUtil.validateSign(resultMap,wxMchKey)){
-			if ("SUCCESS".equalsIgnoreCase(mchPayNotify.getResult_code())) {//业务结果为SUCCESS
+			if ("SUCCESS".equalsIgnoreCase(mchPayNotify.getResult_code())) {
+				//业务结果为SUCCESS
+				log.info("=outTradeNo=="+mchPayNotify.getOut_trade_no());
 				WbPaymentTransaction wbPaymentTransaction = wbPaymentTransactionService.getByOutTradeNo(mchPayNotify.getOut_trade_no());
 				if(wbPaymentTransaction.getStatus()==0){
 					wbPaymentTransaction.setCashFee(mchPayNotify.getCash_fee());
