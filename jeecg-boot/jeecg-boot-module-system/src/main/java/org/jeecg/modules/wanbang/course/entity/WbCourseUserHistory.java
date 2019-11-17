@@ -81,5 +81,7 @@ public class WbCourseUserHistory implements Serializable {
 	private java.lang.Integer learnNum;
 	/**排序*/
 	private java.lang.Double sortNo;
+	/**是否支付*/
+	private java.lang.String isPaid;
 
 }

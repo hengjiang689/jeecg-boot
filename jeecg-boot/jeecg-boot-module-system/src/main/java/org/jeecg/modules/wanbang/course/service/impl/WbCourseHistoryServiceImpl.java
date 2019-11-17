@@ -23,4 +23,11 @@ import java.util.List;
 @Service
 public class WbCourseHistoryServiceImpl extends ServiceImpl<WbCourseHistoryMapper, WbCourseHistory> implements IWbCourseHistoryService {
 
+    @Autowired
+    WbCourseHistoryMapper wbCourseHistoryMapper;
+
+    @Override
+    public WbCourseHistory selectHistoryByCourseId(String courseId) {
+        return wbCourseHistoryMapper.selectHistoryByCourseId(courseId);
+    }
 }

@@ -3,6 +3,7 @@ package org.jeecg.modules.wanbang.course.entity;
 import java.io.Serializable;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -73,4 +74,7 @@ public class WbCourse implements Serializable {
     private java.lang.Integer learnNum;
 	/**排序*/
     private java.lang.Double sortNo;
+    /**是否支付*/
+    @TableField(exist = false)
+    private java.lang.String isPaid;
 }

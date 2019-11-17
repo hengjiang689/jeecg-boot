@@ -111,7 +111,7 @@ public class WbCourseController {
 		 return Result.ok(pageList);
 	 }
 
-	 @ApiOperation(value = "用户访问课程历史记录", notes = "/history/list?column=createTime&order=desc&pageNo=1&pageSize=10")
+	 @ApiOperation(value = "用户访问课程历史记录", notes = "/history/list?column=createTime&order=desc&pageNo=1&pageSize=10 是否支付参数isPaid 0为未支付 1为已支付")
 	 @GetMapping(value = "/history/list")
 	 public Result<?> queryHistoryPageList(WbCourseUserHistory wbCourseUserHistory,
 										   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -249,16 +249,15 @@ public class WbCourseController {
 		 if(wbCourse==null) {
 			 return Result.error("未找到对应数据");
 		 }
-		 LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
-		 if(sysUser!=null){
-			 WbCourseHistory wbCourseHistory = new WbCourseHistory();
-			 wbCourseHistory.setCreateBy(sysUser.getUsername());
+//		 LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+		 WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectHistoryByCourseId(id);
+		 if(wbCourseHistory==null){
+			 wbCourseHistory = new WbCourseHistory();
 			 wbCourseHistory.setCourseId(id);
-			 try{
-				 wbCourseHistoryService.save(wbCourseHistory);
-			 }catch (Exception e){
-
-			 }
+			 wbCourseHistoryService.save(wbCourseHistory);
+			 wbCourse.setIsPaid("0");
+		 }else{
+			 wbCourse.setIsPaid(wbCourseHistory.getIsPaid());
 		 }
 		 return Result.ok(wbCourse);
 	 }

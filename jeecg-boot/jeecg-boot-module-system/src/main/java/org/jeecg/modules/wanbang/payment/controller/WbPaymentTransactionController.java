@@ -12,6 +12,8 @@ import lombok.SneakyThrows;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.wanbang.course.entity.WbCourse;
+import org.jeecg.modules.wanbang.course.entity.WbCourseHistory;
+import org.jeecg.modules.wanbang.course.service.IWbCourseHistoryService;
 import org.jeecg.modules.wanbang.course.service.IWbCourseService;
 import org.jeecg.modules.wanbang.payment.entity.CallBackResult;
 import org.jeecg.modules.wanbang.payment.entity.WbPaymentTransaction;
@@ -71,6 +73,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 
 	@Value("${jeecg.membershipFee}")
 	private Integer membershipFee;
+
+	@Autowired
+	private IWbCourseHistoryService wbCourseHistoryService;
 
 	@Autowired
 	private IWbPaymentTransactionService wbPaymentTransactionService;
@@ -159,6 +164,11 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 					wbPaymentTransaction.setTimeEnd(mchPayNotify.getTime_end());
 					wbPaymentTransaction.setTransactionId(mchPayNotify.getTransaction_id());
 					wbPaymentTransactionService.updateById(wbPaymentTransaction);
+					if(wbPaymentTransaction.getCourseId()!=null){
+						WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectHistoryByCourseId(wbPaymentTransaction.getCourseId());
+						wbCourseHistory.setIsPaid("1");
+						wbCourseHistoryService.updateById(wbCourseHistory);
+					}
 				}
 				resultCode = "SUCCESS";
 				resultMsg = "成功";

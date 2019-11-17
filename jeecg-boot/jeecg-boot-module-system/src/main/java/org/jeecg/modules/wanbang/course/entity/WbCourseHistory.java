@@ -46,4 +46,6 @@ public class WbCourseHistory implements Serializable {
 	private String sysOrgCode;
 	/**外键*/
 	private String courseId;
+	/**外键*/
+	private String isPaid;
 }

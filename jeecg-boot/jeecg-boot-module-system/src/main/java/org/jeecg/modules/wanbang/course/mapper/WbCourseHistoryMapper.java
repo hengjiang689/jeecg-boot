@@ -16,5 +16,5 @@ import java.util.List;
  * @Version: V1.0
  */
 public interface WbCourseHistoryMapper extends BaseMapper<WbCourseHistory> {
-
+    public WbCourseHistory selectHistoryByCourseId(@Param("courseId") String courseId);
 }
