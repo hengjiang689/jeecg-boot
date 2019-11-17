@@ -125,6 +125,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		wbPaymentTransaction.setPlatform(0);
 		wbPaymentTransaction.setPrepayId(unifiedorderResult.getPrepay_id());
 		wbPaymentTransaction.setStatus(0);
+		log.info("=total_fee=="+Integer.getInteger(totalFee));
 		wbPaymentTransaction.setTotalFee(Integer.getInteger(totalFee));
 		wbPaymentTransaction.setTradeType(unifiedorder.getTrade_type());
 		wbPaymentTransactionService.save(wbPaymentTransaction);
@@ -146,6 +147,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		String resultCode;
 		String resultMsg;
 		if(SignatureUtil.validateSign(resultMap,wxMchKey)){
+			log.info("=resultCode=="+mchPayNotify.getResult_code());
 			if ("SUCCESS".equalsIgnoreCase(mchPayNotify.getResult_code())) {
 				//业务结果为SUCCESS
 				log.info("=outTradeNo=="+mchPayNotify.getOut_trade_no());
