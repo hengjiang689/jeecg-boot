@@ -15,5 +15,5 @@ import java.util.List;
  * @Version: V1.0
  */
 public interface IWbCourseHistoryService extends IService<WbCourseHistory> {
-    public WbCourseHistory selectHistoryByCourseId(String courseId);
+    public WbCourseHistory selectUserHistoryByCourseId(String courseId,String username);
 }

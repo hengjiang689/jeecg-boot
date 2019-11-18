@@ -27,7 +27,7 @@ public class WbCourseHistoryServiceImpl extends ServiceImpl<WbCourseHistoryMappe
     WbCourseHistoryMapper wbCourseHistoryMapper;
 
     @Override
-    public WbCourseHistory selectHistoryByCourseId(String courseId) {
-        return wbCourseHistoryMapper.selectHistoryByCourseId(courseId);
+    public WbCourseHistory selectUserHistoryByCourseId(String courseId,String username) {
+        return wbCourseHistoryMapper.selectUserHistoryByCourseId(courseId,username);
     }
 }

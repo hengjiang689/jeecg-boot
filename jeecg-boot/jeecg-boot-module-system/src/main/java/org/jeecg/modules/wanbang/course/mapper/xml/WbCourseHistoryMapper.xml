@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.wanbang.course.mapper.WbCourseHistoryMapper">
 
-    <select id="selectHistoryByCourseId" parameterType="java.lang.String" resultType="org.jeecg.modules.wanbang.course.entity.WbCourseHistory">
+    <select id="selectUserHistoryByCourseId" parameterType="java.lang.String" resultType="org.jeecg.modules.wanbang.course.entity.WbCourseHistory">
 		SELECT *
 		FROM  wb_course_history
 		WHERE
-			 course_id = #{courseId} 	</select>
+			 course_id = #{courseId} and create_by =#{username}	</select>
 </mapper>

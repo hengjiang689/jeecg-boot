@@ -249,8 +249,8 @@ public class WbCourseController {
 		 if(wbCourse==null) {
 			 return Result.error("未找到对应数据");
 		 }
-//		 LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
-		 WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectHistoryByCourseId(id);
+		 LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+		 WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectUserHistoryByCourseId(id,sysUser.getUsername());
 		 if(wbCourseHistory==null){
 			 wbCourseHistory = new WbCourseHistory();
 			 wbCourseHistory.setCourseId(id);
