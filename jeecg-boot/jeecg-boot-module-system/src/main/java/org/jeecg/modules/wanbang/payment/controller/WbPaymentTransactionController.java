@@ -171,8 +171,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		}
 	}
 
+	@ApiOperation(value = "支付宝unifiedorder", notes = "支付宝unifiedorder,courseId 为可选{\"courseId\": 193293823080}")
 	@PostMapping("/unifiedorder/alipay")
-	public String aliPayUnifiedOrder(@RequestBody JSONObject jsonObject){
+		public String aliPayUnifiedOrder(@RequestBody JSONObject jsonObject){
 		DecimalFormat fnum = new DecimalFormat("##0.00");
 		String result=null;
 		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", aliPayAppId, alipayPrivateKey, "json", "utf-8", alipayPublicKey, "RSA2");
