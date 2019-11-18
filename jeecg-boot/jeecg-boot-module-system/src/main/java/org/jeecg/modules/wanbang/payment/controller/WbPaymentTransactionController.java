@@ -296,7 +296,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 	private void handlePaymentTransaction(WbPaymentTransaction wbPaymentTransaction){
 		wbPaymentTransactionService.updateById(wbPaymentTransaction);
 		if(wbPaymentTransaction.getCourseId()!=null){
-			WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectHistoryByCourseId(wbPaymentTransaction.getCourseId());
+			WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectUserHistoryByCourseId(wbPaymentTransaction.getCourseId(),wbPaymentTransaction.getCreateBy());
 			wbCourseHistory.setIsPaid("1");
 			wbCourseHistoryService.updateById(wbCourseHistory);
 		}else{
