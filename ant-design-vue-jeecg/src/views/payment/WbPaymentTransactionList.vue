@@ -157,20 +157,31 @@
           {
             title:'交易ID',
             align:"center",
+            width:120,
             dataIndex: 'transactionId'
           },
           {
-            title:'创建人',
+            title:'用户',
             align:"center",
+            width:60,
             dataIndex: 'createBy'
           },
+          // {
+          //   title:'创建日期',
+          //   align:"center",
+          //   dataIndex: 'createTime',
+          //   customRender:function (text) {
+          //     return !text?"":(text.length>10?text.substr(0,10):text)
+          //   }
+          // },
           {
-            title:'创建日期',
+            title:'支付日期',
             align:"center",
-            dataIndex: 'createTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
+            width:60,
+            dataIndex: 'timeEnd',
+            // customRender:function (text) {
+            //   return !text?"":(text.length>10?text.substr(0,10):text)
+            // }
           },
           {
             title:'商品描述',
@@ -202,12 +213,12 @@
             }
           },
           {
-            title:'标价金额',
+            title:'订单金额(分)',
             align:"center",
             dataIndex: 'totalFee'
           },
           {
-            title:'结算金额',
+            title:'支付金额(分)',
             align:"center",
             dataIndex: 'cashFee'
           },

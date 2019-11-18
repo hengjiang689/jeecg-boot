@@ -142,7 +142,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
 			body="万邦教育-购买课程";
 			detail=wbCourse.getTitle();
-			totalFee = wbCourse.getPrice().toString().replace(".","");
+			totalFee = wbCourse.getPrice().toString().replace(".","").replaceFirst("^0*", "");
 		}
 		unifiedorder.setBody(body);
 		unifiedorder.setOut_trade_no(UUID.randomUUID().toString().replace("-",""));
