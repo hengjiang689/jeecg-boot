@@ -1,11 +1,19 @@
 package org.jeecg.modules.wanbang.payment.controller;
 
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.SneakyThrows;
@@ -78,6 +86,19 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 	@Value("${jeecg.membershipFee}")
 	private Integer membershipFee;
 
+	@Value("${jeecg.payment.alipay.appId}")
+	private String aliPayAppId;
+
+	@Value("${jeecg.payment.alipay.publicKey}")
+	private String alipayPublicKey;
+
+	@Value("${jeecg.payment.alipay.privateKey}")
+	private String alipayPrivateKey;
+
+	@Value("${jeecg.payment.alipay.callBackUrl}")
+	private String alipaycallBackUrl;
+
+
 	@Autowired
 	private IWbCourseHistoryService wbCourseHistoryService;
 
@@ -111,15 +132,16 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		unifiedorder.setMch_id(wxMchId);
 		unifiedorder.setNotify_url(wxCallBackUrl);
 		unifiedorder.setTrade_type(tradeType);
-		String body;
+		String body,detail=null;
 		String totalFee;
 		if(StringUtils.isEmpty(jsonObject.getBigInteger("courseId"))){
-			body="万邦教育VIP会员";
+			body="万邦教育-购买VIP会员";
 //			totalFee = membershipFee*100+"";
 			totalFee = membershipFee+"";
 		}else{
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
-			body="购买课程:"+wbCourse.getTitle();
+			body="万邦教育-购买课程";
+			detail=wbCourse.getTitle();
 			totalFee = Integer.parseInt(wbCourse.getPrice()*100+"")+"";
 		}
 		unifiedorder.setBody(body);
@@ -133,13 +155,13 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		}
 		WbPaymentTransaction wbPaymentTransaction = new WbPaymentTransaction();
 		wbPaymentTransaction.setBody(unifiedorder.getBody());
+		wbPaymentTransaction.setDetail(detail);
 		wbPaymentTransaction.setCourseId(jsonObject.getString("courseId"));
 		wbPaymentTransaction.setOutTradeNo(unifiedorder.getOut_trade_no());
 		wbPaymentTransaction.setPlatform("0");
 		wbPaymentTransaction.setPrepayId(unifiedorderResult.getPrepay_id());
 		wbPaymentTransaction.setStatus("0");
-		log.info("=total_fee=="+totalFee);
-		wbPaymentTransaction.setTotalFee(Integer.getInteger(totalFee));
+		wbPaymentTransaction.setTotalFee(Integer.parseInt(totalFee));
 		wbPaymentTransaction.setTradeType(unifiedorder.getTrade_type());
 		wbPaymentTransactionService.save(wbPaymentTransaction);
 		if(tradeType.equalsIgnoreCase("APP")){
@@ -149,8 +171,55 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		}
 	}
 
+	@PostMapping("/unifiedorder/alipay")
+	public String aliPayUnifiedOrder(@RequestBody JSONObject jsonObject){
+		DecimalFormat fnum = new DecimalFormat("##0.00");
+		String result=null;
+		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", aliPayAppId, alipayPrivateKey, "json", "utf-8", alipayPublicKey, "RSA2");
+		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+		String body,detail=null;
+		String totalFee;
+		if(StringUtils.isEmpty(jsonObject.getBigInteger("courseId"))){
+			body="万邦教育-VIP会员";
+			totalFee = membershipFee.toString();
+		}else{
+			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
+			body="万邦教育-购买课程";
+			detail = wbCourse.getTitle();
+			totalFee = wbCourse.getPrice().toString();
+		}
+		model.setSubject(body);
+		model.setBody(detail);
+		model.setOutTradeNo(UUID.randomUUID().toString().replace("-",""));
+		model.setTimeoutExpress("30m");
+		model.setTotalAmount(fnum.format(Double.parseDouble(totalFee)));
+		model.setProductCode("QUICK_MSECURITY_PAY");
+		request.setBizModel(model);
+		request.setNotifyUrl(alipaycallBackUrl);
+		try {
+			//这里和普通的接口调用不同，使用的是sdkExecute
+			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+			result=response.getBody();
+			WbPaymentTransaction wbPaymentTransaction = new WbPaymentTransaction();
+			wbPaymentTransaction.setBody(model.getSubject());
+			wbPaymentTransaction.setDetail(model.getBody());
+			wbPaymentTransaction.setCourseId(jsonObject.getString("courseId"));
+			wbPaymentTransaction.setOutTradeNo(model.getOutTradeNo());
+			wbPaymentTransaction.setPlatform("1");
+			wbPaymentTransaction.setPrepayId(response.getTradeNo());
+			wbPaymentTransaction.setStatus("0");
+			wbPaymentTransaction.setTotalFee(Integer.parseInt(model.getTotalAmount().replace(".","")));
+			wbPaymentTransaction.setTradeType("ALIPAY");
+			wbPaymentTransactionService.save(wbPaymentTransaction);
+		} catch (AlipayApiException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	@SneakyThrows
-	@RequestMapping("/weixin/notify")
+	@RequestMapping("/notify/weixin")
 	public String wxNotify(HttpServletRequest request){
 		log.info("================================================开始处理微信的异步通知");
 		String xmlResult = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
@@ -163,23 +232,13 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			log.info("=resultCode=="+mchPayNotify.getResult_code());
 			if ("SUCCESS".equalsIgnoreCase(mchPayNotify.getResult_code())) {
 				//业务结果为SUCCESS
-				log.info("=outTradeNo=="+mchPayNotify.getOut_trade_no());
 				WbPaymentTransaction wbPaymentTransaction = wbPaymentTransactionService.getByOutTradeNo(mchPayNotify.getOut_trade_no());
 				if(wbPaymentTransaction.getStatus().equalsIgnoreCase("0")){
 					wbPaymentTransaction.setCashFee(mchPayNotify.getCash_fee());
 					wbPaymentTransaction.setStatus("1");
 					wbPaymentTransaction.setTimeEnd(mchPayNotify.getTime_end());
 					wbPaymentTransaction.setTransactionId(mchPayNotify.getTransaction_id());
-					wbPaymentTransactionService.updateById(wbPaymentTransaction);
-					if(wbPaymentTransaction.getCourseId()!=null){
-						WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectHistoryByCourseId(wbPaymentTransaction.getCourseId());
-						wbCourseHistory.setIsPaid("1");
-						wbCourseHistoryService.updateById(wbCourseHistory);
-					}else{
-						SysUser sysUser = sysUserService.getUserByName(wbPaymentTransaction.getCreateBy());
-						sysUser.setIsMember(true);
-						sysUserService.updateById(sysUser);
-					}
+					handlePaymentTransaction(wbPaymentTransaction);
 				}
 				resultCode = "SUCCESS";
 				resultMsg = "成功";
@@ -192,6 +251,59 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			resultMsg = "验签未通过";
 		}
 		return XMLConverUtil.convertToXML(new CallBackResult(resultCode,resultMsg));
+	}
+
+	@SneakyThrows
+	@RequestMapping("/notify/alipay")
+	public String aliPayNotify(HttpServletRequest request){
+		log.info("================================================开始处理支付宝的异步通知");
+		Map<String,String> params = new HashMap<String,String>();
+		Map requestParams = request.getParameterMap();
+		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) {
+				valueStr = (i == values.length - 1) ? valueStr + values[i]
+						: valueStr + values[i] + ",";
+			}
+			//乱码解决，这段代码在出现乱码时使用。
+			//valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+			params.put(name, valueStr);
+		}
+		boolean flag = AlipaySignature.rsaCheckV1(params, alipayPublicKey, "utf-8","RSA2");
+		if(flag){
+			//业务逻辑
+			if("TRADE_SUCCESS".equalsIgnoreCase(params.get("trade_status"))){
+				WbPaymentTransaction wbPaymentTransaction = wbPaymentTransactionService.getByOutTradeNo(params.get("out_trade_no"));
+				if(wbPaymentTransaction.getStatus().equalsIgnoreCase("0")){
+					wbPaymentTransaction.setCashFee(Integer.parseInt(params.get("buyer_pay_amount").replace(".","")));
+					wbPaymentTransaction.setStatus("1");
+					wbPaymentTransaction.setTimeEnd(params.get("gmt_close").replaceAll("-","").replaceAll(":","").replaceAll(" ",""));
+					wbPaymentTransaction.setTransactionId(params.get("trade_no"));
+					handlePaymentTransaction(wbPaymentTransaction);
+				}
+				return "success";
+			}else{
+				return "failure";
+			}
+
+		}else{
+			return "failure";
+		}
+	}
+
+	private void handlePaymentTransaction(WbPaymentTransaction wbPaymentTransaction){
+		wbPaymentTransactionService.updateById(wbPaymentTransaction);
+		if(wbPaymentTransaction.getCourseId()!=null){
+			WbCourseHistory wbCourseHistory = wbCourseHistoryService.selectHistoryByCourseId(wbPaymentTransaction.getCourseId());
+			wbCourseHistory.setIsPaid("1");
+			wbCourseHistoryService.updateById(wbCourseHistory);
+		}else{
+			SysUser sysUser = sysUserService.getUserByName(wbPaymentTransaction.getCreateBy());
+			sysUser.setIsMember(true);
+			sysUserService.updateById(sysUser);
+		}
 	}
 
 	/**

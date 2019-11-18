@@ -14,7 +14,7 @@ jeecg :
     #webapp文件路径
     webapp: /data/upload
   shiro:
-    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/payment/wbPaymentTransaction/weixin/notify
+    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/payment/wbPaymentTransaction/notify/**
   mini-program:
     appId: wx424640421193d7af
     appSecret: cb4a03fe66264afcf94e83f90e1f096c
@@ -25,5 +25,10 @@ jeecg :
     weixin:
       mchId: 1560064031
       mchKey: 7iyck99g46bxwg3bhvy5oc8zv8pbfnta
-      callBackUrl: https://api.miairobot.com/payment/wbPaymentTransaction/weixin/notify
+      callBackUrl: https://api.miairobot.com/payment/wbPaymentTransaction/notify/weixin
+    alipay:
+      appId: asfasdfasdf
+      publicKey: safasdf
+      privateKey: asdfasdfasdf
+      callBackUrl: https://api.miairobot.com/payment/wbPaymentTransaction/notify/alipay
   membershipFee: 1

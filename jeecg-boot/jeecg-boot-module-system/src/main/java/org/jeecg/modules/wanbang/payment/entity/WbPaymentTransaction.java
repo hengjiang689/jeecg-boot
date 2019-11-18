@@ -49,6 +49,9 @@ public class WbPaymentTransaction implements Serializable {
 	/**商品描述*/
 	@Excel(name = "商品描述", width = 15)
     private java.lang.String body;
+	/**商品详情*/
+	@Excel(name = "商品详情", width = 15)
+	private java.lang.String detail;
 	/**状态*/
 	@Excel(name = "状态", width = 15)
     private java.lang.String status;
