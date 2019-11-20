@@ -77,5 +77,36 @@ CREATE TABLE `wb_course_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-create view `wb_course_user_history` as select history.`id`,history.`create_by`,history.`create_time`,history.`update_by`,history.`update_time`,history.`sys_org_code`,history.`course_id`,course.`title`,course.`image`,course.`description`,course.`category`,course.`category_code` from `wb_course_history` history, `wb_course` course
-where history.course_id = course.id
+CREATE VIEW `wb_course_user_history`
+AS SELECT
+   `history`.`id` AS `id`,
+   `history`.`create_by` AS `create_by`,
+   `history`.`create_time` AS `create_time`,
+   `history`.`update_by` AS `update_by`,
+   `history`.`update_time` AS `update_time`,
+   `history`.`sys_org_code` AS `sys_org_code`,
+   `history`.`course_id` AS `course_id`,
+   `history`.`is_paid` AS `is_paid`,
+   `course`.`title` AS `title`,
+   `course`.`image` AS `image`,
+   `course`.`description` AS `description`,
+   `course`.`category` AS `category`,
+   `course`.`category_code` AS `category_code`,
+   `course`.`video_url` AS `video_url`,
+   `course`.`audio_url` AS `audio_url`,
+   `course`.`introduction` AS `introduction`,
+   `course`.`publish_date` AS `publish_date`,
+   `course`.`teacher_name` AS `teacher_name`,
+   `course`.`price` AS `price`,
+   `course`.`duration` AS `duration`,
+   `course`.`class_num` AS `class_num`,
+   `course`.`is_free` AS `is_free`,
+   `course`.`is_top` AS `is_top`,
+   `course`.`learn_num` AS `learn_num`,
+   `course`.`sort_no` AS `sort_no`
+FROM (`wb_course_history` `history` join `wb_course` `course`) where (`history`.`course_id` = `course`.`id`);
+
+
+create view `wb_finance_withdraw` as select finance.`id`,finance.`create_by`,finance.`create_time`,finance.`update_by`,finance.`update_time`,finance.`sys_org_code`,finance.`amount`,finance.`status`,user.`username`,user.`realname`,user.`identity_no`,user.`card_no`
+,user.`bank_name`,user.`card_type`,user.`card_phone` from `wb_finance` finance, `sys_user` user
+where finance.user_id = user.id and finance.type='1'

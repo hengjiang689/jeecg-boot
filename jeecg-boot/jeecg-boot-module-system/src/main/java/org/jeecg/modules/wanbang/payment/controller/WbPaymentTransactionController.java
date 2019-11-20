@@ -344,6 +344,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 								   HttpServletRequest req) {
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 		wbPaymentTransaction.setCreateBy(sysUser.getUsername());
+		wbPaymentTransaction.setStatus("1");
 		if(wbPaymentTransaction.getTimeEnd()!=null){
 			wbPaymentTransaction.setTimeEnd(wbPaymentTransaction.getTimeEnd()+"*");
 		}
