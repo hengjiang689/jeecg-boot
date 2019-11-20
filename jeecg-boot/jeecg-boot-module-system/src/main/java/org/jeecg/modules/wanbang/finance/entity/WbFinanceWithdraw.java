@@ -51,11 +51,17 @@ public class WbFinanceWithdraw implements Serializable {
 	@Excel(name = "状态", width = 15)
     private String status;
 	/**用户id*/
+	@Excel(name = "用户id", width = 15)
+	private String userId;
+	/**用户名*/
 	@Excel(name = "用户名", width = 15)
     private String username;
 	/**真实姓名*/
 	@Excel(name = "真实姓名", width = 15)
 	private String realname;
+	/**类型*/
+	@Excel(name = "类型", width = 15)
+	private String type;
 	/**身份证号*/
 	@Excel(name = "身份证号", width = 15)
 	private String identityNo;

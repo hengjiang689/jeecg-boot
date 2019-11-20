@@ -9,10 +9,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.wanbang.finance.entity.WbFinance;
+import org.jeecg.modules.wanbang.finance.entity.WbFinanceWithdraw;
 import org.jeecg.modules.wanbang.finance.service.IWbFinanceService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -20,6 +26,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.wanbang.finance.service.IWbFinanceWithdrawService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -39,33 +46,48 @@ import com.alibaba.fastjson.JSON;
  * @Date:   2019-11-19
  * @Version: V1.0
  */
+ @Api(tags="财务管理")
 @RestController
 @RequestMapping("/finance/wbFinance")
 @Slf4j
 public class WbFinanceController extends JeecgController<WbFinance, IWbFinanceService> {
 	@Autowired
 	private IWbFinanceService wbFinanceService;
+
+	@Autowired
+	private IWbFinanceWithdrawService wbFinanceWithdrawService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param wbFinance
+	 * @param wbFinanceWithdraw
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@GetMapping(value = "/list/income")
-	public Result<?> queryPageList(WbFinance wbFinance,
-								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-								   HttpServletRequest req) {
-		wbFinance.setType("0");
-		QueryWrapper<WbFinance> queryWrapper = QueryGenerator.initQueryWrapper(wbFinance, req.getParameterMap());
-		Page<WbFinance> page = new Page<WbFinance>(pageNo, pageSize);
-		IPage<WbFinance> pageList = wbFinanceService.page(page, queryWrapper);
-		return Result.ok(pageList);
-	}
+	 @GetMapping(value = "/list")
+	 public Result<?> queryPageList(WbFinanceWithdraw wbFinanceWithdraw,
+									@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+									@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+									HttpServletRequest req) {
+		 QueryWrapper<WbFinanceWithdraw> queryWrapper = QueryGenerator.initQueryWrapper(wbFinanceWithdraw, req.getParameterMap());
+		 Page<WbFinanceWithdraw> page = new Page<>(pageNo, pageSize);
+		 IPage<WbFinanceWithdraw> pageList = wbFinanceWithdrawService.page(page, queryWrapper);
+		 return Result.ok(pageList);
+	 }
+
+	 @ApiOperation(value = "用户财务管理", notes = "type 0为收入 1为提现")
+	 @GetMapping(value = "/user/list")
+	 public Result<?> userQueryPageList(WbFinanceWithdraw wbFinanceWithdraw,
+											@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+											@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+											HttpServletRequest req) {
+		 LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+		 wbFinanceWithdraw.setUserId(sysUser.getId());
+		 return queryPageList(wbFinanceWithdraw,pageNo,pageSize,req);
+	 }
+
 	
 	/**
 	 *   添加
