@@ -95,8 +95,13 @@ public class WbFinanceController extends JeecgController<WbFinance, IWbFinanceSe
 	 * @param wbFinance
 	 * @return
 	 */
+	@ApiOperation(value = "用户提现")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody WbFinance wbFinance) {
+		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+		wbFinance.setType("1");
+		wbFinance.setStatus("0");
+		wbFinance.setUserId(sysUser.getId());
 		wbFinanceService.save(wbFinance);
 		return Result.ok("添加成功！");
 	}
