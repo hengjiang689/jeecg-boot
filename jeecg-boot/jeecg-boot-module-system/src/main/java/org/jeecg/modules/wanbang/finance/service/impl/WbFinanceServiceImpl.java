@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 /**
  * @Description: 万邦财务信息表
  * @Author: jeecg-boot
- * @Date:   2019-11-19
+ * @Date:   2019-11-20
  * @Version: V1.0
  */
 @Service

@@ -11,7 +11,7 @@
       <a-form :form="form">
 
         <a-form-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-input v-decorator="[ 'status', validatorRules.status]" placeholder="请输入状态"></a-input>
+          <j-dict-select-tag type="list" v-decorator="['status']" :trigger-change="true" dictCode="withdraw_status" placeholder="请选择状态"/>
         </a-form-item>
 
       </a-form>
@@ -23,10 +23,12 @@
 
   import { httpAction } from '@/api/manage'
   import pick from 'lodash.pick'
+  import JDictSelectTag from "@/components/dict/JDictSelectTag"
 
   export default {
     name: "WbFinanceModal",
     components: { 
+      JDictSelectTag,
     },
     data () {
       return {

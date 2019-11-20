@@ -4,20 +4,31 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+          <a-col :md="6" :sm="8">
+            <a-form-item label="状态">
+              <j-dict-select-tag placeholder="请选择状态" v-model="queryParam.status" dictCode="withdraw_status"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="用户id">
+              <a-input placeholder="请输入用户id" v-model="queryParam.userId"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8" >
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a @click="handleToggleSearch" style="margin-left: 8px">
+                {{ toggleSearchStatus ? '收起' : '展开' }}
+                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
 
         </a-row>
       </a-form>
     </div>
     <!-- 查询区域-END -->
-    <div class="table-operator">
-      <a-dropdown v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
-      </a-dropdown>
-    </div>
-
 
     <!-- table区域-begin -->
     <div>
@@ -36,7 +47,7 @@
         :pagination="ipagination"
         :loading="loading"
         :rowSelection="{fixed:true,selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        
+
         @change="handleTableChange">
 
         <template slot="htmlSlot" slot-scope="text">
@@ -86,12 +97,14 @@
 
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import WbFinanceModal from './modules/WbFinanceModal'
+  import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
   import {initDictOptions, filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
     name: "WbFinanceList",
     mixins:[JeecgListMixin],
     components: {
+      JDictSelectTag,
       WbFinanceModal
     },
     data () {
@@ -110,24 +123,61 @@
             }
           },
           {
+            title:'用户id',
+            align:"center",
+            dataIndex: 'userId'
+          },
+          {
+            title:'用户名',
+            align:"center",
+            dataIndex: 'username'
+          },
+          {
+            title:'真实姓名',
+            align:"center",
+            dataIndex: 'realname'
+          },
+          {
+            title:'身份证号',
+            align:"center",
+            dataIndex: 'identityNo'
+          },
+          {
+            title:'开户行',
+            align:"center",
+            dataIndex: 'bankName'
+          },
+          {
+            title:'银行卡类型',
+            align:"center",
+            dataIndex: 'cardType'
+          },
+          {
+            title:'银行卡号',
+            align:"center",
+            dataIndex: 'cardNo'
+          },
+          {
+            title:'关联手机号',
+            align:"center",
+            dataIndex: 'cardPhone'
+          },
+          {
             title:'金额',
             align:"center",
             dataIndex: 'amount'
           },
           {
-            title:'类型',
-            align:"center",
-            dataIndex: 'type'
-          },
-          {
             title:'状态',
             align:"center",
-            dataIndex: 'status'
-          },
-          {
-            title:'用户id',
-            align:"center",
-            dataIndex: 'userId'
+            dataIndex: 'status',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['status'], text+"")
+              }
+            }
           },
           {
             title: '操作',
@@ -144,6 +194,7 @@
           importExcelUrl: "finance/wbFinance/importExcel",
         },
         dictOptions:{
+          status:[],
         },
       }
     },
@@ -154,8 +205,13 @@
     },
     methods: {
       initDictConfig(){
+        initDictOptions('withdraw_status').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'status', res.result)
+          }
+        })
       }
-       
+
     }
   }
 </script>

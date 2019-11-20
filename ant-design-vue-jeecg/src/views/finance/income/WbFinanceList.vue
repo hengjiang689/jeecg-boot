@@ -4,6 +4,21 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+          <a-col :md="6" :sm="8">
+            <a-form-item label="用户id">
+              <a-input placeholder="请输入用户id" v-model="queryParam.userId"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8" >
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a @click="handleToggleSearch" style="margin-left: 8px">
+                {{ toggleSearchStatus ? '收起' : '展开' }}
+                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
 
         </a-row>
       </a-form>
@@ -61,7 +76,7 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+<!--          <a @click="handleEdit(record)">编辑</a>-->
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -111,24 +126,29 @@
             }
           },
           {
-            title:'金额',
+            title:'用户id',
+            align:"center",
+            dataIndex: 'userId'
+          },
+          {
+            title:'用户名',
+            align:"center",
+            dataIndex: 'username'
+          },
+          {
+            title:'真实姓名',
+            align:"center",
+            dataIndex: 'realname'
+          },
+          {
+            title:'金额(元)',
             align:"center",
             dataIndex: 'amount'
           },
           {
-            title:'类型',
+            title:'时间',
             align:"center",
-            dataIndex: 'type'
-          },
-          {
-            title:'状态',
-            align:"center",
-            dataIndex: 'status'
-          },
-          {
-            title:'用户id',
-            align:"center",
-            dataIndex: 'userId'
+            dataIndex: 'createTime'
           },
           {
             title: '操作',

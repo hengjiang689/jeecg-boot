@@ -4,6 +4,26 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
+          <a-col :md="6" :sm="8">
+            <a-form-item label="状态">
+              <j-dict-select-tag placeholder="请选择状态" v-model="queryParam.status" dictCode="withdraw_status"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="用户id">
+              <a-input placeholder="请输入用户id" v-model="queryParam.userId"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8" >
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a @click="handleToggleSearch" style="margin-left: 8px">
+                {{ toggleSearchStatus ? '收起' : '展开' }}
+                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
 
         </a-row>
       </a-form>
@@ -92,12 +112,14 @@
 
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import WbFinanceModal from './modules/WbFinanceModal'
+  import JDictSelectTag from '@/components/dict/JDictSelectTag.vue'
   import {initDictOptions, filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
     name: "WbFinanceList",
     mixins:[JeecgListMixin],
     components: {
+      JDictSelectTag,
       WbFinanceModal
     },
     data () {
@@ -128,7 +150,14 @@
           {
             title:'状态',
             align:"center",
-            dataIndex: 'status'
+            dataIndex: 'status',
+            customRender:(text)=>{
+              if(!text){
+                return ''
+              }else{
+                return filterMultiDictText(this.dictOptions['status'], text+"")
+              }
+            }
           },
           {
             title:'用户id',
@@ -150,6 +179,7 @@
           importExcelUrl: "finance/wbFinance/importExcel",
         },
         dictOptions:{
+         status:[],
         },
       }
     },
@@ -160,6 +190,11 @@
     },
     methods: {
       initDictConfig(){
+        initDictOptions('withdraw_status').then((res) => {
+          if (res.success) {
+            this.$set(this.dictOptions, 'status', res.result)
+          }
+        })
       }
        
     }
