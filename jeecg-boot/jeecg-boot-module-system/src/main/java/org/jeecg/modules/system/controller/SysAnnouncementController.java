@@ -196,7 +196,6 @@ public class SysAnnouncementController {
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation(value = "根据id获取消息", notes = "根据id获取消息")
 	@RequestMapping(value = "/queryById", method = RequestMethod.GET)
 	public Result<SysAnnouncement> queryById(@RequestParam(name="id",required=true) String id) {
 		Result<SysAnnouncement> result = new Result<SysAnnouncement>();
@@ -278,10 +277,9 @@ public class SysAnnouncementController {
 
 	/**
 	 * @功能：补充用户数据，并返回系统消息
-	 * @param id
 	 * @return
 	 */
-	@ApiOperation(value = "用户消息列表", notes = "用户消息列表")
+	@ApiOperation(value = "用户未读消息列表", notes = "用户未读消息列表")
 	@RequestMapping(value = "/listByUser", method = RequestMethod.GET)
 	public Result<Map<String,Object>> listByUser() {
 		Result<Map<String,Object>> result = new Result<Map<String,Object>>();
@@ -308,9 +306,9 @@ public class SysAnnouncementController {
 			}
 		}
 		// 2.查询用户未读的系统消息
-		Page<SysAnnouncement> anntMsgList = new Page<SysAnnouncement>(0,5);
+		Page<SysAnnouncement> anntMsgList = new Page<SysAnnouncement>(0,15);
 		anntMsgList = sysAnnouncementService.querySysCementPageByUserId(anntMsgList,userId,"1");//通知公告消息
-		Page<SysAnnouncement> sysMsgList = new Page<SysAnnouncement>(0,5);
+		Page<SysAnnouncement> sysMsgList = new Page<SysAnnouncement>(0,15);
 		sysMsgList = sysAnnouncementService.querySysCementPageByUserId(sysMsgList,userId,"2");//系统消息
 		Map<String,Object> sysMsgMap = new HashMap<String, Object>();
 		sysMsgMap.put("sysMsgList", sysMsgList.getRecords());

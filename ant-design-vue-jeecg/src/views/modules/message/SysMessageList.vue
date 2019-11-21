@@ -126,7 +126,7 @@
       return {
         description: '消息管理页面',
         // 新增修改按钮是否显示
-        show: false,
+        show: true,
         // 表头
         columns: [
           {

@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
@@ -39,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date:  2019-02-21
  * @Version: V1.0
  */
+ @Api(tags="用户通告阅读标记")
 @RestController
 @RequestMapping("/sys/sysAnnouncementSend")
 @Slf4j
@@ -183,6 +186,7 @@ public class SysAnnouncementSendController {
 	 * @param json
 	 * @return
 	 */
+	@ApiOperation(value = "更新用户系统消息阅读状态", notes = "更新用户系统消息阅读状态为已读 参数为 anntId")
 	@PutMapping(value = "/editByAnntIdAndUserId")
 	public Result<SysAnnouncementSend> editById(@RequestBody JSONObject json) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
@@ -203,6 +207,7 @@ public class SysAnnouncementSendController {
 	 * @功能：获取我的消息
 	 * @return
 	 */
+	@ApiOperation(value = "获取我的消息", notes = "获取我的消息")
 	@GetMapping(value = "/getMyAnnouncementSend")
 	public Result<IPage<AnnouncementSendModel>> getMyAnnouncementSend(AnnouncementSendModel announcementSendModel,
 			@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -224,6 +229,7 @@ public class SysAnnouncementSendController {
 	 * @功能：一键已读
 	 * @return
 	 */
+	@ApiOperation(value = "一键已读", notes = "一键已读")
 	@PutMapping(value = "/readAll")
 	public Result<SysAnnouncementSend> readAll() {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
