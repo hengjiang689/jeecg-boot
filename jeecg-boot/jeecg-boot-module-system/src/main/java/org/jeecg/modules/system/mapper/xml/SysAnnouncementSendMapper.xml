@@ -7,6 +7,7 @@
 		<result column="annt_id" property="anntId" jdbcType="VARCHAR"/>
 		<result column="user_id" property="userId" jdbcType="VARCHAR"/>
 		<result column="titile" property="titile" jdbcType="VARCHAR"/>
+		<result column="course_id" property="courseId" jdbcType="VARCHAR"/>
 		<result column="msg_content" property="msgContent" jdbcType="VARCHAR"/>
 		<result column="sender" property="sender" jdbcType="VARCHAR"/>
 		<result column="priority" property="priority" jdbcType="VARCHAR"/>
@@ -29,7 +30,8 @@
 	   		sa.msg_content as msg_content,
 	   		sa.sender as sender,
 	   		sa.priority as priority,
-	   		sa.msg_category,
+		    sa.course_id,
+		    sa.msg_category,
 	   		sa.send_time as send_time
 	   from sys_announcement_send sas 
 	   left join sys_announcement sa ON sas.annt_id = sa.id

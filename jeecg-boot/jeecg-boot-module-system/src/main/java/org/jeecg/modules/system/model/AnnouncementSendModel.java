@@ -33,6 +33,8 @@ public class AnnouncementSendModel implements Serializable {
 	private java.lang.String titile;
 	/**内容*/
 	private java.lang.String msgContent;
+	/**课程ID*/
+	private java.lang.String courseId;
 	/**发布人*/
 	private java.lang.String sender;
 	/**优先级（L低，M中，H高）*/
