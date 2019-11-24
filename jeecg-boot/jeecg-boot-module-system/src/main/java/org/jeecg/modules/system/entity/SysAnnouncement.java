@@ -100,6 +100,11 @@ public class SysAnnouncement implements Serializable {
      * 删除状态（0，正常，1已删除）
      */
     private java.lang.String delFlag;
+
+    /**
+     * 课程ID
+     */
+    private java.lang.String courseId;
     /**
      * 创建人
      */
