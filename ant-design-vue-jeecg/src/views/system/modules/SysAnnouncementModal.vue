@@ -66,6 +66,12 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
+          label="课程id">
+          <a-input placeholder="请输入课程id" v-decorator="['courseId', validatorRules.courseId]" />
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
           label="通告对象类型">
           <a-select
             v-decorator="[ 'msgType', validatorRules.msgType]"
@@ -126,6 +132,7 @@
         form: this.$form.createForm(this),
         validatorRules:{
           title:{rules: [{ required: true, message: '请输入标题!' }]},
+          courseId:{rules: [{ required: false }]},
           msgCategory:{rules: [{ required: true, message: '请选择消息类型!' }]},
           msgType:{rules: [{ required: true, message: '请选择通告对象类型!' }]},
           endTime:{rules:[{validator: this.endTimeValidate}]},
@@ -172,7 +179,7 @@
           });
         }
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'endTime','startTime','titile','msgContent','sender','priority','msgCategory','msgType','sendStatus','delFlag'))
+          this.form.setFieldsValue(pick(this.model,'endTime','startTime','titile','msgContent','sender','priority','msgCategory','msgType','sendStatus','courseId','delFlag'))
         });
       },
       close () {

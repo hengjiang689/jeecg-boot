@@ -1,8 +1,8 @@
 server:
   port: 443
   ssl:
-    key-store: classpath:2933385_api.miairobot.com.pfx
-    key-store-password: 8C5FCTi6
+    key-store: classpath:3192628_api.zgwbjy.com.pfx
+    key-store-password: 1heJrmnM
     keyStoreType: PKCS12
   tomcat: 
     max-swallow-size: -1
