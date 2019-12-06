@@ -152,7 +152,7 @@ jeecg :
     properties:
       aliyun:
         protocol: https
-      customDomain: https://www.miairobot.com
+      customDomain: https://admin.zgwbjy.com
       customFolder: oss
   # ElasticSearch 设置
   elasticsearch:
