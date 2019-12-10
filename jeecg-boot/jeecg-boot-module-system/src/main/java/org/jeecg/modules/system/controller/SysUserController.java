@@ -118,6 +118,32 @@ public class SysUserController {
 		return result;
 	}
 
+    @ApiOperation(value = "我的团队", notes = "我的团队")
+    @RequestMapping(value = "/referrals", method = RequestMethod.GET)
+    public Result<IPage<SysUser>> queryReferralList(@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                                @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,HttpServletRequest req) {
+        LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+        SysUser user = new SysUser();
+        user.setReferUserId(sysUser.getId());
+        Result<IPage<SysUser>> result = queryPageList(user,pageNo,pageSize,req);
+        for(SysUser u : result.getResult().getRecords()){
+            u.setUnionId(null);
+            u.setAvailableBalance(null);
+            u.setBankName(null);
+            u.setBirthday(null);
+            u.setCardNo(null);
+            u.setCardPhone(null);
+            u.setBalance(null);
+            u.setIdentityNo(null);
+            u.setCardType(null);
+            u.setPassword(null);
+            u.setSalt(null);
+            u.setTotalIncome(null);
+        }
+
+        return result;
+    }
+
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("user:add")
 	public Result<SysUser> add(@RequestBody JSONObject jsonObject) {
