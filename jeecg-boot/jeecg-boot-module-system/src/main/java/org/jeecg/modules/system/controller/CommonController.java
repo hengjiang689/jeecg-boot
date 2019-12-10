@@ -64,6 +64,13 @@ public class CommonController {
 //			}
 			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 			MultipartFile mf = multipartRequest.getFile("file");// 获取上传文件对象
+			if(mf==null || mf.isEmpty()){
+				result.setMessage("没有找到上传文件!");
+				result.setSuccess(false);
+			}else{
+				result.setMessage(fileService.upload(mf));
+				result.setSuccess(true);
+			}
 //			String orgName = mf.getOriginalFilename();// 获取文件名
 //			fileName = orgName.substring(0, orgName.lastIndexOf(".")) + "_" + System.currentTimeMillis() + orgName.substring(orgName.indexOf("."));
 //			String savePath = file.getPath() + File.separator + fileName;
@@ -73,8 +80,6 @@ public class CommonController {
 //			if (dbpath.contains("\\")) {
 //				dbpath = dbpath.replace("\\", "/");
 //			}
-			result.setMessage(fileService.upload(mf));
-			result.setSuccess(true);
 		} catch (IOException e) {
 			result.setSuccess(false);
 			result.setMessage(e.getMessage());
