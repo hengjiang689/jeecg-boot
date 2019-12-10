@@ -118,13 +118,16 @@ public class SysUserController {
 		return result;
 	}
 
-    @ApiOperation(value = "我的团队", notes = "我的团队")
+    @ApiOperation(value = "我的团队", notes = "我的团队, VIP 查询加上参数 ?isMember=true 非VIP 查询加上参数 ?isMember=false")
     @RequestMapping(value = "/referrals", method = RequestMethod.GET)
-    public Result<IPage<SysUser>> queryReferralList(@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+    public Result<IPage<SysUser>> queryReferralList(@RequestParam(name = "isMember", required = false) Boolean isMember,@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
                                                 @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,HttpServletRequest req) {
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
         SysUser user = new SysUser();
         user.setReferUserId(sysUser.getId());
+        if(isMember!=null){
+            user.setIsMember(isMember);
+        }
         Result<IPage<SysUser>> result = queryPageList(user,pageNo,pageSize,req);
         for(SysUser u : result.getResult().getRecords()){
             u.setUnionId(null);
