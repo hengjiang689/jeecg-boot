@@ -19,16 +19,16 @@ jeecg :
     appId: wx424640421193d7af
     appSecret: cb4a03fe66264afcf94e83f90e1f096c
   mobile:
-    appId: wx424640421193d7af
-    appSecret: cb4a03fe66264afcf94e83f90e1f096c
+    appId: wxbe3d81b3764d3a80
+    appSecret: 0b27929b69297e097df612b605571246
   payment:
     weixin:
       mchId: 1560064031
       mchKey: 7iyck99g46bxwg3bhvy5oc8zv8pbfnta
-      callBackUrl: https://api.miairobot.com/payment/wbPaymentTransaction/notify/weixin
+      callBackUrl: https://admin.zgwbjy.com/payment/wbPaymentTransaction/notify/weixin
     alipay:
       appId: asfasdfasdf
       publicKey: safasdf
       privateKey: asdfasdfasdf
-      callBackUrl: https://api.miairobot.com/payment/wbPaymentTransaction/notify/alipay
+      callBackUrl: https://admin.zgwbjy.com/payment/wbPaymentTransaction/notify/alipay
   membershipFee: 1
