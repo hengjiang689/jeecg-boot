@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.bean.sns.Jscode2sessionResult;
 import weixin.popular.bean.sns.SnsToken;
+import weixin.popular.bean.user.User;
 import weixin.popular.bean.wxa.WxaDUserInfo;
 import weixin.popular.util.WxaUtil;
 
@@ -256,6 +257,9 @@ public class LoginController {
 //			}
 			JSONObject obj = new JSONObject();
 			obj.put("unionId", unionId);
+			User user = SnsAPI.userinfo(snsToken.getAccess_token(),snsToken.getOpenid(),null);
+			obj.put("nickName", user.getNickname());
+			obj.put("avatar", user.getHeadimgurl());
 			result.setResult(obj);
 			result.error500("用户尚未绑定手机号");
 			return result;
