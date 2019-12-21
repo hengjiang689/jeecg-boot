@@ -3,6 +3,7 @@ package org.jeecg.modules.wanbang.payment.controller;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -96,7 +97,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 	private String alipayPrivateKey;
 
 	@Value("${jeecg.payment.alipay.callBackUrl}")
-	private String alipaycallBackUrl;
+	private String alipayCallBackUrl;
 
 
 	@Autowired
@@ -110,6 +111,13 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 
 	@Autowired
 	private ISysUserService sysUserService;
+
+	private AlipayClient alipayClient;
+
+	@PostConstruct
+	public void initClient(){
+		alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", aliPayAppId, alipayPrivateKey, "json", "utf-8", alipayPublicKey, "RSA2");
+	}
 
 	@ApiOperation(value = "微信生成支付unifiedorder", notes = "微信生成支付unifiedorder,courseId 为可选{\n" +
 			"  \"code\": \"d8df70\",\n" +
@@ -176,7 +184,6 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		public String aliPayUnifiedOrder(@RequestBody JSONObject jsonObject){
 		DecimalFormat fnum = new DecimalFormat("##0.00");
 		String result=null;
-		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", aliPayAppId, alipayPrivateKey, "json", "utf-8", alipayPublicKey, "RSA2");
 		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
 		String body,detail=null;
@@ -197,7 +204,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		model.setTotalAmount(fnum.format(Double.parseDouble(totalFee)));
 		model.setProductCode("QUICK_MSECURITY_PAY");
 		request.setBizModel(model);
-		request.setNotifyUrl(alipaycallBackUrl);
+		request.setNotifyUrl(alipayCallBackUrl);
 		try {
 			//这里和普通的接口调用不同，使用的是sdkExecute
 			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
