@@ -144,8 +144,8 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		String totalFee;
 		if(StringUtils.isEmpty(jsonObject.getBigInteger("courseId"))){
 			body="万邦教育-购买VIP会员";
-//			totalFee = membershipFee*100+"";
-			totalFee = membershipFee+"";
+			totalFee = membershipFee*100+"";
+//			totalFee = membershipFee+"";
 		}else{
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
 			body="万邦教育-购买课程";
