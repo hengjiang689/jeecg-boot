@@ -18,7 +18,7 @@ import java.util.Date;
  * @Version: V1.0
  */
 @Data
-@TableName("wb_share_daily")
+@TableName("wb_share_daily_course")
 public class WbShareDailyCourse implements Serializable {
     private static final long serialVersionUID = 1L;
 
