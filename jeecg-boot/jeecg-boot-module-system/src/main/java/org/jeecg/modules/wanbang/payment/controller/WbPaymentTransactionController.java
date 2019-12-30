@@ -279,7 +279,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			//valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
 			params.put(name, valueStr);
 		}
+		log.info("================================================"+ JsonUtil.toJSONString(params));
 		boolean flag = AlipaySignature.rsaCheckV1(params, alipayPublicKey, "utf-8","RSA2");
+		log.info("================================================flag=="+ flag);
 		if(flag){
 			//业务逻辑
 			if("TRADE_SUCCESS".equalsIgnoreCase(params.get("trade_status"))){
@@ -295,7 +297,6 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			}else{
 				return "failure";
 			}
-
 		}else{
 			return "failure";
 		}
