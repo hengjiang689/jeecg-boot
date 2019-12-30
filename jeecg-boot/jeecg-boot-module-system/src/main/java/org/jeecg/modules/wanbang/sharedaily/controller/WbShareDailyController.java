@@ -16,6 +16,8 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.wanbang.sharedaily.entity.WbShareDaily;
+import org.jeecg.modules.wanbang.sharedaily.entity.WbShareDailyCourse;
+import org.jeecg.modules.wanbang.sharedaily.service.IWbShareDailyCourseService;
 import org.jeecg.modules.wanbang.sharedaily.service.IWbShareDailyService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -47,13 +49,17 @@ import com.alibaba.fastjson.JSON;
 @RequestMapping("/sharedaily/wbShareDaily")
 @Slf4j
 public class WbShareDailyController extends JeecgController<WbShareDaily, IWbShareDailyService> {
+
 	@Autowired
 	private IWbShareDailyService wbShareDailyService;
+
+	 @Autowired
+	 private IWbShareDailyCourseService wbShareDailyCourseService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param wbShareDaily
+	 * @param wbShareDailyCourse
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
@@ -61,13 +67,13 @@ public class WbShareDailyController extends JeecgController<WbShareDaily, IWbSha
 	 */
 	@ApiOperation(value = "每日必发列表", notes = "参数type  1为素材  2为课程")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(WbShareDaily wbShareDaily,
+	public Result<?> queryPageList(WbShareDailyCourse wbShareDailyCourse,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<WbShareDaily> queryWrapper = QueryGenerator.initQueryWrapper(wbShareDaily, req.getParameterMap());
-		Page<WbShareDaily> page = new Page<WbShareDaily>(pageNo, pageSize);
-		IPage<WbShareDaily> pageList = wbShareDailyService.page(page, queryWrapper);
+		QueryWrapper<WbShareDailyCourse> queryWrapper = QueryGenerator.initQueryWrapper(wbShareDailyCourse, req.getParameterMap());
+		Page<WbShareDailyCourse> page = new Page<>(pageNo, pageSize);
+		IPage<WbShareDailyCourse> pageList = wbShareDailyCourseService.page(page, queryWrapper);
 		return Result.ok(pageList);
 	}
 	

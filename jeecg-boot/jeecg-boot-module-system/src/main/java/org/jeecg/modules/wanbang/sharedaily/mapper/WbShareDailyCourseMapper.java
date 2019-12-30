@@ -1,7 +1,7 @@
 package org.jeecg.modules.wanbang.sharedaily.mapper;
 
-import org.jeecg.modules.wanbang.sharedaily.entity.WbShareDaily;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.jeecg.modules.wanbang.sharedaily.entity.WbShareDailyCourse;
 
 /**
  * @Description: 每日必发
@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Date:   2019-12-21
  * @Version: V1.0
  */
-public interface WbShareDailyMapper extends BaseMapper<WbShareDaily> {
+public interface WbShareDailyCourseMapper extends BaseMapper<WbShareDailyCourse> {
 
 }
