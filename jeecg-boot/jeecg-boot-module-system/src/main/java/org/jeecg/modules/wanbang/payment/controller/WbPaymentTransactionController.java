@@ -93,6 +93,9 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 	@Value("${jeecg.payment.alipay.publicKey}")
 	private String alipayPublicKey;
 
+	@Value("${jeecg.payment.alipay.aliPublicKey}")
+	private String aliPublicKey;
+
 	@Value("${jeecg.payment.alipay.privateKey}")
 	private String alipayPrivateKey;
 
@@ -280,7 +283,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			params.put(name, valueStr);
 		}
 		log.info("================================================"+ JsonUtil.toJSONString(params));
-		boolean flag = AlipaySignature.rsaCheckV1(params, alipayPublicKey, "utf-8","RSA2");
+		boolean flag = AlipaySignature.rsaCheckV1(params, aliPublicKey, "utf-8","RSA2");
 		log.info("================================================flag==="+ flag);
 		if(flag){
 			//业务逻辑
