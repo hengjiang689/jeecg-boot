@@ -292,7 +292,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 				if(wbPaymentTransaction.getStatus().equalsIgnoreCase("0")){
 					wbPaymentTransaction.setCashFee(Integer.parseInt(params.get("buyer_pay_amount").replace(".","")));
 					wbPaymentTransaction.setStatus("1");
-					wbPaymentTransaction.setTimeEnd(params.get("gmt_close").replaceAll("-","").replaceAll(":","").replaceAll(" ",""));
+					wbPaymentTransaction.setTimeEnd(params.get("gmt_payment").replaceAll("-","").replaceAll(":","").replaceAll(" ",""));
 					wbPaymentTransaction.setTransactionId(params.get("trade_no"));
 					handlePaymentTransaction(wbPaymentTransaction);
 				}
