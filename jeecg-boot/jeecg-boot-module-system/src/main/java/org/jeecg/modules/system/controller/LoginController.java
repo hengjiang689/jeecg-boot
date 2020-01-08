@@ -387,12 +387,14 @@ public class LoginController {
 	    	redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + token);
 	    	//清空用户登录Shiro权限缓存
 	    	redisUtil.del(CommonConstant.PREFIX_USER_SHIRO_CACHE + sysUser.getId());
+
 	    	return Result.ok("退出登录成功！");
 	    }else {
 	    	return Result.error("Token无效!");
 	    }
 	}
-	
+
+
 	/**
 	 * 获取访问量
 	 * @return

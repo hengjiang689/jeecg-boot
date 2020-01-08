@@ -31,6 +31,7 @@ import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.PasswordUtil;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.shiro.vo.DefContants;
 import org.jeecg.modules.system.entity.*;
 import org.jeecg.modules.system.model.DepartIdModel;
 import org.jeecg.modules.system.model.SysUserSysDepartModel;
@@ -245,6 +246,29 @@ public class SysUserController {
 		this.sysUserService.deleteUser(id);
 		return Result.ok("删除用户成功");
 	}
+
+    /**
+     * 注销用户
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public Result<?> logout(HttpServletRequest request) {
+        String token = request.getHeader(DefContants.X_ACCESS_TOKEN);
+        LoginUser loginUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+        SysUser sysUser = sysUserService.getUserByName(loginUser.getUsername());
+        sysUser.setUsername(sysUser.getUsername()+"-logout");
+        sysUser.setUnionId(sysUser.getUnionId()+"-logout");
+        sysUserService.updateById(sysUser);
+        if(sysUser!=null) {
+            sysBaseAPI.addLog("用户名: "+sysUser.getRealname()+",退出成功！", CommonConstant.LOG_TYPE_1, null);
+            log.info(" 用户名:  "+sysUser.getRealname()+",退出成功！ ");
+            //清空用户登录Token缓存
+            redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + token);
+            //清空用户登录Shiro权限缓存
+            redisUtil.del(CommonConstant.PREFIX_USER_SHIRO_CACHE + sysUser.getId());
+        }
+
+        return Result.ok("注销用户成功");
+    }
 
 	/**
 	 * 批量删除用户
