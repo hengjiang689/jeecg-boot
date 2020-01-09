@@ -257,6 +257,7 @@ public class SysUserController {
         SysUser sysUser = sysUserService.getUserByName(loginUser.getUsername());
         sysUser.setUsername(sysUser.getUsername()+"-logout");
         sysUser.setUnionId(sysUser.getUnionId()+"-logout");
+        sysUser.setPhone(sysUser.getPhone()+"-logout");
         sysUserService.updateById(sysUser);
         if(sysUser!=null) {
             sysBaseAPI.addLog("用户名: "+sysUser.getRealname()+",退出成功！", CommonConstant.LOG_TYPE_1, null);
