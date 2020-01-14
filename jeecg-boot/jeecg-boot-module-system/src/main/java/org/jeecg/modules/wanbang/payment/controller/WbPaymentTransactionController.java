@@ -117,6 +117,8 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 
 	private AlipayClient alipayClient;
 
+	private final DecimalFormat decimalFormat=new DecimalFormat(".00");
+
 	@PostConstruct
 	public void initClient(){
 		alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", aliPayAppId, alipayPrivateKey, "json", "utf-8", alipayPublicKey, "RSA2");
@@ -154,12 +156,11 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		if(StringUtils.isEmpty(jsonObject.getBigInteger("courseId"))){
 			body="幸福365-购买VIP会员";
 			totalFee = membershipFee*100+"";
-//			totalFee = membershipFee+"";
 		}else{
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
 			body="幸福365-购买课程";
 			detail=wbCourse.getTitle();
-			totalFee = wbCourse.getPrice().toString().replace(".","").replaceFirst("^0*", "");
+			totalFee = decimalFormat.format(wbCourse.getPrice()).replace(".","").replaceFirst("^0*", "");
 		}
 		unifiedorder.setBody(body);
 		unifiedorder.setOut_trade_no(UUID.randomUUID().toString().replace("-",""));
@@ -204,7 +205,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
 			body="幸福365-购买课程";
 			detail = wbCourse.getTitle();
-			totalFee = wbCourse.getPrice().toString();
+			totalFee = decimalFormat.format(wbCourse.getPrice());
 		}
 		model.setSubject(body);
 		model.setBody(detail);
