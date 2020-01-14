@@ -122,6 +122,7 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", aliPayAppId, alipayPrivateKey, "json", "utf-8", alipayPublicKey, "RSA2");
 	}
 
+	@ApiOperation(value = "membershipfee")
 	@GetMapping("/membershipfee")
 	public Integer getMembershipFee(){
 		return membershipFee;
