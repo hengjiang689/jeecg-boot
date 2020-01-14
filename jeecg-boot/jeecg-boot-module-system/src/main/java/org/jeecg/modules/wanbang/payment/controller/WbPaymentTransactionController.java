@@ -122,6 +122,11 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", aliPayAppId, alipayPrivateKey, "json", "utf-8", alipayPublicKey, "RSA2");
 	}
 
+	@GetMapping("/membershipfee")
+	public Integer getMembershipFee(){
+		return membershipFee;
+	}
+
 	@ApiOperation(value = "微信生成支付unifiedorder", notes = "微信生成支付unifiedorder,courseId 为可选{\n" +
 			"  \"code\": \"d8df70\",\n" +
 			"  \"courseId\": 193293823080\n" +
