@@ -152,12 +152,12 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		String body,detail=null;
 		String totalFee;
 		if(StringUtils.isEmpty(jsonObject.getBigInteger("courseId"))){
-			body="万邦教育-购买VIP会员";
+			body="幸福365-购买VIP会员";
 			totalFee = membershipFee*100+"";
 //			totalFee = membershipFee+"";
 		}else{
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
-			body="万邦教育-购买课程";
+			body="幸福365-购买课程";
 			detail=wbCourse.getTitle();
 			totalFee = wbCourse.getPrice().toString().replace(".","").replaceFirst("^0*", "");
 		}
@@ -198,11 +198,11 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 		String body,detail=null;
 		String totalFee;
 		if(StringUtils.isEmpty(jsonObject.getBigInteger("courseId"))){
-			body="万邦教育-VIP会员";
+			body="幸福365-VIP会员";
 			totalFee = membershipFee.toString();
 		}else{
 			WbCourse wbCourse = wbCourseService.getById(jsonObject.getBigInteger("courseId"));
-			body="万邦教育-购买课程";
+			body="幸福365-购买课程";
 			detail = wbCourse.getTitle();
 			totalFee = wbCourse.getPrice().toString();
 		}
