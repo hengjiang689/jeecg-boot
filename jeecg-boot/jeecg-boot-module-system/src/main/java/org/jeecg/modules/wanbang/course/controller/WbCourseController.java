@@ -12,9 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.hutool.core.io.resource.ResourceUtil;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
+import org.jeecg.common.util.RedisUtil;
 import org.jeecg.modules.system.service.ISysCategoryService;
 import org.jeecg.modules.wanbang.course.entity.*;
 import org.jeecg.modules.wanbang.course.service.*;
@@ -33,6 +37,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,8 +72,12 @@ public class WbCourseController {
 	private IWbClassService wbClassService;
 	@Autowired
 	private ISysCategoryService sysCategoryService;
-	
-	/**
+	@Autowired
+	private RedisUtil redisUtil;
+	ObjectMapper mapper = new ObjectMapper();
+
+
+	 /**
 	 * 分页列表查询
 	 *
 	 * @param wbCourse
@@ -99,6 +108,26 @@ public class WbCourseController {
 		IPage<WbCourse> pageList = wbCourseService.page(page, queryWrapper);
 		return Result.ok(pageList);
 	}
+
+	@SneakyThrows
+	@ApiOperation(value = "课程列表", notes = "课程列表 type 1 为志慧学堂 2 为幸福学院 3 为百家讲坛 ")
+	@GetMapping(value = "/mobileList")
+	public Result<?> queryPageListForMobile(WbCourse wbCourse,
+									@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+									@RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+									HttpServletRequest req) {
+		Result<IPage<WbCourse>> result;
+		String key= mapper.writeValueAsString(wbCourse)+pageNo+pageSize+mapper.writeValueAsString(req.getParameterMap());
+		if(redisUtil.get(key)!=null){
+			result= (Result<IPage<WbCourse>>)redisUtil.get(key);
+		}else{
+			result = (Result<IPage<WbCourse>>)queryPageList(wbCourse,pageNo,pageSize,req);
+			redisUtil.set(key, result, 600);
+		}
+		return result;
+	 }
+
+
 
 	 @GetMapping(value = "/comment/list")
 	 public Result<?> queryCommentPageList(WbCourseComment wbCourseComment,

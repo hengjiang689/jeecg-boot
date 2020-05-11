@@ -216,7 +216,7 @@
           }
         ],
         url: {
-          list: "/course/wbCourse/list?categoryCode=A01A03*",
+          list: "/course/wbCourse/list?categoryCode=A01A03*&column=isTop&order=DESC",
           delete: "/course/wbCourse/delete",
           deleteBatch: "/course/wbCourse/deleteBatch",
           exportXlsUrl: "/course/wbCourse/exportXls",

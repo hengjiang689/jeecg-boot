@@ -175,31 +175,28 @@ public class QueryGenerator {
 	
 	//多字段排序 TODO 需要修改前端
 	public static void doMultiFieldsOrder(QueryWrapper<?> queryWrapper,Map<String, String[]> parameterMap) {
-		String column=null,order=null;
-		if(parameterMap!=null&& parameterMap.containsKey(ORDER_COLUMN)) {
-			column = parameterMap.get(ORDER_COLUMN)[0];
-		}
-		if(parameterMap!=null&& parameterMap.containsKey(ORDER_TYPE)) {
-			order = parameterMap.get(ORDER_TYPE)[0];
-		}
-		log.debug("排序规则>>列:"+column+",排序方式:"+order);
-		if (oConvertUtils.isNotEmpty(column) && oConvertUtils.isNotEmpty(order)) {
-			//字典字段，去掉字典翻译文本后缀
-			if(column.endsWith(CommonConstant.DICT_TEXT_SUFFIX)) {
-				column = column.substring(0, column.lastIndexOf(CommonConstant.DICT_TEXT_SUFFIX));
-			}
-			//SQL注入check
-			if(column.contains(",")){
-				SqlInjectionUtil.filterContent(column.split(","));
-			}else{
-				SqlInjectionUtil.filterContent(column);
-			}
-
-			
-			if (order.toUpperCase().indexOf(ORDER_TYPE_ASC)>=0) {
-				queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
-			} else {
-				queryWrapper.orderByDesc(oConvertUtils.camelToUnderline(column));
+		if(parameterMap!=null&& parameterMap.containsKey(ORDER_COLUMN)&& parameterMap.containsKey(ORDER_TYPE)) {
+			for(int i=0;i<parameterMap.get(ORDER_COLUMN).length;i++){
+				String column = parameterMap.get(ORDER_COLUMN)[i];
+				String order = parameterMap.get(ORDER_TYPE)[i];
+				log.debug("排序规则>>列:"+column+",排序方式:"+order);
+				if (oConvertUtils.isNotEmpty(column) && oConvertUtils.isNotEmpty(order)) {
+					//字典字段，去掉字典翻译文本后缀
+					if(column.endsWith(CommonConstant.DICT_TEXT_SUFFIX)) {
+						column = column.substring(0, column.lastIndexOf(CommonConstant.DICT_TEXT_SUFFIX));
+					}
+					//SQL注入check
+					if(column.contains(",")){
+						SqlInjectionUtil.filterContent(column.split(","));
+					}else{
+						SqlInjectionUtil.filterContent(column);
+					}
+					if (order.toUpperCase().indexOf(ORDER_TYPE_ASC)>=0) {
+						queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
+					} else {
+						queryWrapper.orderByDesc(oConvertUtils.camelToUnderline(column));
+					}
+				}
 			}
 		}
 	}
