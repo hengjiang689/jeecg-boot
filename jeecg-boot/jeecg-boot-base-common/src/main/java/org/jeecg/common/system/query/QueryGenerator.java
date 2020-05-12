@@ -176,27 +176,42 @@ public class QueryGenerator {
 	//多字段排序 TODO 需要修改前端
 	public static void doMultiFieldsOrder(QueryWrapper<?> queryWrapper,Map<String, String[]> parameterMap) {
 		if(parameterMap!=null&& parameterMap.containsKey(ORDER_COLUMN)&& parameterMap.containsKey(ORDER_TYPE)) {
-			for(int i=0;i<parameterMap.get(ORDER_COLUMN).length;i++){
-				String column = parameterMap.get(ORDER_COLUMN)[i];
-				String order = parameterMap.get(ORDER_TYPE)[i];
-				log.debug("排序规则>>列:"+column+",排序方式:"+order);
-				if (oConvertUtils.isNotEmpty(column) && oConvertUtils.isNotEmpty(order)) {
-					//字典字段，去掉字典翻译文本后缀
-					if(column.endsWith(CommonConstant.DICT_TEXT_SUFFIX)) {
-						column = column.substring(0, column.lastIndexOf(CommonConstant.DICT_TEXT_SUFFIX));
-					}
-					//SQL注入check
-					if(column.contains(",")){
-						SqlInjectionUtil.filterContent(column.split(","));
-					}else{
-						SqlInjectionUtil.filterContent(column);
-					}
-					if (order.toUpperCase().indexOf(ORDER_TYPE_ASC)>=0) {
-						queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
-					} else {
-						queryWrapper.orderByDesc(oConvertUtils.camelToUnderline(column));
-					}
+			if(parameterMap.get(ORDER_COLUMN).length>1){
+				for(int i=0;i<parameterMap.get(ORDER_COLUMN).length;i++){
+					String column = parameterMap.get(ORDER_COLUMN)[i];
+					String order = parameterMap.get(ORDER_TYPE)[i];
+					doPutOrderBy(queryWrapper,column,order);
 				}
+			}else{
+				if(parameterMap.get(ORDER_COLUMN)[0].contains(",")){
+					for(String col : parameterMap.get(ORDER_COLUMN)[0].split(",")){
+						doPutOrderBy(queryWrapper,col,parameterMap.get(ORDER_TYPE)[0]);
+					}
+				}else{
+					doPutOrderBy(queryWrapper,parameterMap.get(ORDER_COLUMN)[0],parameterMap.get(ORDER_TYPE)[0]);
+				}
+			}
+
+		}
+	}
+
+	public static void doPutOrderBy(QueryWrapper<?> queryWrapper,String column,String order){
+		log.debug("排序规则>>列:"+column+",排序方式:"+order);
+		if (oConvertUtils.isNotEmpty(column) && oConvertUtils.isNotEmpty(order)) {
+			//字典字段，去掉字典翻译文本后缀
+			if(column.endsWith(CommonConstant.DICT_TEXT_SUFFIX)) {
+				column = column.substring(0, column.lastIndexOf(CommonConstant.DICT_TEXT_SUFFIX));
+			}
+			//SQL注入check
+			if(column.contains(",")){
+				SqlInjectionUtil.filterContent(column.split(","));
+			}else{
+				SqlInjectionUtil.filterContent(column);
+			}
+			if (order.toUpperCase().indexOf(ORDER_TYPE_ASC)>=0) {
+				queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
+			} else {
+				queryWrapper.orderByDesc(oConvertUtils.camelToUnderline(column));
 			}
 		}
 	}
@@ -630,8 +645,7 @@ public class QueryGenerator {
 	
 	/**
 	 *   根据权限相关配置生成相关的SQL 语句
-	 * @param searchObj
-	 * @param parameterMap
+	 * @param clazz
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -673,8 +687,8 @@ public class QueryGenerator {
 	
 	/**
 	  * 根据权限相关配置 组装mp需要的权限
-	 * @param searchObj
-	 * @param parameterMap
+	 * @param queryWrapper
+	 * @param clazz
 	 * @return
 	 */
 	public static void installAuthMplus(QueryWrapper<?> queryWrapper,Class<?> clazz) {
