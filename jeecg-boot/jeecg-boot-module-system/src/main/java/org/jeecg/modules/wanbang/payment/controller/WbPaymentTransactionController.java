@@ -317,8 +317,12 @@ public class WbPaymentTransactionController extends JeecgController<WbPaymentTra
 			wbCourseHistory.setIsPaid("1");
 			wbCourseHistoryService.updateById(wbCourseHistory);
 		}else{
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.YEAR, 1);
 			SysUser sysUser = sysUserService.getUserByName(wbPaymentTransaction.getCreateBy());
 			sysUser.setIsMember(true);
+			sysUser.setMembershipStartTime(new Date());
+			sysUser.setMembershipEndTime(cal.getTime());
 			sysUserService.updateById(sysUser);
 		}
 	}

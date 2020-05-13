@@ -2,10 +2,7 @@ package org.jeecg.modules.wanbang.course.controller;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.service.ISysCategoryService;
 import org.jeecg.modules.wanbang.course.entity.*;
 import org.jeecg.modules.wanbang.course.service.*;
@@ -76,6 +74,20 @@ public class WbCourseController {
 	private RedisUtil redisUtil;
 	ObjectMapper mapper = new ObjectMapper();
 
+
+	 @RequestMapping(value = "/report", method = RequestMethod.GET)
+	 public Result<Map<String,String>> report() {
+		 Result<Map<String,String>> result = new Result<>();
+		 Map<String,String> data = new HashMap<>();
+		 data.put("courseTotal",wbCourseService.count()+"");
+		 WbCourseHistory wbCourseHistory = new WbCourseHistory();
+		 wbCourseHistory.setIsPaid("1");
+		 QueryWrapper<WbCourseHistory> queryWrapper = QueryGenerator.initQueryWrapper(wbCourseHistory, null);
+		 data.put("coursePurchaseTotal",wbCourseHistoryService.count(queryWrapper)+"");
+		 result.setResult(data);
+		 result.setSuccess(true);
+		 return result;
+	 }
 
 	 /**
 	 * 分页列表查询

@@ -225,27 +225,6 @@
             dataIndex: 'nickname',
           },
           {
-            title: '头像',
-            align: "center",
-            width: 120,
-            dataIndex: 'avatar',
-            scopedSlots: {customRender: "avatarslot"}
-          },
-
-          {
-            title: '性别',
-            align: "center",
-            width: 80,
-            dataIndex: 'sex_dictText',
-            sorter: true
-          },
-          {
-            title: '生日',
-            align: "center",
-            width: 180,
-            dataIndex: 'birthday'
-          },
-          {
             title: '手机号码',
             align: "center",
             width: 100,
@@ -257,13 +236,30 @@
             width: 80,
             dataIndex: 'status_dictText'
           },
-         /* {
-            title: '创建时间',
+          {
+            title: '账户余额',
             align: "center",
             width: 150,
-            dataIndex: 'createTime',
-            sorter: true
-          },*/
+            dataIndex: 'balance'
+          },
+          {
+            title: '注册时间',
+            align: "center",
+            width: 150,
+            dataIndex: 'createTime'
+          },
+          {
+            title: '会员开始时间',
+            align: "center",
+            width: 150,
+            dataIndex: 'membershipStartTime'
+          },
+          {
+            title: '会员结束时间',
+            align: "center",
+            width: 150,
+            dataIndex: 'membershipEndTime'
+          },
           {
             title: '操作',
             dataIndex: 'action',

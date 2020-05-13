@@ -211,6 +211,16 @@ public class SysUser implements Serializable {
     private String telephone;
 
     /**
+     * 会员开始时间
+     */
+    private Date membershipStartTime;
+
+    /**
+     * 会员结束时间
+     */
+    private Date membershipEndTime;
+
+    /**
      * 创建人
      */
     private String createBy;

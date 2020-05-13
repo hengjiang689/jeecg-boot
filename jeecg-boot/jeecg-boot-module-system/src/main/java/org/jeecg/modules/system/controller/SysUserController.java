@@ -308,6 +308,25 @@ public class SysUserController {
 
     }
 
+    @RequestMapping(value = "/report", method = RequestMethod.GET)
+    public Result<Map<String,String>> report() {
+        Result<Map<String,String>> result = new Result<>();
+        Map<String,String> data = new HashMap<>();
+        int memberTotal = sysUserService.count();
+        data.put("memberTotal",memberTotal+"");
+        SysUser user = new SysUser();
+        user.setIsMember(true);
+        QueryWrapper<SysUser> queryWrapper = QueryGenerator.initQueryWrapper(user, null);
+        int vipMemberTotal = sysUserService.count(queryWrapper);
+        data.put("vipMemberTotal",vipMemberTotal+"");
+        int normalMemberTotal = memberTotal-vipMemberTotal;
+        data.put("normalMemberTotal",normalMemberTotal+"");
+        data.put("agentMemberTotal",vipMemberTotal+"");
+        result.setResult(data);
+        result.setSuccess(true);
+        return result;
+    }
+
     @RequestMapping(value = "/queryById", method = RequestMethod.GET)
     public Result<SysUser> queryById(@RequestParam(name = "id", required = true) String id) {
         Result<SysUser> result = new Result<SysUser>();

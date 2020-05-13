@@ -95,6 +95,12 @@ const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 // 加载分类字典
 const loadCategoryData = (params)=>getAction("/sys/category/loadAllData",params);
 
+// 用户报告
+const getUserReport = (params)=>getAction("/sys/user/report",params);
+
+// 课程报告
+const getCourseReport = (params)=>getAction("/course/wbCourse/report",params);
+
 export {
   // imgView,
   // doMian,
@@ -142,7 +148,9 @@ export {
   queryTreeListForRole,
   getSystemMenuList,
   getSystemSubmenu,
-  loadCategoryData
+  loadCategoryData,
+  getUserReport,
+  getCourseReport
 }
 
 
